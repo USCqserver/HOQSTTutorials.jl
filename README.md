@@ -1,5 +1,5 @@
 # OSQATTutorials.jl
-Tutorials for open system quantum annealing toolbox(OSQAT). This repo is inspired by (SciMLTutorials)[https://github.com/SciML/SciMLTutorials.jl] so the workflow is the same. Because currently `OSQAT` and `OSQATTutorials.jl` are not officially registered, you need manually install these packages.
+Tutorials for open system quantum annealing toolbox(OSQAT). This repo is inspired by [SciMLTutorials](https://github.com/SciML/SciMLTutorials.jl) so the workflow is the same. Because currently `OSQAT` and `OSQATTutorials.jl` are not officially registered, you need manually install these packages.
 
 ## Contributing
 
