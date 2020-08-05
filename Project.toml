@@ -1,0 +1,10 @@
+name = "OSQATTutorials"
+uuid = "355a68e2-8a29-4473-87d2-0bdae3433bdb"
+authors = ["Huo Chen <huochen@usc.edu>"]
+version = "0.1.0"
+
+[deps]
+IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
+InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
