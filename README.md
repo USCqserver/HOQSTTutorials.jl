@@ -17,7 +17,7 @@ using Pkg, OSQATTutorials
 cd(joinpath(dirname(pathof(OSQATTutorials)), ".."))
 Pkg.pkg"activate ."
 Pkg.pkg"instantiate"
-OSQATTutorials.weave_file("","01-closed_system.jmd")
+OSQATTutorials.weave_file("introduction","01-closed_system.jmd")
 ```
 
 To generate all of the notebooks, do:
