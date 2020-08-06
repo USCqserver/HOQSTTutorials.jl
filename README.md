@@ -6,7 +6,7 @@ Tutorials for open system quantum annealing toolbox(OSQAT). This repo is inspire
 - Introduction
   - [Introduction to OSQAT through closed-system simulation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/introduction/01-closed_system.html)
 - Redfield
-  -[Non-positivity in Redfield equation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/redfield/01-non_positivity_redfield.html)
+  - [Non-positivity in Redfield equation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/redfield/01-non_positivity_redfield.html)
 
 ## Contributing
 
