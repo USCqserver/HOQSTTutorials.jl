@@ -3,7 +3,8 @@ Tutorials for open system quantum annealing toolbox(OSQAT). This repo is inspire
 
 ## Table of Contents
 
-- [Introduction to OSQAT through closed-system simulation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/01-closed_system.html)
+- Introduction
+  - [Introduction to OSQAT through closed-system simulation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/introduction/01-closed_system.html)
 
 ## Contributing
 

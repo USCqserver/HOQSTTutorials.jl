@@ -53,16 +53,20 @@ We start with the Schrodinger equation
 
 To solve the this differential equation, we need to choose a proper algortihm. OSQAT rely on `OrdinaryDiffEq.jl` as the low level solver, which support a large collection of [algorithms](https://docs.sciml.ai/latest/solvers/ode_solve/). We do not guarantee compatibilities to every solver in this list. Users can try specific algorithms if they are interested. We provide a list of algorithms we tested and recommended here:
 
-1. The default Tsitouras 5/4 Runge-Kutta method(Tsit5()).  \
+1. The default Tsitouras 5/4 Runge-Kutta method(Tsit5()).
+
    This is the default method in `OrdinaryDiffEq` and works well in most cases.
- 
-2. A second order A-B-L-S-stable one-step ESDIRK method(TRBDF2()). \
+
+2. A second order A-B-L-S-stable one-step ESDIRK method(TRBDF2()).
+
    This is the method widely used in large scale classical circuit simulations. Because this method has order of 2, it is recommended to use smaller error tolerance comparing with other higher order methods.
  
-3. A simple linear exponential method(LinearExponential()). \
+3. A simple linear exponential method(LinearExponential()).
+
    This method simply discretize the Hamiltonian and do matrix exponential for each interval.
  
-4. Adaptive exponential Rosenbrock methods(Exprb32()/Exprb43()). \
+4. Adaptive exponential Rosenbrock methods(Exprb32()/Exprb43()).
+
    This method belongs to the adaptive exponential Runge-Kutta method family.
  
 It is important to notice that, method 3 and 4 are exponential methods which would preserve the norm of the state vectors. To solve our the Schrodinger equation we use the command `solve_schrodinger`.
