@@ -4,6 +4,7 @@ authors = ["Huo Chen <huochen@usc.edu>"]
 version = "0.1.0"
 
 [deps]
+Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
 IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
 InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
