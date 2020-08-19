@@ -11,6 +11,7 @@ Tutorials for open system quantum annealing toolbox(OSQAT). This repo is inspire
   - [AME Spin-fluctuator model](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/introduction/05-ame_spin_fluctuators.html)
 - Redfield
   - [Non-positivity in Redfield equation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/redfield/01-non_positivity_redfield.html)
+  - [Introduction to polaron transformed Redfield equation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/redfield/02-polaron-transformed-redfield.html)
 
 ## Contributing
 
