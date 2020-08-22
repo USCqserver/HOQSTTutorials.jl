@@ -9,7 +9,7 @@ This is an tutorial for using polaron transformed Redfield equation (PTRE) in OS
 
 In this example, we solve both Redfield equation and PTRE for a single qubit model with system Hamiltonian
 
-$$H_\mathrm{S}=\epsilon \sigma_z + \Delta \sigma_z$$
+$$H_\mathrm{S}=\epsilon \sigma_z + \Delta \sigma_x$$
 
 coupling to an Ohmic bath via $\sigma_z$ interaction
 
@@ -22,7 +22,7 @@ $$C(t_1, t_2) = \langle B(t_1)B(t_2) \rangle \ .$$
 In the polaron frame, however, the bath correlation function becomes
 
 $$K(t_1, t_2) = \exp\Big\{ -4 \int_0^t \int_{-\infty}^{0}C(t_1, t_2) \mathrm{d}t_1 \mathrm{d}t_2 \Big\} \ .$$
-Again, interesting reader can refer to [[Amin and Averin]](https://link.aps.org/doi/10.1103/PhysRevLett.100.197001) and [Leggett et al](https://link.aps.org/doi/10.1103/RevModPhys.59.1) for more details.
+Again, interested reader can refer to [[Amin and Averin]](https://link.aps.org/doi/10.1103/PhysRevLett.100.197001) and [Leggett et al](https://link.aps.org/doi/10.1103/RevModPhys.59.1) for more details.
 
 ### Error bound on the second order master equation
 
@@ -49,12 +49,16 @@ end
 fc = 4; T =12; tf = 1000;
 ηlist = log_uniform(1e-3, 5, 1000)
 err_ratio = []
+err_clist = []
+err_klist = []
 for η in ηlist
     bath = Ohmic(η, fc, T)
     cfun = (x)->correlation(x, bath)
     pfun = (x)->polaron_correlation(x, bath)
     err_c = err_bound(tf, cfun)
     err_k = err_bound(tf, pfun)
+    push!(err_clist, err_c)
+    push!(err_klist, err_k)
     push!(err_ratio, err_c/err_k)
 end
 idx = findfirst((x)->x>=1, err_ratio)
@@ -69,7 +73,22 @@ ylabel!("R")
 ![](figures/02-polaron-transformed-redfield_1_1.png)
 
 
-From above figure we can see that, as the system-bath coupling strength is bigger than $10^{-1}$, PTRE should have better error scaling than the usual form of Redfield equation.
+From above figure we can see that, as the system-bath coupling strength is bigger than $10^{-1}$, PTRE should have better error scaling than the usual form of Redfield equation. We also plot the corresponding error values for both Redfield and PTRE:
+
+````julia
+
+plot(ηlist, err_clist, xscale=:log10, yscale=:log10, label="Redfield", linewidth=2)
+plot!(ηlist, err_klist, xscale=:log10, yscale=:log10, label="PTRE", linewidth=2)
+xlabel!(L"\eta g^2")
+ylabel!("error")
+````
+
+
+![](figures/02-polaron-transformed-redfield_2_1.png)
+
+
+
+Above figure confirms that the range of applicability of Redfield and PTRE are weak and strong coupling regime respectively.
 
 ### Solving PTRE
 
@@ -112,7 +131,7 @@ The following code block illustrates how these can be done in OSQAT
 ````
 
 
-![](figures/02-polaron-transformed-redfield_2_1.png)
+![](figures/02-polaron-transformed-redfield_3_1.png)
 
 
 
@@ -120,7 +139,7 @@ For historical reasons, this is know as an example of the "incoherent tunneling"
 
 ### Redfield equation
 
-What would happend to normal Redfield equation in this regime? We can also try
+What would happened to normal Redfield equation in this regime? We can also try
 
 ````julia
 
@@ -135,7 +154,7 @@ plot!(sol_redfield.t, pop_e_redfield, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t
 ````
 
 
-![](figures/02-polaron-transformed-redfield_3_1.png)
+![](figures/02-polaron-transformed-redfield_4_1.png)
 
 
 
@@ -146,9 +165,9 @@ PTRE gives a much stronger decay than the Redfield equation for the parameters c
 t_axis = range(0, 5, length=100)
 off_diag_ptre = [abs(sol_ptre(t)[1,2]) for t in t_axis]
 off_diag_redfield = [abs(sol_redfield(t)[1,2]) for t in t_axis]
-plot(t_axis, off_diag_ptre, xlabel=L"t\ (\mathrm{ns})", ylabel=L"\lvert P_{12} \rvert|(t)", label="PTRE", linewidth = 2, legend=:right)
-plot!(t_axis, off_diag_redfield, xlabel=L"t\ (\mathrm{ns})", ylabel=L"|P_{12}(t)|", label="Redfield", linewidth = 2)
+plot(t_axis, off_diag_ptre, xlabel=L"t\ (\mathrm{ns})", ylabel=L"\lvert \rho_{12} \rvert|(t)", label="PTRE", linewidth = 2, legend=:right)
+plot!(t_axis, off_diag_redfield, xlabel=L"t\ (\mathrm{ns})", ylabel=L"|\rho_{12}(t)|", label="Redfield", linewidth = 2)
 ````
 
 
-![](figures/02-polaron-transformed-redfield_4_1.png)
+![](figures/02-polaron-transformed-redfield_5_1.png)
