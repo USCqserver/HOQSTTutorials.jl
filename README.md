@@ -4,17 +4,17 @@ Tutorials for open system quantum annealing toolbox(OSQAT). This repo is inspire
 ## Table of Contents
 
 - Introduction
-  - [Introduction to OSQAT through closed-system simulation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/introduction/01-closed_system.html)
-  - [Introduction to OSQAT through adiabatic master equation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/introduction/02-single_qubit_ame.html)
-  - [Redfield equation with multi-axis noise](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/introduction/03-redfield_multi_axis_noise.html)
-  - [Spin-fluctuator model](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/introduction/04-spin_fluctuators.html)
-  - [AME Spin-fluctuator model](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/introduction/05-ame_spin_fluctuators.html)
+  - [Introduction to OSQAT through closed-system simulation](https://uscqserver.github.io/OSQATTutorials.jl/html/introduction/01-closed_system.html)
+  - [Introduction to OSQAT through adiabatic master equation](https://uscqserver.github.io/OSQATTutorials.jl/html/introduction/02-single_qubit_ame.html)
+  - [Redfield equation with multi-axis noise](https://uscqserver.github.io/OSQATTutorials.jl/html/introduction/03-redfield_multi_axis_noise.html)
+  - [Spin-fluctuator model](https://uscqserver.github.io/OSQATTutorials.jl/html/introduction/04-spin_fluctuators.html)
+  - [AME Spin-fluctuator model](https://uscqserver.github.io/OSQATTutorials.jl/html/introduction/05-ame_spin_fluctuators.html)
 - Hamiltonian
-  - [Custom eigendecomposition function](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/hamiltonian/01-custom-eigen.html)
+  - [Custom eigendecomposition function](https://uscqserver.github.io/OSQATTutorials.jl/html/hamiltonian/01-custom-eigen.html)
 - Redfield
-  - [Non-positivity in Redfield equation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/redfield/01-non_positivity_redfield.html)
-  - [Introduction to polaron transformed Redfield equation](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/redfield/02-polaron-transformed-redfield.html)
-  - [Introduction to CGME and ULE](https://htmlpreview.github.io/?https://github.com/USCqserver/OSQATTutorials.jl/blob/master/html/redfield/03-CGME_ULE.html)
+  - [Non-positivity in Redfield equation](https://uscqserver.github.io/OSQATTutorials.jl/html/redfield/01-non_positivity_redfield.html)
+  - [Introduction to polaron transformed Redfield equation](https://uscqserver.github.io/OSQATTutorials.jl/html/redfield/02-polaron-transformed-redfield.html)
+  - [Introduction to CGME and ULE](https://uscqserver.github.io/OSQATTutorials.jl/html/redfield/03-CGME_ULE.html)
 
 ## Contributing
 
