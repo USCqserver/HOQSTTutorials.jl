@@ -16,8 +16,7 @@ coupling to an Ohmic bath via $\sigma_z$ operator. We solve the open system dyna
 
 Coarse-grained ME is a completely copositive ME that can be obtained by applying an additional time coarse graining approximate to the Redfield equation. More details of CGME can be found in [Mozgunov and Lidar](https://quantum-journal.org/papers/q-2020-02-06-227/). We first solve the original Redfield equation and CGME and compare the instantaneous ground state population of both cases.
 
-````julia
-
+```julia
 using OrdinaryDiffEq, Plots, LaTeXStrings
 using QuantumAnnealingTools
 
@@ -37,16 +36,15 @@ U = InplaceUnitary(U)
 
 @time solr = solve_redfield(annealing, tf, U, alg=Tsit5())
 # we set the integration error tolerance to 1e-5 for speed
-@time solc = solve_CGME(annealing, tf, U, alg=Tsit5(), int_atol=1e-5, int_rtol=1e-5)
+@time solc = solve_cgme(annealing, tf, U, alg=Tsit5(), int_atol=1e-5, int_rtol=1e-5)
 plot(solr, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$", label="Redfield")
 plot!(solc, H, [1], 0:0.01:tf, linewidth=2, label="CGME")
-````
+```
 
-
-````
-0.204915 seconds (2.96 M allocations: 78.345 MiB, 9.30% gc time)
- 37.080598 seconds (489.73 M allocations: 19.392 GiB, 7.94% gc time)
-````
+```
+0.326442 seconds (3.08 M allocations: 80.058 MiB, 3.56% gc time)
+ 49.815768 seconds (489.73 M allocations: 19.392 GiB, 4.21% gc time)
+```
 
 
 ![](figures/03-CGME_ULE_1_1.png)
@@ -61,8 +59,7 @@ $$g(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \sqrt{\gamma(\omega)} e^{i\omega t}
 
 Let's first see how it looks like compared with two point correlation function $C(t)$:
 
-````julia
-
+```julia
 using QuadGK
 
 g(t) = quadgk((w)->sqrt(γ(w, bath))*exp(1.0im*w*t)/2/π, -Inf, Inf)[1]
@@ -77,8 +74,7 @@ plot!(t, real.(c_value), label="Re[C(t)]", linewidth=2)
 plot!(t, imag.(c_value), label="Im[C(t)]", linewidth=2)
 xlabel!("t (ns)")
 ylabel!("correlation")
-````
-
+```
 
 ![](figures/03-CGME_ULE_2_1.png)
 
@@ -86,8 +82,7 @@ ylabel!("correlation")
 
 From above picture, we can see that the jump correlator and two point correlation function roughly have the same time scale. To avoid recalculating the inverse Fourier transform within the solver, we can precalcuate $g(t)$ and construct interpolation from these pre-computed values. This procedure can be done by the following code:
 
-````julia
-
+```julia
 t = range(-4,4,length=2000)
 g_value = g.(t)
 gf = construct_interpolations(t, g_value, extrapolation = "flat")
@@ -98,8 +93,7 @@ plot(t, real.(g_value), label="Re[g(t)]", linewidth=2)
 plot!(t, imag.(g_value), label="Im[g(t)]", linewidth=2)
 xlabel!("t (ns)")
 ylabel!("fitted jump correlator")
-````
-
+```
 
 ![](figures/03-CGME_ULE_3_1.png)
 
@@ -107,20 +101,18 @@ ylabel!("fitted jump correlator")
 
 Finally we solve ULE and compare the result with Redfield and CGME:
 
-````julia
-
+```julia
 ubath = ULEBath(gf)
 annealing = Annealing(H, u0; coupling=coupling, bath=ubath)
 @time solu = solve_ule(annealing, tf, U, alg=Tsit5(), int_atol=1e-5, int_rtol=1e-5)
 plot(solr, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$", label="Redfield")
 plot!(solc, H, [1], 0:0.01:tf, linewidth=2, label="CGME")
 plot!(solu, H, [1], 0:0.01:tf, linewidth=2, label="ULE")
-````
+```
 
-
-````
-0.304092 seconds (5.09 M allocations: 133.387 MiB, 9.74% gc time)
-````
+```
+0.648544 seconds (5.09 M allocations: 133.383 MiB, 3.27% gc time)
+```
 
 
 ![](figures/03-CGME_ULE_4_1.png)

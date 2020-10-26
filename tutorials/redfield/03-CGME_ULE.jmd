@@ -35,7 +35,7 @@ U = InplaceUnitary(U)
 
 @time solr = solve_redfield(annealing, tf, U, alg=Tsit5())
 # we set the integration error tolerance to 1e-5 for speed
-@time solc = solve_CGME(annealing, tf, U, alg=Tsit5(), int_atol=1e-5, int_rtol=1e-5)
+@time solc = solve_cgme(annealing, tf, U, alg=Tsit5(), int_atol=1e-5, int_rtol=1e-5)
 plot(solr, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$", label="Redfield")
 plot!(solc, H, [1], 0:0.01:tf, linewidth=2, label="CGME")
 ```
