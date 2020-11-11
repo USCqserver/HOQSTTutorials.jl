@@ -2,9 +2,15 @@
 using QuantumAnnealingTools, OrdinaryDiffEq, Plots
 # define the Hamiltonian
 H = DenseHamiltonian([(s)->1.0], [-σz], unit=:ħ)
+
+
+# define the initial state by PauliVec[k][j],
+# which are the jth eigenvector of the 
+# Pauli matrix σₖ   
 u0 = PauliVec[1][1]
 # define total evolution time in (ns)
 tf = 10
+# combine H and u0 into an Annealing object
 annealing = Annealing(H, u0)
 
 
@@ -54,10 +60,9 @@ sol_linexp = solve_von_neumann(annealing, tf, alg=LinearExponential(), tstops=ra
 
 sol_tsit = solve_von_neumann(annealing, tf, alg=Tsit5(), reltol=1e-6);
 sol_trbdf = solve_von_neumann(annealing, tf, alg=TRBDF2(), reltol=1e-6);
-# LinearExponential is a fixed step size method, user need to specify the time steps using keyword argument `tstops`.
+
 sol_linexp = solve_von_neumann(annealing, tf, alg=LinearExponential(), tstops=range(0,tf,length=100), vectorize=true);
-# Even though Exprb method is an adaptive method, it tends to jump a lot of middle points. So if you want accurate evolution in the middle,
-# it is better to manually add more points for the algorithm.
+
 sol_exprb32 = solve_von_neumann(annealing, tf, alg=Exprb32(), tstops=range(0,tf,length=100), vectorize=true);
 
 t_list = range(0,tf,length=100)
