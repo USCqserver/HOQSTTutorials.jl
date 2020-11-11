@@ -44,6 +44,7 @@ using Pkg
 Pkg.add("Arpack")
 using Arpack
 
+
 function build_user_eigen(u_cache)
     function (H, t, lvl)
         hmat = H(t)
