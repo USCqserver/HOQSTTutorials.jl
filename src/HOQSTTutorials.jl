@@ -1,5 +1,5 @@
 __precompile__(false)
-module OSQATTutorials
+module HOQSTTutorials
 
 using Weave, Pkg, InteractiveUtils, IJulia
 
@@ -73,15 +73,14 @@ end
 function tutorial_footer(folder=nothing, file=nothing; remove_homedir=true)
     display("text/markdown", """
     ## Appendix
-     This tutorial is part of the OSQATTutorials.jl repository, found at: <https://github.com/SciML/OSQATTutorials.jl>.
-     For more information on doing scientific machine learning (SciML) with open source software, check out <https://sciml.ai/>.
+     This tutorial is part of the HOQSTTutorials.jl repository, found at: <https://github.com/USCqserver/HOQSTTutorials.jl>.
     """)
     if folder !== nothing && file !== nothing
         display("text/markdown", """
         To locally run this tutorial, do the following commands:
         ```
-        using OSQATTutorials
-        OSQATTutorials.weave_file("$folder","$file")
+        using HOQSTTutorials
+        HOQSTTutorials.weave_file("$folder","$file")
         ```
         """)
     end

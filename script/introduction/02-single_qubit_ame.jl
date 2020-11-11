@@ -49,7 +49,7 @@ annealing = Annealing(H, u0; coupling=coupling, bath=bath)
 
 tf = 10*sqrt(2)
 @time sol = solve_schrodinger(annealing, tf, alg=Tsit5(), retol=1e-4)
-# a convinient plot recipe to plot the instantaneous population during the evolution
+# a convenient plot recipe to plot the instantaneous population during the evolution
 # currently only support Hamiltonian with annealing parameter s = t/tf from 0 to 1.
 plot(sol, H, [1], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$")
 
