@@ -10,7 +10,7 @@ Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspi
   - [Spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-spin_fluctuators.html)
   - [AME Spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/05-ame_spin_fluctuators.html)
 - Hamiltonian
-  - [Custom eigendecomposition function](https://uscqserver.github.io/HOQSTTutorials.jl/html/hamiltonian/01-custom-eigen.html)
+  - [Custom eigendecomposition function](https://uscqserver.github.io/HOQSTTutorials.jl/html/hamiltonian/01-custom_eigen.html)
 - Redfield
   - [Non-positivity in Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/01-non_positivity_redfield.html)
   - [Introduction to polaron transformed Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/02-polaron-transformed-redfield.html)

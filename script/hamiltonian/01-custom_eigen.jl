@@ -1,9 +1,9 @@
 
 using QuantumAnnealingTools
 
-# define a function to construct an eigendecomposition routine for the
-# Hamiltonian. The routine should have signature: (H, t, lvl) -> (w, v).
-# the argument is the cache of the Hamiltonian
+# Define a function to construct an eigendecomposition routine for the
+# Hamiltonian. The routine should have the signature: (H, t, lvl) -> (w, v).
+# The argument of this function is the cache used by the Hamiltonian object.
 function build_user_eigen(u_cache)
     EIGS = function(H, t, lvl)
         println("I am the user defined eigendecomposition routine.")
@@ -43,6 +43,7 @@ w, v = eigen_decomp(H, 0.1, lvl=4)
 using Pkg
 Pkg.add("Arpack")
 using Arpack
+
 
 function build_user_eigen(u_cache)
     function (H, t, lvl)

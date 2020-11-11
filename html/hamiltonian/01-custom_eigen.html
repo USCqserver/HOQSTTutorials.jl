@@ -3,7 +3,7 @@
 <HEAD>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Using a user defined eigendecomposition function</title>
+  <title>Using a user-defined eigendecomposition function</title>
   
 
   <script type="text/x-mathjax-config">
@@ -657,22 +657,22 @@ div.title {text-align: center;}
     <div class = "row">
       <div class = "col-md-12 twelve columns">
         <div class="title">
-          <h1 class="title">Using a user defined eigendecomposition function</h1>
+          <h1 class="title">Using a user-defined eigendecomposition function</h1>
           <h5>Huo Chen</h5>
           
         </div>
 
         <h2>Initialize Hamiltonian with a custom eigendecomposition function</h2>
-<p>When defining a Hamiltonian object, a keyword argument <code>EIGS</code> can be used to construct a user defined eigendecomposition routine. All the eigendecomposition calls inside the solver will call this function instead of the default one.</p>
+<p>When defining a Hamiltonian object, a keyword argument <code>EIGS</code> can be supplied to construct a user defined eigendecomposition routine. All the eigendecomposition calls inside the solver will call this function instead of the default one.</p>
 <p>For example:</p>
 
 
 <pre class='hljl'>
 <span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>QuantumAnnealingTools</span><span class='hljl-t'>
 
-</span><span class='hljl-cs'># define a function to construct an eigendecomposition routine for the</span><span class='hljl-t'>
-</span><span class='hljl-cs'># Hamiltonian. The routine should have signature: (H, t, lvl) -&gt; (w, v).</span><span class='hljl-t'>
-</span><span class='hljl-cs'># the argument is the cache of the Hamiltonian</span><span class='hljl-t'>
+</span><span class='hljl-cs'># Define a function to construct an eigendecomposition routine for the</span><span class='hljl-t'>
+</span><span class='hljl-cs'># Hamiltonian. The routine should have the signature: (H, t, lvl) -&gt; (w, v).</span><span class='hljl-t'>
+</span><span class='hljl-cs'># The argument of this function is the cache used by the Hamiltonian object.</span><span class='hljl-t'>
 </span><span class='hljl-k'>function</span><span class='hljl-t'> </span><span class='hljl-nf'>build_user_eigen</span><span class='hljl-p'>(</span><span class='hljl-n'>u_cache</span><span class='hljl-p'>)</span><span class='hljl-t'>
     </span><span class='hljl-n'>EIGS</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-k'>function</span><span class='hljl-p'>(</span><span class='hljl-n'>H</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>t</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lvl</span><span class='hljl-p'>)</span><span class='hljl-t'>
         </span><span class='hljl-nf'>println</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;I am the user defined eigendecomposition routine.&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'>
@@ -710,27 +710,17 @@ I am the user defined eigendecomposition routine.
 
 </span><span class='hljl-n'>H</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>DenseHamiltonian</span><span class='hljl-p'>([(</span><span class='hljl-n'>s</span><span class='hljl-p'>)</span><span class='hljl-oB'>-&gt;</span><span class='hljl-nfB'>1.0</span><span class='hljl-p'>],</span><span class='hljl-t'> </span><span class='hljl-p'>[</span><span class='hljl-n'>σx</span><span class='hljl-oB'>+</span><span class='hljl-n'>σz</span><span class='hljl-p'>],</span><span class='hljl-t'> </span><span class='hljl-n'>EIGS</span><span class='hljl-oB'>=</span><span class='hljl-n'>build_user_eigen</span><span class='hljl-p'>)</span><span class='hljl-t'>
 
-</span><span class='hljl-nf'>print</span><span class='hljl-p'>(</span><span class='hljl-nf'>eigen_decomp</span><span class='hljl-p'>(</span><span class='hljl-n'>H</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.5</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lvl</span><span class='hljl-oB'>=</span><span class='hljl-ni'>2</span><span class='hljl-p'>))</span>
+</span><span class='hljl-nf'>print</span><span class='hljl-p'>(</span><span class='hljl-nf'>eigen_decomp</span><span class='hljl-p'>(</span><span class='hljl-n'>H</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.5</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lvl</span><span class='hljl-oB'>=</span><span class='hljl-ni'>2</span><span class='hljl-p'>))</span><span class='hljl-t'>
+</span><span class='hljl-nf'>print</span><span class='hljl-p'>(</span><span class='hljl-nf'>eigen_decomp</span><span class='hljl-p'>(</span><span class='hljl-n'>H</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.0</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lvl</span><span class='hljl-oB'>=</span><span class='hljl-ni'>2</span><span class='hljl-p'>))</span>
 </pre>
 
 
 <pre class="output">
 &#40;&#91;-1.4142135623730951, 1.4142135623730951&#93;, Complex&#123;Float64&#125;&#91;0.382683432365
 0897 &#43; 0.0im -0.9238795325112867 &#43; 0.0im; -0.9238795325112867 &#43; 0.0im -0.38
-26834323650897 &#43; 0.0im&#93;&#41;
-</pre>
-
-
-
-<pre class='hljl'>
-<span class='hljl-nf'>print</span><span class='hljl-p'>(</span><span class='hljl-nf'>eigen_decomp</span><span class='hljl-p'>(</span><span class='hljl-n'>H</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.0</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lvl</span><span class='hljl-oB'>=</span><span class='hljl-ni'>2</span><span class='hljl-p'>))</span>
-</pre>
-
-
-<pre class="output">
-&#40;&#91;-1.4142135623730951, 1.4142135623730951&#93;, Complex&#123;Float64&#125;&#91;0.382683432365
-0897 &#43; 0.0im -0.9238795325112867 &#43; 0.0im; -0.9238795325112867 &#43; 0.0im -0.38
-26834323650897 &#43; 0.0im&#93;&#41;
+26834323650897 &#43; 0.0im&#93;&#41;&#40;&#91;-1.4142135623730951, 1.4142135623730951&#93;, Complex
+&#123;Float64&#125;&#91;0.3826834323650897 &#43; 0.0im -0.9238795325112867 &#43; 0.0im; -0.923879
+5325112867 &#43; 0.0im -0.3826834323650897 &#43; 0.0im&#93;&#41;
 </pre>
 
 
@@ -750,26 +740,33 @@ I am the user defined eigendecomposition routine.
 
 
 <pre class="output">
-&#40;&#91;-0.5738678866844571, -0.3083962790700119, -0.29497773868333155, -0.278555
-1652296734&#93;, Complex&#123;Float64&#125;&#91;0.2333620288024759 &#43; 0.0im 0.0169701529350041
-5 &#43; 0.0im -0.10038463218322669 &#43; 0.0im -0.0855665799604572 &#43; 0.0im; -0.2424
-3922044437416 &#43; 0.0im -0.1495341151898942 &#43; 0.0im -0.21085996056604397 &#43; 0.
-0im -0.22971101089378024 &#43; 0.0im; … ; -0.24243922044437377 &#43; 0.0im 0.149534
-11518989426 &#43; 0.0im 0.210859960566044 &#43; 0.0im 0.22971101089377993 &#43; 0.0im; 
-0.23336202880247583 &#43; 0.0im -0.01697015293500432 &#43; 0.0im 0.1003846321832266
-2 &#43; 0.0im 0.08556657996045736 &#43; 0.0im&#93;&#41;
+&#40;&#91;-0.573495658003095, -0.3042181697504149, -0.28852109913767227, -0.2849528
+71435738&#93;, Complex&#123;Float64&#125;&#91;0.23836977958435954 &#43; 0.0im 0.05398087128590853
+ &#43; 0.0im 0.1634628366629931 &#43; 0.0im 0.13930036452997857 &#43; 0.0im; -0.2486159
+339315127 &#43; 0.0im 0.18503072485464925 &#43; 0.0im 0.06269935477737626 &#43; 0.0im -
+0.4125671661024614 &#43; 0.0im; … ; -0.24861593393151232 &#43; 0.0im -0.18503072485
+464936 &#43; 0.0im -0.06269935477737654 &#43; 0.0im 0.41256716610246136 &#43; 0.0im; 0.
+23836977958435948 &#43; 0.0im -0.05398087128590844 &#43; 0.0im -0.16346283666299297
+ &#43; 0.0im -0.139300364529979 &#43; 0.0im&#93;&#41;
 </pre>
 
 
-<p>If the size of the Hamiltonian becomes very large, we can use sparse algorithms provided by <a href="https://github.com/JuliaLinearAlgebra/Arpack.jl">Arpack</a> instead.</p>
+<p>If the size of the Hamiltonian becomes very large, we can use sparse algorithms provided by <a href="https://github.com/JuliaLinearAlgebra/Arpack.jl">Arpack</a> instead. Let&#39;s first install <code>Arpack.jl</code> by running:</p>
 
 
 <pre class='hljl'>
 <span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Pkg</span><span class='hljl-t'>
 </span><span class='hljl-n'>Pkg</span><span class='hljl-oB'>.</span><span class='hljl-nf'>add</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;Arpack&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'>
-</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Arpack</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>Arpack</span>
+</pre>
 
-</span><span class='hljl-k'>function</span><span class='hljl-t'> </span><span class='hljl-nf'>build_user_eigen</span><span class='hljl-p'>(</span><span class='hljl-n'>u_cache</span><span class='hljl-p'>)</span><span class='hljl-t'>
+
+
+<p>Next, we can use <code>Arpack</code> function to replace the default eigendecomposition routine:</p>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>function</span><span class='hljl-t'> </span><span class='hljl-nf'>build_user_eigen</span><span class='hljl-p'>(</span><span class='hljl-n'>u_cache</span><span class='hljl-p'>)</span><span class='hljl-t'>
     </span><span class='hljl-k'>function</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>H</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>t</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>lvl</span><span class='hljl-p'>)</span><span class='hljl-t'>
         </span><span class='hljl-n'>hmat</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>H</span><span class='hljl-p'>(</span><span class='hljl-n'>t</span><span class='hljl-p'>)</span><span class='hljl-t'>
         </span><span class='hljl-nf'>println</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;Using sparse matrix algorithm&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'>
@@ -788,18 +785,17 @@ I am the user defined eigendecomposition routine.
 
 <pre class="output">
 Using sparse matrix algorithm
-&#40;&#91;-0.5734785532733703, -0.30317794826695216, -0.2917378434634687, -0.282026
-46922972613&#93;, Complex&#123;Float64&#125;&#91;0.22195405299111942 &#43; 0.08866031953298129im 
--0.02052140993920564 &#43; 0.019005043662084425im -0.022435905206461004 - 0.035
-367134086704576im -0.15648952959398843 - 0.22193046461129737im; -0.22588103
-02807888 - 0.09022896428899621im 0.04515024207247971 - 0.04181400422695076i
-m -0.16010822034874572 - 0.2523886977302269im -0.03884367554039626 - 0.0550
-8735940517666im; … ; -0.22588103028078868 - 0.09022896428899646im -0.045150
-242072479564 &#43; 0.04181400422695083im 0.16010822034874564 &#43; 0.25238869773022
-743im 0.038843675540396014 &#43; 0.05508735940517674im; 0.22195405299111998 &#43; 0
-.08866031953298154im 0.02052140993920588 - 0.019005043662084442im 0.0224359
-05206461566 &#43; 0.03536713408670475im 0.15648952959398815 &#43; 0.221930464611297
-im&#93;&#41;
+&#40;&#91;-0.573753223516986, -0.3081332950118014, -0.28888236532365813, -0.2848473
+193924189&#93;, Complex&#123;Float64&#125;&#91;-0.07043338469104704 - 0.22525389644832888im 0
+.03640120197310678 &#43; 0.04190368601781744im -0.05708697082619761 - 0.1510792
+8936989132im 0.09602116760349026 &#43; 0.10721986223927632im; 0.071094643847699
+67 &#43; 0.22736867770229574im -0.05707655238287779 - 0.06570436689971414im -0.
+07124587282907825 - 0.18855048151574916im 0.105745171320418 &#43; 0.11807795077
+293008im; … ; 0.07109464384769937 &#43; 0.2273686777022955im 0.0570765523828783
+4 &#43; 0.06570436689971379im 0.07124587282907847 &#43; 0.18855048151574938im -0.10
+574517132041804 - 0.11807795077293036im; -0.07043338469104696 - 0.225253896
+44832872im -0.03640120197310675 - 0.04190368601781775im 0.05708697082619774
+ &#43; 0.15107928936989115im -0.09602116760349015 - 0.10721986223927653im&#93;&#41;
 </pre>
 
 
@@ -807,8 +803,8 @@ im&#93;&#41;
         <HR/>
         <div class="footer">
           <p>
-            Published from <a href="01-custom-eigen.jmd">01-custom-eigen.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.2 on 2020-08-14.
+            Published from <a href="01-custom_eigen.jmd">01-custom_eigen.jmd</a>
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.6 on 2020-11-11.
           </p>
         </div>
       </div>

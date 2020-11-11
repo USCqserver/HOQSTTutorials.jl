@@ -1,19 +1,19 @@
 ---
-title: Using a user defined eigendecomposition function
+title: Using a user-defined eigendecomposition function
 author: Huo Chen
 ---
 
 ## Initialize Hamiltonian with a custom eigendecomposition function
-When defining a Hamiltonian object, a keyword argument `EIGS` can be used to construct a user defined eigendecomposition routine. All the eigendecomposition calls inside the solver will call this function instead of the default one.
+When defining a Hamiltonian object, a keyword argument `EIGS` can be supplied to construct a user defined eigendecomposition routine. All the eigendecomposition calls inside the solver will call this function instead of the default one.
 
 For example:
 
 ```julia
 using QuantumAnnealingTools
 
-# define a function to construct an eigendecomposition routine for the
-# Hamiltonian. The routine should have signature: (H, t, lvl) -> (w, v).
-# the argument is the cache of the Hamiltonian
+# Define a function to construct an eigendecomposition routine for the
+# Hamiltonian. The routine should have the signature: (H, t, lvl) -> (w, v).
+# The argument of this function is the cache used by the Hamiltonian object.
 function build_user_eigen(u_cache)
     EIGS = function(H, t, lvl)
         println("I am the user defined eigendecomposition routine.")
@@ -60,13 +60,15 @@ H = SparseHamiltonian([(s)->1-s, (s)->s], [Hd, Hp], unit=:ħ)
 # the default eigen_decomposition using dense matrices algorithm
 w, v = eigen_decomp(H, 0.1, lvl=4)
 ```
-If the size of the Hamiltonian becomes very large, we can use sparse algorithms provided by [Arpack](https://github.com/JuliaLinearAlgebra/Arpack.jl) instead.
-
-```julia
+If the size of the Hamiltonian becomes very large, we can use sparse algorithms provided by [Arpack](https://github.com/JuliaLinearAlgebra/Arpack.jl) instead. Let's first install `Arpack.jl` by running:
+```julia; results = "hidden"
 using Pkg
 Pkg.add("Arpack")
 using Arpack
+```
 
+Next, we can use `Arpack` function to replace the default eigendecomposition routine:
+```julia
 function build_user_eigen(u_cache)
     function (H, t, lvl)
         hmat = H(t)
