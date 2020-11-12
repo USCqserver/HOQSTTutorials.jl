@@ -23,12 +23,15 @@ sol_linexp = solve_schrodinger(annealing, tf, alg=LinearExponential(), abstol=1e
 sol_exprb32 = solve_schrodinger(annealing, tf, alg=Exprb32(), tstops=range(0,tf,length=100));
 
 
+# this code block shows how to plot the expectation value of X
 t_list = range(0,tf,length=100)
 tsit = []
 trbdf = []
 linexp = []
 exprb32 = []
 for s in t_list
+    # sol_tsit(s)'*σx*sol_tsit(s) calculates the 
+    # expectation value <ψ(s)|X|ψ(s)>
     push!(tsit, real(sol_tsit(s)'*σx*sol_tsit(s)))
     push!(trbdf, real(sol_trbdf(s)'*σx*sol_trbdf(s)))
     push!(linexp, real(sol_linexp(s)'*σx*sol_linexp(s)))
