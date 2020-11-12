@@ -3,15 +3,15 @@ title: An Intro to HOQST - closed-system simulation
 author: Huo Chen
 ---
 
-## Close System Examples
-This notebook will get you started with HOQST by introducing you to the functionality for solving colsed-system equations.
+## Closed-system Examples
+This notebook will get you started with HOQST by introducing you to the functionality for solving closed-system equations.
 
-### Define the Hamiltonin
-The first step is to define an Hamiltonian. In this tutorial we focus on a 2-level system with the following Hamiltonian
+### Define the Hamiltonian
+The first step is to define a Hamiltonian. In this tutorial, we focus on a 2-level system with the following Hamiltonian
 
 $$H(s) = - \sigma_z$$
 
-where $s= t/t_f$ is the dimensionless time and $t_f$ is the total evolution time. We use a constant Hamiltonian so the simulation results can be trivially confirmed. The syntax is the same for time dependent Hamiltonians. Let's first define the Hamiltonian by:
+where $s= t/t_f$ is the dimensionless time and $t_f$ is the total evolution time. We use a constant Hamiltonian so the simulation results can be trivially confirmed. The syntax is the same for time-dependent Hamiltonians. Let's first define the Hamiltonian by:
 
 ```julia
 using QuantumAnnealingTools, OrdinaryDiffEq, Plots
@@ -19,7 +19,7 @@ using QuantumAnnealingTools, OrdinaryDiffEq, Plots
 H = DenseHamiltonian([(s)->1.0], [-σz], unit=:ħ)
 ```
 
-In this example, we use the `DenseHamiltonian` object. The syntax is the same for other type of Hamiltonians.
+In this example, we use the `DenseHamiltonian` object. The syntax is the same for other types of Hamiltonians.
 
 The closed-system evolution is completely specified by the Hamiltonian and the initial state. We can combine them into a single `Annealing` object by:
 
@@ -45,25 +45,25 @@ We start with the Schrodinger equation
     \lvert \dot{\phi} \rangle = -i t_f H(s) \lvert \phi \rangle \ .
 \end{equation}
 
-To solve the this differential equation, we need to choose a proper algortihm. HOQST relies on `OrdinaryDiffEq.jl` as the low level solver, which support a large collection of [algorithms](https://docs.sciml.ai/latest/solvers/ode_solve/). We do not guarantee compatibilities to every solver in this list. Users can try specific algorithms if they are interested. We provide a list of algorithms we tested and recommended here:
+To solve this differential equation, we need to choose a proper algorithm. HOQST relies on `OrdinaryDiffEq.jl` as the low-level solver, which supports a large collection of [algorithms](https://docs.sciml.ai/latest/solvers/ode_solve/). We do not guarantee compatibilities to every solver in this list. Users can try specific algorithms if they are interested. We provide a list of algorithms we tested and recommended here:
 
 1. The default Tsitouras 5/4 Runge-Kutta method(Tsit5()).
 
    This is the default method in `OrdinaryDiffEq` and works well in most cases.
 
-2. A second order A-B-L-S-stable one-step ESDIRK method(TRBDF2()).
+2. A second-order A-B-L-S-stable one-step ESDIRK method(TRBDF2()).
 
-   This is the method widely used in large scale classical circuit simulations. Because this method has order of 2, it is recommended to use smaller error tolerance comparing with other higher order methods.
+   This is the method widely used in large scale classical circuit simulations. Because this is a second-order method, it is recommended to use smaller error tolerance comparing with other higher-order methods.
  
 3. A simple linear exponential method(LinearExponential()).
 
-   This method simply discretize the Hamiltonian and do matrix exponential for each interval.
+   This method simply discretizes the Hamiltonian and do matrix exponential for each interval.
  
 4. Adaptive exponential Rosenbrock methods(Exprb32()/Exprb43()).
 
    This method belongs to the adaptive exponential Runge-Kutta method family.
  
-It is important to notice that, method 3 and 4 are exponential methods which would preserve the norm of the state vectors. To solve our the Schrodinger equation we use the function `solve_schrodinger`.
+It is important to notice that, method 3 and 4 are exponential methods which would preserve the norm of the state vectors. To solve the Schrodinger equation we use the function `solve_schrodinger`.
 
 ```julia
 sol_tsit = solve_schrodinger(annealing, tf, alg=Tsit5(), abstol=1e-6, reltol=1e-6);
@@ -99,18 +99,18 @@ title!("Free Evolution")
 ### Other close system equations
 The package also contains several other closed-system solvers.
 #### Von Neumann equation
-Von Neumann equation is the "Schrodinger" equation for density matrices
+The Von Neumann equation is the "Schrodinger" equation for density matrices
 
 $$\dot{\rho} = -it_f[H(s), \rho] \ .$$
 
-Even though Von Neumann equation is equivalent to the Schrodinger equation, it is sometimes numerically more stable than the Schrodinger equation. Users is encouraged to try to solve it using different algorithms.
+Even though the Von Neumann equation is equivalent to the Schrodinger equation, it is sometimes numerically more stable than the Schrodinger equation. Users are encouraged to try to solve it using different algorithms.
 
 ```julia
 annealing = Annealing(H, u0)
 sol_tsit = solve_von_neumann(annealing, tf, alg=Tsit5(), abstol=1e-6, reltol=1e-6)
 ```
 
-As shown below, the solution given by the solver is the density matrix instead of state vector:
+As shown below, the solution given by the solver is the density matrix instead of the state vector:
 
 ```julia
 sol_tsit(0.5)
@@ -172,7 +172,7 @@ using `solve_unitary`. The ODE form of the problem is
 
 $$\dot{U} = -i t_f H(s) U \ .$$
 
-Again, although this is in principle equivalent to Schrondinger/Von Neumann equation, the unitary becomes handy in certain cases, e.g. when solving the Redfeild equation.
+Again, although this is in principle equivalent to Schrodinger/Von Neumann equation, the unitary becomes handy in certain cases, e.g. when solving the Redfield equation.
 
 ```julia
 annealing = Annealing(H, u0)
