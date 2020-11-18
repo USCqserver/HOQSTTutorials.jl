@@ -15,7 +15,7 @@ $$H(s) = - \sigma_z$$
 where $s= t/t_f$ is the dimensionless time and $t_f$ is the total evolution time. We use the constant Hamiltonian so that the simulation results can be trivially confirmed. The syntax is the same for time-dependent Hamiltonians. Let's first define the Hamiltonian by:
 
 ```julia
-using QuantumAnnealingTools, OrdinaryDiffEq, Plots
+using OpenQuantumTools, OrdinaryDiffEq, Plots
 # define the Hamiltonian
 H = DenseHamiltonian([(s)->1.0], [-σz], unit=:ħ)
 ```
@@ -259,17 +259,17 @@ sol_linexp = solve_von_neumann(annealing, tf, alg=LinearExponential(), tstops=ra
 ```
 
 ```
-Error: MethodError: no method matching Array{T,2} where T(::QuantumAnnealin
-gTools.var"#34#38")
+Error: MethodError: no method matching Array{T,2} where T(::OpenQuantumTool
+s.var"#40#44")
 Closest candidates are:
   Array{T,2} where T(!Matched::LinearAlgebra.SymTridiagonal{T,V} where V<:A
-bstractArray{T,1}) where T at D:\buildbot\worker\package_win64\build\usr\sh
+bstractArray{T,1}) where T at C:\buildbot\worker\package_win64\build\usr\sh
 are\julia\stdlib\v1.5\LinearAlgebra\src\tridiag.jl:141
   Array{T,2} where T(!Matched::LinearAlgebra.Tridiagonal{T,V} where V<:Abst
-ractArray{T,1}) where T at D:\buildbot\worker\package_win64\build\usr\share
+ractArray{T,1}) where T at C:\buildbot\worker\package_win64\build\usr\share
 \julia\stdlib\v1.5\LinearAlgebra\src\tridiag.jl:582
   Array{T,2} where T(!Matched::LinearAlgebra.LowerTriangular{T,S} where S<:
-AbstractArray{T,2}) where T at D:\buildbot\worker\package_win64\build\usr\s
+AbstractArray{T,2}) where T at C:\buildbot\worker\package_win64\build\usr\s
 hare\julia\stdlib\v1.5\LinearAlgebra\src\triangular.jl:34
   ...
 ```
