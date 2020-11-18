@@ -1,5 +1,5 @@
 # HOQSTTutorials.jl
-Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspired by [SciMLTutorials](https://github.com/SciML/SciMLTutorials.jl) so the workflow is the same. Because currently `HOQST` and `HOQSTTutorials.jl` are not officially registered, you need to manually install these packages.
+Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspired by [SciMLTutorials](https://github.com/SciML/SciMLTutorials.jl), so the workflow is the same. Because currently `HOQST` and `HOQSTTutorials.jl` are not officially registered, you need to install these packages manually.
 
 ## Table of Contents
 
@@ -9,6 +9,7 @@ Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspi
   - [Redfield equation with multi-axis noise](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/03-redfield_multi_axis_noise.html)
   - [Spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-spin_fluctuators.html)
   - [AME Spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/05-ame_spin_fluctuators.html)
+- Advanced
 - Hamiltonian
   - [Custom eigendecomposition function](https://uscqserver.github.io/HOQSTTutorials.jl/html/hamiltonian/01-custom_eigen.html)
 - Redfield
@@ -36,6 +37,6 @@ To generate all of the notebooks, do:
 HOQSTTutorials.weave_all()
 ```
 
-If you add new tutorials which require new packages, simply updating your local
+If you add new tutorials that require new packages, simply updating your local
 environment will change the project and manifest files. When this occurs, the
 updated environment files should be included in the PR.
