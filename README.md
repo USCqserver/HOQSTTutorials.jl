@@ -1,3 +1,5 @@
+<img src="assets/logo.jpg" width="256"/>
+
 # HOQSTTutorials.jl
 Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspired by [SciMLTutorials](https://github.com/SciML/SciMLTutorials.jl), so the workflow is the same. Because currently `HOQST` and `HOQSTTutorials.jl` are not officially registered, you need to install these packages manually.
 
