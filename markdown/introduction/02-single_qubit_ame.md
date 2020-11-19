@@ -5,7 +5,7 @@ title: "An Intro to HOQST - adiabatic master equation"
 
 
 ## Single qubit annealing
-In this tutorial, we will try to recreate the single-qubit example in this paper: [Decoherence in adiabatic quantum computation](https://arxiv.org/abs/1503.08767).
+This tutorial will recreate the single-qubit example in this paper: [Decoherence in adiabatic quantum computation](https://arxiv.org/abs/1503.08767).
 
 The Hamiltonian of this example is
 
@@ -14,7 +14,7 @@ $$H(s) = -\frac{1}{2}(1-s)\sigma_x - \frac{1}{2}s\sigma_z \ ,$$
 which can be constructed by the following code block
 
 ```julia
-using QuantumAnnealingTools, OrdinaryDiffEq, Plots
+using OpenQuantumTools, OrdinaryDiffEq, Plots
 H = DenseHamiltonian([(s)->1-s, (s)->s], -[σx, σz]/2)
 ```
 
@@ -30,7 +30,7 @@ with size: (2, 2)
 This package directly interacts with [Plots.jl](https://github.com/JuliaPlots/Plots.jl) by defining [recipes](https://github.com/JuliaPlots/RecipesBase.jl). We can visualize the spectrum of the Hamiltonian by directly plotting the object:
 
 ```julia
-# this plot recipe is for conviniently plotting the spectrum of the Hamltonian
+# this plot recipe is for conveniently plotting the spectrum of the Hamiltonian
 # the first 3 arguments are: the Hamiltonian, the grid `s` and the levels to keep
 plot(H, 0:0.01:1, 2, linewidth=2)
 ```
@@ -40,7 +40,7 @@ plot(H, 0:0.01:1, 2, linewidth=2)
 
 
 ### Unit ($h$ or $\hbar$)
-A keyword argument `unit` whose default value is `:h` can be provided to the constructor of any Hamiltonian object. This argument specifies the unit of other input arguments. For example, setting `unit` to `:h` means the other input arguments have the unit of $\mathrm{GHz}$, while setting it to `:ħ` means the other input arguments have the unit of $2\pi\mathrm{GHz}$. To evaluate the value of a Hamiltonian object at a given time, it is recommended to use `evaluate` function instead of directly calling the object. This will also return the value in the unit system of $h=1$. The following code block shows the effects of different choices of `unit`. 
+A keyword argument `unit` whose default value is `:h` can be provided to any Hamiltonian type's constructor. This argument specifies the unit of other input arguments. For example, setting `unit` to `:h` means the other input arguments have the unit of $\mathrm{GHz}$, while setting it to `:ħ` means the other input arguments have the unit of $2\pi\mathrm{GHz}$. To evaluate the Hamiltonian at a given time, the user should use the `evaluate` function instead of directly calling it. `evaluate` will always return the Hamiltonian value in the unit system of $h=1$. The following code block shows the effects of different choices of `unit`:
 
 ```julia
 H_h = DenseHamiltonian([(s)->1-s, (s)->s], -[σx, σz]/2, unit=:h)
@@ -65,7 +65,7 @@ evaluate(H_ħ, 0.5) = Complex{Float64}[-0.039788735772973836 + 0.0im -0.0397
 
 
 
-Internally, this package use a unit system of $\hbar=1$. If we call `H_h` directly, we can see that the value is scaled by $2\pi$.
+Internally, HOQST uses a unit system of $\hbar=1$. If we call `H_h` directly, its value is scaled by $2\pi$:
 
 ```julia
 H_h(0.5)
@@ -90,7 +90,7 @@ $$H(s) = H_{\mathrm{S}}(s) + gS \otimes B + H_{\mathrm{B}} \ .$$
 We denote $S$ the coupling and $\{gB, H_{\mathrm{B}}\}$ the bath.
 
 #### Coupling
-For constant coupling operators, we can use the constructor `ConstantCouplings`. Like the case of Hamiltonian, there is a keyword argument `unit` to specify the input unit.
+For constant coupling operators, we can use the constructor `ConstantCouplings`. Like Hamiltonian's case, there is a keyword argument `unit` to specify the input unit.
 
 ```julia
 coupling = ConstantCouplings(["Z"])
@@ -106,12 +106,12 @@ and string representation: ["Z"]
 
 
 #### Bath
-A bath instance can be any object which implement the following three methods:
+A bath instance can be any object which implements the following three methods:
   1. Correlation function: `correlation(τ, bath)`
   2. Spectrum density: `γ(ω, bath)`
   3. Lamb shift: `S(ω, bath)`
 
-Those three methods are required by Redfield/Adiabatic ME solvers. Currently we have built-in support for Ohmic bath. An Ohmic bath object can be created by :
+Redfield/Adiabatic ME solvers require those three methods. Currently, we have built-in support for the Ohmic bath. An Ohmic bath object can be created by :
 
 ```julia
 η = 1e-4
@@ -131,7 +131,7 @@ T (mK): 16.0
 
 
 
-`info_freq` is a convenient function to convert each quantities into the same unit.
+`info_freq` is a convenient function to convert each quantity into the same unit.
 
 ```julia
 info_freq(bath)
@@ -146,7 +146,7 @@ T (GHz): 0.33338579560200365
 
 
 
-We can also directly plot the spectrum density of Ohmic bath
+We can also directly plot the spectrum density of Ohmic bath:
 
 ```julia
 p1 = plot(bath, :γ, range(0,20,length=200), label="", size=(800, 400), linewidth=2)
@@ -191,13 +191,14 @@ There are several interfaces in HOQST that might be handy. The first one is the 
 ```julia
 tf = 10*sqrt(2)
 @time sol = solve_schrodinger(annealing, tf, alg=Tsit5(), retol=1e-4)
-# a convenient plot recipe to plot the instantaneous population during the evolution
-# currently only support Hamiltonian with annealing parameter s = t/tf from 0 to 1.
-plot(sol, H, [1], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$")
+# The following line of code is a convenient recipe to plot the instantaneous population during the evolution.
+# It currently only supports Hamiltonian with annealing parameter s = t/tf from 0 to 1.
+# The third argument can be either a list or a number. When it is a list, it specifies the energy levels to plot (starting from 0); when it is a number, it specifies the total number of levels to plot.
+plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.005162 seconds (2.42 k allocations: 147.051 KiB)
+0.003820 seconds (2.42 k allocations: 147.051 KiB)
 ```
 
 
@@ -205,7 +206,7 @@ plot(sol, H, [1], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$"
 
 
 
-The solution is an `ODESolution` object in `DifferentialEquations.jl` package. More details for the interface can be found [here](http://docs.juliadiffeq.org/latest/basics/solution.html). The value of state vector at a given time can be obtained by directly calling the `ODESolution` object.
+The solution is an `ODESolution` object in `DifferentialEquations.jl` package. More details for the interface can be found [here](http://docs.juliadiffeq.org/latest/basics/solution.html). The state vector's value at a given time can be obtained by directly calling the `ODESolution` object.
 
 ```julia
 sol(0.5)
@@ -233,18 +234,18 @@ Other interfaces include
 
 
 ### Open System
-#### Time dependent Redfield equation
-The time-depedent Redfield equation solver needs
+#### Time-dependent Redfield equation
+The time-dependent Redfield equation solver needs
   1. Annealing object
   2. Total annealing time
   3. Pre-calculated unitary
-to work. The follow code block illustrates how to supply the above three objects to the Redfield solver. In addition, all the other keyword arguments in [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/basics/common_solver_opts/) are supported.
+to work. The following code block illustrates how to supply the above three objects to the Redfield solver. Besides, all the other keyword arguments in [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/basics/common_solver_opts/) are supported.
 
 ```julia
 tf = 10*sqrt(2)
 U = solve_unitary(annealing, tf, alg=Tsit5(), abstol=1e-8, retol=1e-8);
 sol = solve_redfield(annealing, tf, U; alg=Tsit5(), abstol=1e-8, retol=1e-8)
-plot(sol, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
+plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ![](figures/02-single_qubit_ame_13_1.png)
@@ -261,11 +262,11 @@ Besides other keyword arguments supported in [DifferentialEquations.jl](https://
 ```julia
 tf = 10*sqrt(2)
 @time sol = solve_ame(annealing, tf; alg=Tsit5(), ω_hint=range(-6, 6, length=100), reltol=1e-4)
-plot(sol, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
+plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.011240 seconds (193.16 k allocations: 4.270 MiB)
+0.011561 seconds (193.16 k allocations: 4.270 MiB)
 ```
 
 
@@ -277,12 +278,12 @@ We can also solve the AME for a longer annealing time:
 
 ```julia
 tf = 5000
-@time sol_ame = solve_ame(annealing, tf; alg=Tsit5(), ω_hint=range(-6, 6, length=100), reltol=1e-4)
-plot(sol_ame, H, [1], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
+@time sol_ame = solve_ame(annealing, tf; alg=Tsit5(), ω_hint=range(-6, 6, length=100), reltol=1e-6)
+plot(sol_ame, H, [0], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.126154 seconds (1.42 M allocations: 72.884 MiB, 18.71% gc time)
+0.203734 seconds (1.37 M allocations: 70.515 MiB, 47.03% gc time)
 ```
 
 
@@ -293,33 +294,41 @@ plot(sol_ame, H, [1], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 The above results agree with Fig 2 of the [reference paper](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320).
 
 #### Trajectory method for adiabatic master equation
-The package also supports the trajectory method for AME. More details of this method can be found in this [paper](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022116). The basic workflow is to create an ODE [EnsembleProblem](https://docs.juliadiffeq.org/dev/features/ensemble/) via `build_ensembles` interface. Then, the resulting `EnsembleProblem` object can be solved by the native [Parallel Ensemble Simulations](https://docs.juliadiffeq.org/dev/features/ensemble/) interface of `DifferentialEquations.jl`. The following code block solves the same annealing process described above($t_f = 5000(ns)$) using 1000 trajectories.
+The package also supports the trajectory method for AME. More details of this method can be found in this [paper](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022116). The basic workflow is to create an ODE [EnsembleProblem](https://docs.juliadiffeq.org/dev/features/ensemble/) via `build_ensembles` interface. Then, the resulting `EnsembleProblem` object can be solved by the native [Parallel Ensemble Simulations](https://docs.juliadiffeq.org/dev/features/ensemble/) interface of `DifferentialEquations.jl`. The following code block solves the same annealing process described above($t_f = 5000(ns)$) using multithreading. To keep the running time reasonably short, we simulate only 3000 trajectories in this example. The result may not converge to the true solution yet. The user is encouraged to try more trajectories and see how the result converges.
+
+The codes can also be deployed on high-performance clusters using Julia's native [distributed computing](https://docs.julialang.org/en/v1/manual/distributed-computing/) module.
 
 ```julia
 tf = 5000
-prob = build_ensembles(annealing, tf, :ame, ω_hint=range(-6, 6, length=100))
+# total number of trajectories
+num_trajectories = 3000
+# construct the `EnsembleProblem` 
+# `safetycopy` needs to be true because the current trajectories implementation is not thread-safe.
+prob = build_ensembles(annealing, tf, :ame, ω_hint=range(-6, 6, length=100), safetycopy=true)
 # to use multi-threads, you need to start Julia kernel with multiple threads
-sol = solve(prob, Tsit5(), EnsembleThreads(), trajectories=1000, reltol=1e-4, saveat=range(0,1,length=100))
+# julia --threads 8
+sol = solve(prob, Tsit5(), EnsembleThreads(), trajectories=num_trajectories, reltol=1e-6, saveat=range(0,tf,length=100))
 
-s_axis = range(0,tf,length=100)
+t_axis = range(0,tf,length=100)
 dataset = []
-for s in s_axis
-    w, v = eigen_decomp(H, s/tf)
-    push!(dataset, [abs2(normalize(so(s, continuity=:right))' * v[:, 1]) for so in sol])
+for t in t_axis
+    w, v = eigen_decomp(H, t/tf)
+    push!(dataset, [abs2(normalize(so(t))' * v[:, 1]) for so in sol])
 end
 
-# the following code average over all the trajectories
+# the following codes calculate the instantaneous ground state population and its error bar by averaging over all the trajectories
+
 pop_mean = []
-pop_rmse = []
+pop_sem = []
 for data in dataset
-    p_mean = sum(data)/1000
-    p_rmse = sqrt(sum((x)->(x-p_mean)^2, data))/1000
+    p_mean = sum(data) / num_trajectories
+    p_sem = sqrt(sum((x)->(x-p_mean)^2, data)) / num_trajectories
     push!(pop_mean, p_mean)
-    push!(pop_rmse, p_rmse)
+    push!(pop_sem, p_sem)
 end
 
-scatter(s_axis, pop_mean, marker=:d, yerror=pop_rmse, label="Trajectory", markersize=6)
-plot!(sol_ame, H, [1], s_axis, linewidth=2, label="Non-trajectory")
+scatter(t_axis, pop_mean, marker=:d, yerror=2*pop_sem, label="Trajectory", markersize=6)
+plot!(sol_ame, H, [0], t_axis, linewidth=2, label="Non-trajectory")
 xlabel!("t (ns)")
 ylabel!("\$P_G(s)\$")
 ```
