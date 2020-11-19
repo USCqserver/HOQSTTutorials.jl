@@ -1,5 +1,5 @@
 
-using QuantumAnnealingTools
+using OpenQuantumTools
 
 # Define a function to construct an eigendecomposition routine for the
 # Hamiltonian. The routine should have the signature: (H, t, lvl) -> (w, v).

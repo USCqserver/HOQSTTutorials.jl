@@ -8,16 +8,15 @@ Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspi
 - Introduction
   - [Introduction to HOQST through closed-system simulation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/01-closed_system.html)
   - [Introduction to HOQST through adiabatic master equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/02-single_qubit_ame.html)
-  - [Redfield equation with multi-axis noise](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/03-redfield_multi_axis_noise.html)
-  - [Spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-spin_fluctuators.html)
-  - [AME Spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/05-ame_spin_fluctuators.html)
+  - [A tutorial on the polaron transformed Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/02-single_qubit_ame.html)
+  - [An Intro to the coarse-grained ME and universal Lindblad ME]((https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/02-single_qubit_ame.html))
+  - [Classical stochastic noise -- the spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-spin_fluctuators.html)
 - Advanced
-- Hamiltonian
-  - [Custom eigendecomposition function](https://uscqserver.github.io/HOQSTTutorials.jl/html/hamiltonian/01-custom_eigen.html)
-- Redfield
-  - [Non-positivity in Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/01-non_positivity_redfield.html)
-  - [Introduction to polaron transformed Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/02-polaron-transformed-redfield.html)
-  - [Introduction to CGME and ULE](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/03-CGME_ULE.html)
+  - Hamiltonian
+    - [Custom eigendecomposition function](https://uscqserver.github.io/HOQSTTutorials.jl/html/hamiltonian/01-custom_eigen.html)
+  - Redfield
+    - [Non-positivity in Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/01-non_positivity_redfield.html)
+    - [Redfield equation with multi-axis noise](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/03-redfield_multi_axis_noise.html)
 
 ## Contributing
 
