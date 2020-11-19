@@ -1,5 +1,5 @@
 ---
-title: Classical stochastic noise -- spin-fluctuator model
+title: Classical stochastic noise -- the spin-fluctuator model
 author: Huo Chen
 ---
 
@@ -8,7 +8,7 @@ The total Hamiltonian in this example is
 
 $$H(s) = -Z+ \frac{1}{2}\sum_i n_i(s) Z$$
 
-where $n_i(s)$ is the telegraph process with amplitude $b_i$ and fliping frequency $\gamma_i$. The summation $\sum_i n_i(s)$ generate "1/f" noise approximately.
+where $n_i(s)$ is the telegraph process that switches randomly between $\pm b_i$ with rate $\gamma_i$. The summation $\sum_i n_i(s)$ generate "1/f" noise approximately.
 
 The initial state is
 
@@ -18,7 +18,7 @@ We first construct the fluctuator bath object using `EnsembleFluctuator` and plo
 
 
 ```julia
-using QuantumAnnealingTools, LaTeXStrings
+using OpenQuantumTools, LaTeXStrings
 using OrdinaryDiffEq, Plots, StatsBase
 
 # calculate the mean and standard deviation of mean estimator from a sample

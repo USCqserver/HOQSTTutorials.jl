@@ -1,6 +1,6 @@
 ---
 author: "Huo Chen"
-title: "An tutorial on polaron transformed Redfield equation"
+title: "A tutorial on the polaron transformed Redfield equation"
 ---
 
 

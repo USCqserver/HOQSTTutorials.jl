@@ -1,5 +1,5 @@
 ---
-title: An Intro to coarse-grained ME and universal Lindblad ME
+title: An Intro to the coarse-grained ME and universal Lindblad ME
 author: Huo Chen
 ---
 
@@ -9,15 +9,15 @@ In this tutorial, we consider a standard single qubit annealing Hamiltonian
 
 $$H(s) = -\frac{1}{2}(1-s)\sigma_x - \frac{1}{2}s\sigma_z$$
 
-coupling to an Ohmic bath via $\sigma_z$ operator. We solve the open system dynamics via three different MEs: Redfield, coarse-grained ME(CGME) and universal Lindblad equation(ULE). Unlike the Redfield equation, CGME and ULE generate CP maps.
+coupling to an Ohmic bath via $\sigma_z$ operator. We solve the open system dynamics via three different MEs: Redfield equation, coarse-grained ME(CGME), and universal Lindblad equation(ULE). Unlike the Redfield equation, CGME and ULE generate CP maps.
 
 ## Coarse-grained ME
 
-Coarse-grained ME is a completely copositive ME that can be obtained by applying an additional time coarse graining approximate to the Redfield equation. More details of CGME can be found in [Mozgunov and Lidar](https://quantum-journal.org/papers/q-2020-02-06-227/). We first solve the original Redfield equation and CGME and compare the instantaneous ground state population of both cases.
+Coarse-grained ME is a completely positive ME obtained by applying an additional time coarse-graining approximate to the Redfield equation. More details of CGME can be found in [Mozgunov and Lidar](https://quantum-journal.org/papers/q-2020-02-06-227/). We first solve the original Redfield equation and CGME and compare both cases' instantaneous ground state population.
 
 ```julia
 using OrdinaryDiffEq, Plots, LaTeXStrings
-using QuantumAnnealingTools
+using OpenQuantumTools
 
 # Hamiltonian
 H = DenseHamiltonian([(s)->1-s, (s)->s], -[σx, σz]/2, unit=:ħ)
@@ -36,17 +36,17 @@ U = InplaceUnitary(U)
 @time solr = solve_redfield(annealing, tf, U, alg=Tsit5())
 # we set the integration error tolerance to 1e-5 for speed
 @time solc = solve_cgme(annealing, tf, U, alg=Tsit5(), int_atol=1e-5, int_rtol=1e-5)
-plot(solr, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$", label="Redfield")
-plot!(solc, H, [1], 0:0.01:tf, linewidth=2, label="CGME")
+plot(solr, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$", label="Redfield")
+plot!(solc, H, [0], 0:0.01:tf, linewidth=2, label="CGME")
 ```
 
 ## Universal Lindblad equation
 
-Universal Lindblad equation(ULE) is a different CP ME proposed in [Nathan and Rudner](https://arxiv.org/abs/2004.01469). Unlike the Redfield and CGME, it depends on on the jump correlator, which is the inverse Fourier transform of the square root of the noise spectrum
+Universal Lindblad equation(ULE) is a different CP ME proposed in [Nathan and Rudner](https://arxiv.org/abs/2004.01469). Unlike the Redfield and CGME, it depends on the jump correlator, which is the inverse Fourier transform of the square root of the noise spectrum:
 
 $$g(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \sqrt{\gamma(\omega)} e^{i\omega t} \mathrm{d}\omega \ .$$
 
-Let's first see how it looks like compared with two point correlation function $C(t)$:
+Let's first see how it looks compared with the two-point correlation function $C(t)$:
 
 ```julia
 using QuadGK
@@ -65,7 +65,7 @@ xlabel!("t (ns)")
 ylabel!("correlation")
 ```
 
-From above picture, we can see that the jump correlator and two point correlation function roughly have the same time scale. To avoid recalculating the inverse Fourier transform within the solver, we can precalcuate $g(t)$ and construct interpolation from these pre-computed values. This procedure can be done by the following code:
+From the above picture, we can see that the jump correlator and two-point correlation function roughly have the same time scale. To avoid recalculating the inverse Fourier transform within the solver, we can precalculate $g(t)$ and construct interpolation from these pre-computed values. This procedure can be done by the following code block:
 
 ```julia
 t = range(-4,4,length=2000)
@@ -80,13 +80,13 @@ xlabel!("t (ns)")
 ylabel!("fitted jump correlator")
 ```
 
-Finally we solve ULE and compare the result with Redfield and CGME:
+Finally we solve ULE and compare the result with the Redfield equation and CGME:
 
 ```julia
 ubath = ULEBath(gf)
 annealing = Annealing(H, u0; coupling=coupling, bath=ubath)
 @time solu = solve_ule(annealing, tf, U, alg=Tsit5(), int_atol=1e-5, int_rtol=1e-5)
-plot(solr, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$", label="Redfield")
-plot!(solc, H, [1], 0:0.01:tf, linewidth=2, label="CGME")
-plot!(solu, H, [1], 0:0.01:tf, linewidth=2, label="ULE")
+plot(solr, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$", label="Redfield")
+plot!(solc, H, [0], 0:0.01:tf, linewidth=2, label="CGME")
+plot!(solu, H, [0], 0:0.01:tf, linewidth=2, label="ULE")
 ```
