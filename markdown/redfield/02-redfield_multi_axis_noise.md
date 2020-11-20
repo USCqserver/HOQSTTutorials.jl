@@ -1,7 +1,8 @@
 ---
-title: Redfield equation with multi-axis noise
-author: Huo Chen
+author: "Huo Chen"
+title: "Redfield equation with multi-axis noise"
 ---
+
 
 ## Redfield equation with multi-axis couplings
 In this example, we show how to solve the Redfield equation with the following Hamiltonian
@@ -28,6 +29,9 @@ interaction_2 = Interaction(coupling_2, bath_2)
 interaction_set = InteractionSet(interaction_1, interaction_2);
 ```
 
+
+
+
 Finally, we can create an`Annealing` object with `InteractionSet` instead of coupling and bath:
 ```julia
 H = DenseHamiltonian([(s) -> 1.0], -[σz], unit = :ħ)
@@ -37,11 +41,21 @@ annealing_2 = Annealing(H, u0, coupling=coupling_2, bath = bath_2)
 annealing = Annealing(H, u0, interactions=interaction_set)
 ```
 
+```
+Annealing with hType QTBase.DenseHamiltonian{Complex{Float64}} and uType Ar
+ray{Complex{Float64},1}
+u0 with size: (2,)
+```
+
+
+
+
+
 ### Solve Redfield equation
 
 We solve the Redfield equation with $X$, $Z$, and $X$ plus $Z$ couplings:
 
-```julia; results = "hidden"
+```julia
 tf = 10
 # Generate the unitary first
 U = solve_unitary(annealing, tf, alg=Tsit5(), reltol=1e-6)
@@ -53,6 +67,9 @@ sol_1 = solve_redfield(annealing_1, tf, U, alg = Tsit5(), abstol = 1e-6, reltol 
 sol_2 = solve_redfield(annealing_2, tf, U, alg = Tsit5(), abstol = 1e-6, reltol = 1e-6)
 sol = solve_redfield(annealing, tf, U, alg = Tsit5(), abstol = 1e-6, reltol = 1e-6)
 ```
+
+
+
 
 We plot $\langle X \rangle$ for the above three cases:
 
@@ -73,11 +90,15 @@ xlabel!("s")
 ylabel!("<X>")
 ```
 
+![](figures/02-redfield_multi_axis_noise_4_1.png)
+
+
+
 ### Instantaneous pulses
 
 In the last section, we run the same simulation with a single $X$ pulse in the middle of the evolution (spin echo). The can be done by creating a Callback object and feed it to the solver. For ideal pulses, we can use the built-in function `InstPulseCallback`. This has similar effects as the dynamical decoupling (except the pulse does not commute with the system Hamiltonian).
 
-```julia; results = "hidden"
+```julia
 # in this example, we apply an Z pulse in the middle of the annealing
 # for the InstPulseCallback constructor
 # the first argument is a list of times where the pulses are applied
@@ -93,6 +114,7 @@ tf = 10
 U = solve_unitary(annealing, tf, alg=Tsit5(), reltol=1e-6, callback = cbu);
 U = InplaceUnitary(U)
 ```
+
 
 ```julia
 sol_1 = solve_redfield(annealing_1, tf, U, alg = Tsit5(), reltol = 1e-6, callback=cb)
@@ -116,5 +138,9 @@ plot!(t_list, xz_nopulse, linewidth=2, linestyle=:dash, label="X+Z coupling with
 xlabel!("s")
 ylabel!("<X>")
 ```
+
+![](figures/02-redfield_multi_axis_noise_6_1.png)
+
+
 
 We can see that the echo pulse slightly reduced the envelope's decay rate for the case where $Z$ coupling is present.
