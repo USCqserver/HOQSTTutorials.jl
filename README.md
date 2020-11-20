@@ -9,7 +9,7 @@ Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspi
   - [Introduction to HOQST through closed-system simulation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/01-closed_system.html)
   - [Introduction to HOQST through adiabatic master equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/02-single_qubit_ame.html)
   - [A tutorial on the polaron transformed Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/03-polaron_transformed_redfield.html)
-  - [An Intro to the coarse-grained ME and universal Lindblad ME]((https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-CGME_ULE.html))
+  - [An Intro to the coarse-grained ME and universal Lindblad ME](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-CGME_ULE.html)
   - [Classical stochastic noise -- the spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/05-spin_fluctuators.html)
 - Advanced
   - Hamiltonian
