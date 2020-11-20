@@ -1,7 +1,8 @@
 ---
-title: Adiabatic master equation with spin-fluctuators
-author: Huo Chen
+author: "Huo Chen"
+title: "Adiabatic master equation with spin-fluctuators"
 ---
+
 
 ## Model setup
 In this example notebook, we solve the master equation of the following form
@@ -39,10 +40,20 @@ interactions = InteractionSet(interaction_fluctuator, interaction_ohmic)
 annealing = Annealing(H, u0, interactions=interactions)
 ```
 
+```
+Annealing with hType QTBase.DenseHamiltonian{Complex{Float64}} and uType Ar
+ray{Complex{Float64},1}
+u0 with size: (2,)
+```
+
+
+
+
+
 ## Dynamics
 Then we solve the dynamics and calculate $\langle X \rangle$ during the evolution:
 
-```julia; results = "hidden"
+```julia
 tf = 100
 prob = build_ensembles(annealing, tf, :ame, ω_hint = range(-2, 2, length=100))
 t_list = range(0,tf,length=200)
@@ -64,15 +75,21 @@ for data in dataset
 end
 ```
 
+
+
+
 We also solve the dynamics with pure Ohmic bath, i.e. the adiabatic master equation:
 
-```julia; results = "hidden"
+```julia
 a_list = range(0,tf,length=400)
 annealing_ame = Annealing(H, u0, coupling=coupling, bath=ohmic_bath)
 sol_ame = solve_ame(annealing_ame, tf, alg=Tsit5(), ω_hint = range(-2, 2, length=100), 
     reltol=1e-6, saveat=a_list)
 ame_x = [real(tr(u*σx)) for u in sol_ame.u]
 ```
+
+
+
 
 We compare $\langle X \rangle$ obtained using the above two models:
 
@@ -82,3 +99,5 @@ plot!(t_list, pop_mean, ribbon=pop_rmse, label="Hyrbrid", linewidth=2)
 xlabel!("s (ns)")
 ylabel!("<X>")
 ```
+
+![](figures/01-ame_spin_fluctuators_4_1.png)
