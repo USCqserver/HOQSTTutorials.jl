@@ -5,7 +5,7 @@ H = DenseHamiltonian([(s)->1.0], [-σz], unit=:ħ)
 
 
 # define the initial state by PauliVec[k][j],
-# which are the jth eigenvector of the 
+# which is the jth eigenvector of the 
 # Pauli matrix σₖ   
 u0 = PauliVec[1][1]
 # define total evolution time in (ns)
@@ -16,10 +16,10 @@ annealing = Annealing(H, u0)
 
 sol_tsit = solve_schrodinger(annealing, tf, alg=Tsit5(), abstol=1e-6, reltol=1e-6);
 sol_trbdf = solve_schrodinger(annealing, tf, alg=TRBDF2(), abstol=1e-6, reltol=1e-6);
-# LinearExponential is a fixed step size method, user need to specify the time steps using keyword argument `tstops`.
+# LinearExponential is a fixed-stepsize method, the user needs to specify the time steps using keyword argument `tstops`.
 sol_linexp = solve_schrodinger(annealing, tf, alg=LinearExponential(), abstol=1e-6, reltol=1e-6, tstops=range(0,tf,length=100));
-# Even though Exprb method is an adaptive method, it tends to jump a lot of middle points. So if you want accurate evolution in the middle,
-# it is better to manually add more points for the algorithm.
+# Even though Exprb is an adaptive method, it tends to skip a lot of middle points. So if you want accurate solution in the middle,
+# it is better to manually add more points.
 sol_exprb32 = solve_schrodinger(annealing, tf, alg=Exprb32(), tstops=range(0,tf,length=100));
 
 

@@ -35,7 +35,7 @@ The closed-system evolution is completely specified by the Hamiltonian and the i
 
 ```julia
 # define the initial state by PauliVec[k][j],
-# which are the jth eigenvector of the 
+# which is the jth eigenvector of the 
 # Pauli matrix σₖ   
 u0 = PauliVec[1][1]
 # define total evolution time in (ns)
@@ -54,7 +54,7 @@ u0 with size: (2,)
 
 
 
-The initial state in above code block is
+The initial state in the above code block is
 $$\lvert \phi(0) \rangle = \lvert + \rangle \ .$$
 
 We will consider three variants of the closed-system equations in this tutorial.
@@ -65,7 +65,7 @@ We start with the Schrodinger equation
     \lvert \dot{\phi} \rangle = -i t_f H(s) \lvert \phi \rangle \ .
 \end{equation}
 
-To solve this differential equation, we need to choose a proper algorithm. HOQST relies on `OrdinaryDiffEq.jl` as the low-level solver, which supports a large collection of [algorithms](https://docs.sciml.ai/latest/solvers/ode_solve/). We do not guarantee compatibilities to every solver in this list. Users can try specific algorithms if they are interested. We provide a list of algorithms we tested and recommended here:
+To solve this differential equation, we need to choose a proper algorithm. HOQST relies on `OrdinaryDiffEq.jl` as the low-level solver, which supports a large collection of [algorithms](https://docs.sciml.ai/latest/solvers/ode_solve/). We do not guarantee compatibilities to every solver in this list. Users can try specific algorithms if they are interested. We recommend a list of algorithms we tested as follows:
 
 1. The default Tsitouras 5/4 Runge-Kutta method(Tsit5()).
 
@@ -83,22 +83,22 @@ To solve this differential equation, we need to choose a proper algorithm. HOQST
 
    This method belongs to the adaptive exponential Runge-Kutta method family.
  
-It is important to notice that methods 3 and 4 are exponential methods that are supposed to preserve the state vectors' norm. To solve the Schrodinger equation, we use the function `solve_schrodinger`:
+It is important to note that methods 3 and 4 are exponential methods that are supposed to preserve the state vectors' norm. To solve the Schrodinger equation, we use the function `solve_schrodinger`:
 
 ```julia
 sol_tsit = solve_schrodinger(annealing, tf, alg=Tsit5(), abstol=1e-6, reltol=1e-6);
 sol_trbdf = solve_schrodinger(annealing, tf, alg=TRBDF2(), abstol=1e-6, reltol=1e-6);
-# LinearExponential is a fixed step size method, user need to specify the time steps using keyword argument `tstops`.
+# LinearExponential is a fixed-stepsize method, the user needs to specify the time steps using keyword argument `tstops`.
 sol_linexp = solve_schrodinger(annealing, tf, alg=LinearExponential(), abstol=1e-6, reltol=1e-6, tstops=range(0,tf,length=100));
-# Even though Exprb method is an adaptive method, it tends to jump a lot of middle points. So if you want accurate evolution in the middle,
-# it is better to manually add more points for the algorithm.
+# Even though Exprb is an adaptive method, it tends to skip a lot of middle points. So if you want accurate solution in the middle,
+# it is better to manually add more points.
 sol_exprb32 = solve_schrodinger(annealing, tf, alg=Exprb32(), tstops=range(0,tf,length=100));
 ```
 
 
 
 
-In the above code block, the keyword arguments `abstol` and `reltol` are the absolute and relative error tolerances for [step size control](https://diffeq.sciml.ai/stable/basics/common_solver_opts/) in adaptive stepsize ODE algorithms. They are usually chosen by trial-and-error in real applications. 
+In the above code block, the keyword arguments `abstol` and `reltol` are the absolute and relative error tolerances for [stepsize control](https://diffeq.sciml.ai/stable/basics/common_solver_opts/) in adaptive stepsize ODE algorithms. They are usually chosen by trial-and-error in real applications. 
 
 We plot the observable $\langle X \rangle$ during the evolution.
 ```julia
@@ -129,7 +129,7 @@ title!("Free Evolution")
 
 
 
-### Other close system equations
+### Other closed-system equations
 The package also contains several other closed-system solvers.
 #### Von Neumann equation
 The Von Neumann equation is the "Schrodinger" equation for density matrices:
@@ -260,7 +260,7 @@ sol_linexp = solve_von_neumann(annealing, tf, alg=LinearExponential(), tstops=ra
 
 ```
 Error: MethodError: no method matching Array{T,2} where T(::OpenQuantumTool
-s.var"#40#44")
+s.var"#34#38")
 Closest candidates are:
   Array{T,2} where T(!Matched::LinearAlgebra.SymTridiagonal{T,V} where V<:A
 bstractArray{T,1}) where T at C:\buildbot\worker\package_win64\build\usr\sh
