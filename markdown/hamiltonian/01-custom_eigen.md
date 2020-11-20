@@ -4,13 +4,15 @@ title: "Using a user-defined eigendecomposition function"
 ---
 
 
+
 ## Initialize Hamiltonian with a custom eigendecomposition function
-When defining a Hamiltonian object, a keyword argument `EIGS` can be supplied to construct a user defined eigendecomposition routine. All the eigendecomposition calls inside the solver will call this function instead of the default one.
+
+When defining a Hamiltonian object, a user-defined eigendecomposition routine can be supplied using a keyword argument `EIGS`. All the eigendecomposition calls inside the solver will call this function instead of the default one.
 
 For example:
 
 ```julia
-using QuantumAnnealingTools
+using OpenQuantumTools
 
 # Define a function to construct an eigendecomposition routine for the
 # Hamiltonian. The routine should have the signature: (H, t, lvl) -> (w, v).
@@ -40,7 +42,7 @@ I am the user defined eigendecomposition routine.
 
 
 ### Constant Hamiltonian
-There are two applications for this functionality. First, if the Hamiltonian is constant, one can precalculates the eigensystem of that Hamiltonian and build a function that returns those precalculated values. This is particular helpful for adiabatic master equation solver.
+There are two applications for this functionality. First, if the Hamiltonian is constant, one can precalculate that Hamiltonian's eigensystem and build a function that returns those precalculated values. This is particularly helpful for the adiabatic master equation solver.
 
 ```julia
 
@@ -72,9 +74,9 @@ print(eigen_decomp(H, 0.0, lvl=2))
 
 ### Sparse Hamiltonian
 
-Another application is to supply speical eigendecomposition algorithms for sparse matrices in order to take advantage of the sparsity. 
+Another application is to supply special eigendecomposition algorithms for sparse matrices to take advantage of the sparsity. 
 
-For example, the default eigendecomposition algorithm for sparse Hamiltonian is to first convert it into dense matrices and then perform the decomposition.
+For example, the default eigendecomposition algorithm for sparse Hamiltonian is to convert it into dense matrices first and then perform the decomposition.
 
 ```julia
 Hd = standard_driver(4, sp=true);
@@ -86,20 +88,20 @@ w, v = eigen_decomp(H, 0.1, lvl=4)
 ```
 
 ```
-([-0.5729923320369654, -0.2909140176773721, -0.28692493464359575, -0.286089
-30359797324], Complex{Float64}[0.2473784274380235 + 0.0im 0.040695944338657
-37 + 0.0im 0.05915731187328016 + 0.0im -0.28180804014959693 + 0.0im; -0.251
-0321427724954 + 0.0im 0.2932926473618397 + 0.0im 0.04998787555385241 + 0.0i
-m 0.3971501566526018 + 0.0im; … ; -0.2510321427724953 + 0.0im -0.2932926473
-618393 + 0.0im -0.04998787555385233 + 0.0im -0.3971501566526014 + 0.0im; 0.
-24737842743802355 + 0.0im -0.04069594433865745 + 0.0im -0.05915731187327999
-4 + 0.0im 0.28180804014959704 + 0.0im])
+([-0.5735244654671962, -0.304565310552158, -0.28936834479657075, -0.2842127
+439114835], Complex{Float64}[0.23764845654771619 + 0.0im -0.009503985289811
+945 + 0.0im 0.19830147707586077 + 0.0im -0.019056568660583945 + 0.0im; -0.2
+4261757772878467 + 0.0im 0.11756923861584401 + 0.0im 0.12692646580471256 + 
+0.0im -0.30325080327059184 + 0.0im; … ; -0.2426175777287845 + 0.0im -0.1175
+6923861584388 + 0.0im -0.12692646580471267 + 0.0im 0.3032508032705917 + 0.0
+im; 0.23764845654771624 + 0.0im 0.00950398528981197 + 0.0im -0.198301477075
+86065 + 0.0im 0.019056568660583927 + 0.0im])
 ```
 
 
 
 
-If the size of the Hamiltonian becomes very large, we can use sparse algorithms provided by [Arpack](https://github.com/JuliaLinearAlgebra/Arpack.jl) instead. Let's first install `Arpack.jl` by running:
+If the Hamiltonian size becomes large, we can use sparse algorithms provided by [Arpack](https://github.com/JuliaLinearAlgebra/Arpack.jl) instead. Let's first install `Arpack.jl` by running:
 ```julia
 using Pkg
 Pkg.add("Arpack")
@@ -129,18 +131,18 @@ eigen_decomp(H, 0.1, lvl=4)
 
 ```
 Using sparse matrix algorithm
-([-0.5733165321046936, -0.3004703651326788, -0.29063522075372417, -0.282563
-26509951385], Complex{Float64}[-0.007159439655548368 - 0.23936480997673287i
-m -0.012133557946698244 + 0.007450789819478774im 0.02035383149534172 - 0.13
-33297763551637im -0.034271552359772174 - 0.03703217538616028im; 0.007373209
-090542359 + 0.24651186095390382im -0.15570674055672995 + 0.0956140154817683
-2im 0.021833559400207706 - 0.14302287962511612im 0.23063593297888502 + 0.24
-92139903896338im; … ; 0.007373209090542037 + 0.24651186095390368im 0.155706
-74055673003 - 0.09561401548176823im -0.02183355940020778 + 0.14302287962511
-614im -0.2306359329788852 - 0.2492139903896334im; -0.00715943965554853 - 0.
-23936480997673287im 0.0121335579466981 - 0.007450789819478828im -0.02035383
-1495342048 + 0.1333297763551638im 0.03427155235977204 + 0.03703217538615996
-6im])
+([-0.5736067127748863, -0.305375099581338, -0.29218673198844436, -0.2812376
+250417108], Complex{Float64}[0.0077968247914967405 - 0.2359246876933563im 0
+.01778350602287372 + 0.018094339548598005im -0.12077612792231388 + 0.011769
+929520151275im -0.01276513438898149 - 0.09912659311490553im; -0.00800540859
+5379472 + 0.24223624016566098im -0.09281537302257294 - 0.09443767008824275i
+m -0.20280559312074686 + 0.019763901843741827im -0.02829699560284785 - 0.21
+973797408028825im; … ; -0.008005408595379383 + 0.24223624016566106im 0.0928
+1537302257299 + 0.09443767008824264im 0.20280559312074678 - 0.0197639018437
+41636im 0.028296995602847912 + 0.21973797408028825im; 0.007796824791496877 
+- 0.23592468769335637im -0.017783506022873815 - 0.01809433954859785im 0.120
+77612792231385 - 0.0117699295201512im 0.012765134388981386 + 0.099126593114
+90575im])
 ```
 
 

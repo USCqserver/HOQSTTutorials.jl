@@ -1,5 +1,5 @@
 
-using QuantumAnnealingTools, OrdinaryDiffEq, Plots
+using OpenQuantumTools, OrdinaryDiffEq, Plots
 # define the Hamiltonian
 H = DenseHamiltonian([(s)->1.0], [-σz], unit=:ħ)
 

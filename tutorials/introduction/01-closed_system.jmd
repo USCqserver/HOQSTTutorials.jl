@@ -14,7 +14,7 @@ $$H(s) = - \sigma_z$$
 where $s= t/t_f$ is the dimensionless time and $t_f$ is the total evolution time. We use the constant Hamiltonian so that the simulation results can be trivially confirmed. The syntax is the same for time-dependent Hamiltonians. Let's first define the Hamiltonian by:
 
 ```julia
-using QuantumAnnealingTools, OrdinaryDiffEq, Plots
+using OpenQuantumTools, OrdinaryDiffEq, Plots
 # define the Hamiltonian
 H = DenseHamiltonian([(s)->1.0], [-σz], unit=:ħ)
 ```

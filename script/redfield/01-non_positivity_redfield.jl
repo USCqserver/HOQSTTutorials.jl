@@ -1,5 +1,5 @@
 
-using QuantumAnnealingTools, OrdinaryDiffEq, Plots, Printf, LaTeXStrings
+using OpenQuantumTools, OrdinaryDiffEq, Plots, Printf, LaTeXStrings
 
 β = 4
 T = β_2_temperature(β)

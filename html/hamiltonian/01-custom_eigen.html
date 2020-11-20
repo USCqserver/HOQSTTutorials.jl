@@ -663,12 +663,12 @@ div.title {text-align: center;}
         </div>
 
         <h2>Initialize Hamiltonian with a custom eigendecomposition function</h2>
-<p>When defining a Hamiltonian object, a keyword argument <code>EIGS</code> can be supplied to construct a user defined eigendecomposition routine. All the eigendecomposition calls inside the solver will call this function instead of the default one.</p>
+<p>When defining a Hamiltonian object, a user-defined eigendecomposition routine can be supplied using a keyword argument <code>EIGS</code>. All the eigendecomposition calls inside the solver will call this function instead of the default one.</p>
 <p>For example:</p>
 
 
 <pre class='hljl'>
-<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>QuantumAnnealingTools</span><span class='hljl-t'>
+<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>OpenQuantumTools</span><span class='hljl-t'>
 
 </span><span class='hljl-cs'># Define a function to construct an eigendecomposition routine for the</span><span class='hljl-t'>
 </span><span class='hljl-cs'># Hamiltonian. The routine should have the signature: (H, t, lvl) -&gt; (w, v).</span><span class='hljl-t'>
@@ -696,7 +696,7 @@ I am the user defined eigendecomposition routine.
 
 
 <h3>Constant Hamiltonian</h3>
-<p>There are two applications for this functionality. First, if the Hamiltonian is constant, one can precalculates the eigensystem of that Hamiltonian and build a function that returns those precalculated values. This is particular helpful for adiabatic master equation solver.</p>
+<p>There are two applications for this functionality. First, if the Hamiltonian is constant, one can precalculate that Hamiltonian&#39;s eigensystem and build a function that returns those precalculated values. This is particularly helpful for the adiabatic master equation solver.</p>
 
 
 <pre class='hljl'>
@@ -725,8 +725,8 @@ I am the user defined eigendecomposition routine.
 
 
 <h3>Sparse Hamiltonian</h3>
-<p>Another application is to supply speical eigendecomposition algorithms for sparse matrices in order to take advantage of the sparsity. </p>
-<p>For example, the default eigendecomposition algorithm for sparse Hamiltonian is to first convert it into dense matrices and then perform the decomposition.</p>
+<p>Another application is to supply special eigendecomposition algorithms for sparse matrices to take advantage of the sparsity. </p>
+<p>For example, the default eigendecomposition algorithm for sparse Hamiltonian is to convert it into dense matrices first and then perform the decomposition.</p>
 
 
 <pre class='hljl'>
@@ -740,18 +740,18 @@ I am the user defined eigendecomposition routine.
 
 
 <pre class="output">
-&#40;&#91;-0.573495658003095, -0.3042181697504149, -0.28852109913767227, -0.2849528
-71435738&#93;, Complex&#123;Float64&#125;&#91;0.23836977958435954 &#43; 0.0im 0.05398087128590853
- &#43; 0.0im 0.1634628366629931 &#43; 0.0im 0.13930036452997857 &#43; 0.0im; -0.2486159
-339315127 &#43; 0.0im 0.18503072485464925 &#43; 0.0im 0.06269935477737626 &#43; 0.0im -
-0.4125671661024614 &#43; 0.0im; … ; -0.24861593393151232 &#43; 0.0im -0.18503072485
-464936 &#43; 0.0im -0.06269935477737654 &#43; 0.0im 0.41256716610246136 &#43; 0.0im; 0.
-23836977958435948 &#43; 0.0im -0.05398087128590844 &#43; 0.0im -0.16346283666299297
- &#43; 0.0im -0.139300364529979 &#43; 0.0im&#93;&#41;
+&#40;&#91;-0.5732186989267017, -0.2974574410634193, -0.2922359124589142, -0.2810148
+5383458963&#93;, Complex&#123;Float64&#125;&#91;0.24160276643934148 &#43; 0.0im 0.020619045117879
+584 &#43; 0.0im -0.0434277441686759 &#43; 0.0im -0.21704746616060705 &#43; 0.0im; -0.25
+02519788363328 &#43; 0.0im 0.29228114946822775 &#43; 0.0im -0.10608127482248259 &#43; 0
+.0im 0.37150137538532696 &#43; 0.0im; … ; -0.2502519788363327 &#43; 0.0im -0.292281
+1494682276 &#43; 0.0im 0.10608127482248247 &#43; 0.0im -0.3715013753853268 &#43; 0.0im;
+ 0.2416027664393415 &#43; 0.0im -0.02061904511787961 &#43; 0.0im 0.0434277441686757
+86 &#43; 0.0im 0.21704746616060697 &#43; 0.0im&#93;&#41;
 </pre>
 
 
-<p>If the size of the Hamiltonian becomes very large, we can use sparse algorithms provided by <a href="https://github.com/JuliaLinearAlgebra/Arpack.jl">Arpack</a> instead. Let&#39;s first install <code>Arpack.jl</code> by running:</p>
+<p>If the Hamiltonian size becomes large, we can use sparse algorithms provided by <a href="https://github.com/JuliaLinearAlgebra/Arpack.jl">Arpack</a> instead. Let&#39;s first install <code>Arpack.jl</code> by running:</p>
 
 
 <pre class='hljl'>
@@ -785,17 +785,18 @@ I am the user defined eigendecomposition routine.
 
 <pre class="output">
 Using sparse matrix algorithm
-&#40;&#91;-0.573753223516986, -0.3081332950118014, -0.28888236532365813, -0.2848473
-193924189&#93;, Complex&#123;Float64&#125;&#91;-0.07043338469104704 - 0.22525389644832888im 0
-.03640120197310678 &#43; 0.04190368601781744im -0.05708697082619761 - 0.1510792
-8936989132im 0.09602116760349026 &#43; 0.10721986223927632im; 0.071094643847699
-67 &#43; 0.22736867770229574im -0.05707655238287779 - 0.06570436689971414im -0.
-07124587282907825 - 0.18855048151574916im 0.105745171320418 &#43; 0.11807795077
-293008im; … ; 0.07109464384769937 &#43; 0.2273686777022955im 0.0570765523828783
-4 &#43; 0.06570436689971379im 0.07124587282907847 &#43; 0.18855048151574938im -0.10
-574517132041804 - 0.11807795077293036im; -0.07043338469104696 - 0.225253896
-44832872im -0.03640120197310675 - 0.04190368601781775im 0.05708697082619774
- &#43; 0.15107928936989115im -0.09602116760349015 - 0.10721986223927653im&#93;&#41;
+&#40;&#91;-0.5733889246516085, -0.30146521092949174, -0.29217496022670864, -0.28107
+239984447785&#93;, Complex&#123;Float64&#125;&#91;-0.1123919473772608 - 0.2103663829804076im 
+-0.0020896476289270893 &#43; 0.02061959004713226im -0.07992674413001108 - 0.060
+29207885483326im 0.09086719498626825 &#43; 0.04687676989085711im; 0.11527156549
+998924 &#43; 0.21575622507300735im 0.014544616857240268 - 0.14351895163422745im
+ -0.17567564449824383 - 0.13251947050080473im 0.19536387565144447 &#43; 0.10078
+474905361193im; … ; 0.11527156549998883 &#43; 0.21575622507300668im -0.01454461
+6857240233 &#43; 0.14351895163422762im 0.17567564449824372 &#43; 0.132519470500805i
+m -0.19536387565144445 - 0.1007847490536122im; -0.11239194737726053 - 0.210
+3663829804077im 0.0020896476289270697 - 0.020619590047132333im 0.0799267441
+3001101 &#43; 0.06029207885483327im -0.09086719498626833 - 0.046876769890856755
+im&#93;&#41;
 </pre>
 
 
@@ -804,7 +805,7 @@ Using sparse matrix algorithm
         <div class="footer">
           <p>
             Published from <a href="01-custom_eigen.jmd">01-custom_eigen.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.6 on 2020-11-11.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.6 on 2020-11-19.
           </p>
         </div>
       </div>

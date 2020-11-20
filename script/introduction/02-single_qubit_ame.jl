@@ -1,9 +1,9 @@
 
-using QuantumAnnealingTools, OrdinaryDiffEq, Plots
+using OpenQuantumTools, OrdinaryDiffEq, Plots
 H = DenseHamiltonian([(s)->1-s, (s)->s], -[σx, σz]/2)
 
 
-# this plot recipe is for conviniently plotting the spectrum of the Hamltonian
+# this plot recipe is for conveniently plotting the spectrum of the Hamiltonian
 # the first 3 arguments are: the Hamiltonian, the grid `s` and the levels to keep
 plot(H, 0:0.01:1, 2, linewidth=2)
 
@@ -49,9 +49,10 @@ annealing = Annealing(H, u0; coupling=coupling, bath=bath)
 
 tf = 10*sqrt(2)
 @time sol = solve_schrodinger(annealing, tf, alg=Tsit5(), retol=1e-4)
-# a convenient plot recipe to plot the instantaneous population during the evolution
-# currently only support Hamiltonian with annealing parameter s = t/tf from 0 to 1.
-plot(sol, H, [1], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$")
+# The following line of code is a convenient recipe to plot the instantaneous population during the evolution.
+# It currently only supports Hamiltonian with annealing parameter s = t/tf from 0 to 1.
+# The third argument can be either a list or a number. When it is a list, it specifies the energy levels to plot (starting from 0); when it is a number, it specifies the total number of levels to plot.
+plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$")
 
 
 sol(0.5)
@@ -65,43 +66,49 @@ sol(0.5)
 tf = 10*sqrt(2)
 U = solve_unitary(annealing, tf, alg=Tsit5(), abstol=1e-8, retol=1e-8);
 sol = solve_redfield(annealing, tf, U; alg=Tsit5(), abstol=1e-8, retol=1e-8)
-plot(sol, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
+plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 
 
 tf = 10*sqrt(2)
 @time sol = solve_ame(annealing, tf; alg=Tsit5(), ω_hint=range(-6, 6, length=100), reltol=1e-4)
-plot(sol, H, [1], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
+plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 
 
 tf = 5000
-@time sol_ame = solve_ame(annealing, tf; alg=Tsit5(), ω_hint=range(-6, 6, length=100), reltol=1e-4)
-plot(sol_ame, H, [1], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
+@time sol_ame = solve_ame(annealing, tf; alg=Tsit5(), ω_hint=range(-6, 6, length=100), reltol=1e-6)
+plot(sol_ame, H, [0], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 
 
 tf = 5000
-prob = build_ensembles(annealing, tf, :ame, ω_hint=range(-6, 6, length=100))
+# total number of trajectories
+num_trajectories = 3000
+# construct the `EnsembleProblem` 
+# `safetycopy` needs to be true because the current trajectories implementation is not thread-safe.
+prob = build_ensembles(annealing, tf, :ame, ω_hint=range(-6, 6, length=100), safetycopy=true)
 # to use multi-threads, you need to start Julia kernel with multiple threads
-sol = solve(prob, Tsit5(), EnsembleThreads(), trajectories=1000, reltol=1e-4, saveat=range(0,1,length=100))
+# julia --threads 8
+sol = solve(prob, Tsit5(), EnsembleThreads(), trajectories=num_trajectories, reltol=1e-6, saveat=range(0,tf,length=100))
 
-s_axis = range(0,tf,length=100)
+t_axis = range(0,tf,length=100)
 dataset = []
-for s in s_axis
-    w, v = eigen_decomp(H, s/tf)
-    push!(dataset, [abs2(normalize(so(s, continuity=:right))' * v[:, 1]) for so in sol])
+for t in t_axis
+    w, v = eigen_decomp(H, t/tf)
+    push!(dataset, [abs2(normalize(so(t))' * v[:, 1]) for so in sol])
 end
 
-# the following code average over all the trajectories
+# the following codes calculate the instantaneous ground state population and its error bar by averaging over all the trajectories
+
 pop_mean = []
-pop_rmse = []
+pop_sem = []
 for data in dataset
-    p_mean = sum(data)/1000
-    p_rmse = sqrt(sum((x)->(x-p_mean)^2, data))/1000
+    p_mean = sum(data) / num_trajectories
+    p_sem = sqrt(sum((x)->(x-p_mean)^2, data)) / num_trajectories
     push!(pop_mean, p_mean)
-    push!(pop_rmse, p_rmse)
+    push!(pop_sem, p_sem)
 end
 
-scatter(s_axis, pop_mean, marker=:d, yerror=pop_rmse, label="Trajectory", markersize=6)
-plot!(sol_ame, H, [1], s_axis, linewidth=2, label="Non-trajectory")
+scatter(t_axis, pop_mean, marker=:d, yerror=2*pop_sem, label="Trajectory", markersize=6)
+plot!(sol_ame, H, [0], t_axis, linewidth=2, label="Non-trajectory")
 xlabel!("t (ns)")
 ylabel!("\$P_G(s)\$")
 
