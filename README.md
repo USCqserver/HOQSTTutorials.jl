@@ -1,20 +1,24 @@
+<img src="assets/logo.jpg" width="256"/>
+
 # HOQSTTutorials.jl
-Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspired by [SciMLTutorials](https://github.com/SciML/SciMLTutorials.jl) so the workflow is the same. Because currently `HOQST` and `HOQSTTutorials.jl` are not officially registered, you need to manually install these packages.
+Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspired by [SciMLTutorials](https://github.com/SciML/SciMLTutorials.jl), so the workflow is the same. Because currently `HOQST` and `HOQSTTutorials.jl` are not officially registered, you need to install these packages manually.
 
 ## Table of Contents
 
 - Introduction
   - [Introduction to HOQST through closed-system simulation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/01-closed_system.html)
   - [Introduction to HOQST through adiabatic master equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/02-single_qubit_ame.html)
-  - [Redfield equation with multi-axis noise](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/03-redfield_multi_axis_noise.html)
-  - [Spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-spin_fluctuators.html)
-  - [AME Spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/05-ame_spin_fluctuators.html)
-- Hamiltonian
-  - [Custom eigendecomposition function](https://uscqserver.github.io/HOQSTTutorials.jl/html/hamiltonian/01-custom_eigen.html)
-- Redfield
-  - [Non-positivity in Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/01-non_positivity_redfield.html)
-  - [Introduction to polaron transformed Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/02-polaron-transformed-redfield.html)
-  - [Introduction to CGME and ULE](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/03-CGME_ULE.html)
+  - [A tutorial on the polaron transformed Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/03-polaron_transformed_redfield.html)
+  - [An Intro to the coarse-grained ME and universal Lindblad ME](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-CGME_ULE.html)
+  - [Classical stochastic noise -- the spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/05-spin_fluctuators.html)
+- Advanced
+  - Hamiltonian
+    - [Custom eigendecomposition function](https://uscqserver.github.io/HOQSTTutorials.jl/html/hamiltonian/01-custom_eigen.html)
+  - Redfield
+    - [Non-positivity in Redfield equation](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/01-non_positivity_redfield.html)
+    - [Redfield equation with multi-axis noise](https://uscqserver.github.io/HOQSTTutorials.jl/html/redfield/02-redfield_multi_axis_noise.html)
+  - AME
+    - [Adiabatic master equation with spin-fluctuators](https://uscqserver.github.io/HOQSTTutorials.jl/html/advanced/01-ame_spin_fluctuators.html)
 
 ## Contributing
 
@@ -36,6 +40,6 @@ To generate all of the notebooks, do:
 HOQSTTutorials.weave_all()
 ```
 
-If you add new tutorials which require new packages, simply updating your local
+If you add new tutorials that require new packages, simply updating your local
 environment will change the project and manifest files. When this occurs, the
 updated environment files should be included in the PR.
