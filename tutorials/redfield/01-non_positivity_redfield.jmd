@@ -1,12 +1,15 @@
 ---
-title: An example of non-positivity in Redfield equation
+title: An example of non-positivity in the Redfield equation
 author: Huo Chen, Jenia Mozgunov
 ---
+
+In this notebook, we will construct an example where the Redfield equation becomes non-positive. We will also show how to use the positivity-check routine to stop the solver when this happens.
+
 ## Ohmic bath
-We first create Ohmic bath with the following parameters
+We first create an Ohmic bath with the following parameters:
 
 ```julia
-using QuantumAnnealingTools, OrdinaryDiffEq, Plots, Printf, LaTeXStrings
+using OpenQuantumTools, OrdinaryDiffEq, Plots, Printf, LaTeXStrings
 
 β = 4
 T = β_2_temperature(β)
@@ -21,7 +24,7 @@ The spectrum $\gamma$ is plotted below:
 plot(bath, :γ, range(0,10,length=100), linewidth=2, label="")
 ```
 
-and the properties of the bath are
+and the properties of the bath are:
 
 ```julia
 τsb, err_τsb = τ_SB((x)->correlation(x, bath))
@@ -48,7 +51,7 @@ ylabel!(L"P(s)")
 ```
 ### Closed system
 
-We now run closed-system simulation
+We now run the closed-system simulation:
 
 ```julia; results = "hidden"
 tf = 20
@@ -58,7 +61,7 @@ annealing = Annealing(H, ρ0, bath=bath, coupling=coupling)
 close_sol = solve_von_neumann(annealing, tf, alg = Tsit5(), abstol=1e-6, reltol=1e-6);
 ```
 
-The population of instantanous ground state is:
+The population of instantaneous ground state is:
 
 ```julia
 plot(close_sol, H, 1, range(0,tf,length=100), linewidth=2)
@@ -98,11 +101,11 @@ xlabel!("t")
 ylabel!(L"\rho")
 ```
 
-We can see that the density matrix becomes negative during the evolution.
+We can see that the density matrix becomes negative during evolution.
 
 ### Positivity check
 
-We can add a callback to stop the ODE solver when the density matrix become negative.
+We can add a callback to stop the ODE solver when the density matrix becomes negative.
 
 ```julia
 redfield_sol = solve_redfield(annealing, tf, U, alg = Tsit5(), abstol=1e-7, reltol=1e-7, callback=PositivityCheckCallback())
