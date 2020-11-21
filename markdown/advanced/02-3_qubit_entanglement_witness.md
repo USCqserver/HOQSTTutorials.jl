@@ -1,14 +1,15 @@
 ---
-title: 3-qubit entanglement witness experiment
-author: Huo Chen
+author: "Huo Chen"
+title: "3-qubit entanglement witness experiment"
 ---
+
 This tutorial illustrates how to simulate the 3-qubit entanglement experiment examined in [T. Albash, I. Hen, F. M. Spedalieri, and D. A. Lidar, Reexamination of the Evidence for Entanglement in a Quantum Annealer, Phys. Rev. A 92, 062328 (2015)](https://link.aps.org/doi/10.1103/PhysRevA.92.062328) and the HOQST paper. We assume that our readers already have some knowledge of this experiment and HOQST. If not, we strongly recommend readers to first go through the references and introductory tutorials.
 
 To make this tutorial less bulky, we also move most of the source code into [modules/3\_qubit\_entanglement](https://github.com/USCqserver/HOQSTTutorials.jl/tree/master/modules/3_qubit_entanglement) folder. Interested readers can look into the source files for more details.
 
 ## Annealing schedules
 First, we load all necessary files and packages:
-```julia; results="hidden"
+```julia
 using OpenQuantumTools, OrdinaryDiffEq, Plots, LaTeXStrings
 using Optim, Printf
 # schedules.jl defines the annealing schedules
@@ -20,6 +21,9 @@ include("../../modules/3_qubit_entanglement/couplings.jl")
 # evolutions.jl contains functions to construct the `Annealing` object
 include("../../modules/3_qubit_entanglement/evolutions.jl")
 ```
+
+
+
 
 We plot the annealing schedules used in this experiment:
 ```julia
@@ -34,6 +38,10 @@ plot(
     legend=(0.5, 0.9);
 )
 ```
+
+![](figures/02-3_qubit_entanglement_witness_2_1.png)
+
+
 
 ## Adiabatic frame
 To keep the running time reasonably short for this tutorial, we only solve the adiabatic master equation and the adiabatic PTRE in the adiabatic frame. For readers who are not familiar with the adiabatic frame, [H. Chen and D. A. Lidar, Why and When Pausing Is Beneficial in Quantum Annealing, Phys. Rev. Applied 14, 014100 (2020)](https://link.aps.org/doi/10.1103/PhysRevApplied.14.014100) contains a brief description of it. The readers are encouraged to try solving the dynamics in the original frame. It will take around 3 hours to complete the simulation of a single evolution.
@@ -63,6 +71,10 @@ sm <= 0.5 && !(hp == 1.8) ? vline!(p1, [sm], label="crossing", linewidth=2) : no
 plot!(p1, [0.05, 0.0], [ev[1][ilvl], ev[1][ilvl]], arrow=0.4, color=:red, label="initial level")
 ```
 
+![](figures/02-3_qubit_entanglement_witness_3_1.png)
+
+
+
 Second, we plot the amplitude of the geometric terms in the adiabatic frame. There will be a bunch of warnings when the following code block is executed. This is because some energy levels become so close to each other during the evolution (either because $a(t)$ becomes very small or there is actually a level crossing) that the current algorithm may not be accurate in those regions. It is fine to ignore those warnings in this particular example. The level crossings (delta functions in adiabatic frame) are not captured by the algorithm but will be manually added when we perform the simulations.
 ```julia
 dH = build_dH(hp, 1)
@@ -79,12 +91,16 @@ plot!(p1, s_axis, abs.(get_dθ(proj, 1, 4)), linewidth=2, label=L"|d\theta_{14}|
 
 title!(p1, latexstring(@sprintf "h_p = %.3f" hp))
 ```
+
+![](figures/02-3_qubit_entanglement_witness_4_1.png)
+
+
 When divided by the total evolution time of the first stage $\tau_1$, these geometric terms are small compared with the energy gaps. The same argument applies to stage 3 of the evolution because these two stages are symmetrical to each other. Additionally, since stage 2 has a constant Hamiltonian, the geometric terms are 0. In conclusion, it is safe to ignore all the geometric terms during the entire evolution.
 
 ## Dynamics
 Finally, we solve the open system dynamics using two different types of master equations. More details about the master equations and corresponding model parameters can be found in the HOQST paper.
 ### Adiabatic master equation
-```julia; results="hidden"
+```julia
 # define Ohmic bath
 bath = Ohmic(1.2732e-4, 4, 12.5)
 # construct the Hamiltonian H, system-bath couplings C and
@@ -113,6 +129,9 @@ C = C[1]
 annealing = Annealing(H, u3, coupling=C, bath=bath)
 sol3 = solve_ame(annealing, 2 * τ1, ω_hint=range(-15, 15, length=200), alg=Tsit5(), reltol=1e-6, callback=cb, saveat=range(0,2*τ1,length=100))
 ```
+
+
+
 We plot the population of the instantaneous eigenstates during the evolution:
 ```julia
 # combine 3 stages of the evolution together for plotting
@@ -127,9 +146,13 @@ plot(t_axis/1e3, s_axis', xlabel=L"t\ (\mu s)", ylabel=L"P_i(t)", label=[L"E_0" 
 title!(latexstring(@sprintf "h_p = %.3f" hp))
 ```
 
+![](figures/02-3_qubit_entanglement_witness_6_1.png)
+
+
+
 ### Adiabatic PTRE
 
-```julia; results="hidden"
+```julia
 # pre-calculate the spectrum density of the 
 # hybrid Ohmic bath to speed up the computation
 function hybrid_ohmic(ω, W, η, fc, T)
@@ -182,6 +205,9 @@ annealing = Annealing(H3, u3, interactions = interaction3)
 sol3 = solve_ame(annealing, 2 * τ1, lambshift=false, alg=Tsit5(), reltol=1e-6, callback=cb3, saveat=range(0,2*τ1,length=100))
 ```
 
+
+
+
 We plot the population of the instantaneous eigenstates:
 ```julia
 # combine 3 stages of the evolution together for plotting
@@ -195,5 +221,9 @@ s_axis = hcat(s1..., s2..., s3...)
 plot(t_axis/1e3, s_axis', xlabel=L"t\ (\mu s)", ylabel=L"P_i(t)", label=[L"E_0" L"E_1" L"E_2" L"E_3"], linewidth=2)
 title!(latexstring(@sprintf "h_p = %.3f" hp))
 ```
+
+![](figures/02-3_qubit_entanglement_witness_8_1.png)
+
+
 
 The same procedure needs to be repeated for different $h_p$ and $\tau_2$ values in order to reproduce Fig. 3 in the HOQST paper.
