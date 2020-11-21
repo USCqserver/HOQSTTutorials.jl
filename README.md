@@ -13,6 +13,7 @@ Tutorials for Hamiltonian Open Quantum System Toolkit(HOQST). This repo is inspi
   - [An Intro to the coarse-grained ME and universal Lindblad ME](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/04-CGME_ULE.html)
   - [Classical stochastic noise -- the spin-fluctuator model](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/05-spin_fluctuators.html)
 - Advanced
+  - [3-qubit entanglement witness experiment](https://uscqserver.github.io/HOQSTTutorials.jl/html/advanced/02-3_qubit_entanglement_witness.html)
   - Hamiltonian
     - [Custom eigendecomposition function](https://uscqserver.github.io/HOQSTTutorials.jl/html/hamiltonian/01-custom_eigen.html)
   - Redfield
