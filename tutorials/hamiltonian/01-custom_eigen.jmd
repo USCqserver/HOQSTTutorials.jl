@@ -62,10 +62,8 @@ H = SparseHamiltonian([(s)->1-s, (s)->s], [Hd, Hp], unit=:ħ)
 # the default eigen_decomposition using dense matrices algorithm
 w, v = eigen_decomp(H, 0.1, lvl=4)
 ```
-If the Hamiltonian size becomes large, we can use sparse algorithms provided by [Arpack](https://github.com/JuliaLinearAlgebra/Arpack.jl) instead. Let's first install `Arpack.jl` by running:
+If the Hamiltonian size becomes large, we can use sparse algorithms provided by [Arpack](https://github.com/JuliaLinearAlgebra/Arpack.jl) instead. Let's first load `Arpack.jl` by running:
 ```julia; results = "hidden"
-using Pkg
-Pkg.add("Arpack")
 using Arpack
 ```
 
