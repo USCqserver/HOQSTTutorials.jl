@@ -2,7 +2,7 @@
 title: An Intro to HOQST - Lindblad equation
 author: Huo Chen
 ---
-This tutorial is part of the final project for CHEM 550 Fall 2020 @USC. It demonstrates how to solve the time-independent Lindblad equation using HOQST.
+This tutorial demonstrates how to solve the time-independent Lindblad equation using HOQST.
 
 ## Model setup
 We consider the Lindblad equation of the following form:
@@ -68,7 +68,7 @@ xlabel!("t (ns)")
 ylabel!("|ρ₀₁(t)|")
 ```
 
-## Trajectory method
+## Quantum trajectories method
 In this section, we show how to perform the same simulation using the trajectory method. This is done by:
 ```julia; results = "hidden"
 # For the trajectory method, the u0 supplied to `Annealing` must be
@@ -84,7 +84,7 @@ prob = build_ensembles(annealing, tf, :lindblad)
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=1000, saveat=range(0,tf,length=100))
 ```
 
-We can pick one trajectory from the entire results and observe how its norm shrinks during the evolution:
+We can pick one trajectory from the entire set of trajectories and observe how its norm shrinks during the evolution:
 ```julia
 vec_norm = []
 # this is the index of the trajectory you want to look at
@@ -95,7 +95,7 @@ end
 plot(sol[idx].t, vec_norm, linewidth=2, label="", xlabel="t (ns)", ylabel="‖ψ̃(t)‖")
 ```
 
-We can also compare the results of trajectory method with the result of direct solver:
+We can also compare the results of the quantum trajectories method with the result of the direct solver:
 ```julia
 t_axis = range(0,tf,length=100)
 dataset = []
@@ -178,7 +178,7 @@ end
 bar([0,1],initial_state_counter, label="", ylabel="Frequency", xticks=([0, 1], ["|+⟩","|-⟩"]))
 ```
 
-Finally, we plot the result of the trajectory method together with the result of the direct solver:
+Finally, we plot the result of the quantum trajectory method together with the result of the direct solver:
 ```julia
 t_axis = range(0,tf,length=100)
 dataset = []
