@@ -4,7 +4,7 @@ author: Huo Chen
 ---
 
 ## Single qubit annealing
-This tutorial will recreate the single-qubit example in this paper: [Decoherence in adiabatic quantum computation](https://arxiv.org/abs/1503.08767).
+This tutorial will recreate the single-qubit example in this paper: [[1] Decoherence in adiabatic quantum computation](https://arxiv.org/abs/1503.08767).
 
 The Hamiltonian of this example is
 
@@ -44,7 +44,7 @@ H_h(0.5)
 ```
 
 ### Annealing
-The total Hamiltonian presented in [Ref.](https://arxiv.org/abs/1503.08767) is
+The total Hamiltonian presented in [[1]](https://arxiv.org/abs/1503.08767) is
 
 $$H(s) = H_{\mathrm{S}}(s) + gS \otimes B + H_{\mathrm{B}} \ .$$
 
@@ -60,7 +60,7 @@ coupling = ConstantCouplings(["Z"])
 #### Bath
 A bath instance can be any object which implements the following three methods:
   1. Correlation function: `correlation(τ, bath)`
-  2. Spectrum density: `γ(ω, bath)`
+  2. Spectral density: `γ(ω, bath)`
   3. Lamb shift: `S(ω, bath)`
 
 Redfield/Adiabatic ME solvers require those three methods. Currently, we have built-in support for the Ohmic bath. An Ohmic bath object can be created by :
@@ -78,7 +78,7 @@ bath = Ohmic(η, fc, T)
 info_freq(bath)
 ```
 
-We can also directly plot the spectrum density of Ohmic bath:
+We can also directly plot the spectral density of Ohmic bath:
 
 ```julia
 p1 = plot(bath, :γ, range(0,20,length=200), label="", size=(800, 400), linewidth=2)
@@ -101,7 +101,7 @@ bath = Ohmic(1e-4, 4, 16)
 annealing = Annealing(H, u0; coupling=coupling, bath=bath)
 ```
 
-Because we want to compare our results to the [Ref.](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320), we need to set the unit to $\hbar=1$.
+Because we want to compare our results to the [[1]](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320), we need to set the unit to $\hbar=1$.
 
 ### Closed system
 There are several interfaces in HOQST that might be handy. The first one is the Schrodinger equation solver:
@@ -135,7 +135,7 @@ The time-dependent Redfield equation solver needs
   1. Annealing object
   2. Total annealing time
   3. Pre-calculated unitary
-to work. The following code block illustrates how to supply the above three objects to the Redfield solver. Besides, all the other keyword arguments in [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/basics/common_solver_opts/) are supported.
+to work. The following code block illustrates how to supply the above three objects to the Redfield solver. In addition all the other keyword arguments in [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/basics/common_solver_opts/) are supported.
 
 ```julia
 tf = 10*sqrt(2)
@@ -165,10 +165,10 @@ tf = 5000
 plot(sol_ame, H, [0], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
-The above results agree with Fig 2 of the [reference paper](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320).
+The above results agree with Fig 2 of reference [[1]](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320).
 
 #### Trajectory method for adiabatic master equation
-The package also supports the trajectory method for AME. More details of this method can be found in this [paper](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022116). The basic workflow is to create an ODE [EnsembleProblem](https://docs.juliadiffeq.org/dev/features/ensemble/) via `build_ensembles` interface. Then, the resulting `EnsembleProblem` object can be solved by the native [Parallel Ensemble Simulations](https://docs.juliadiffeq.org/dev/features/ensemble/) interface of `DifferentialEquations.jl`. The following code block solves the same annealing process described above($t_f = 5000(ns)$) using multithreading. To keep the running time reasonably short, we simulate only 3000 trajectories in this example. The result may not converge to the true solution yet. The user is encouraged to try more trajectories and see how the result converges.
+The package also supports the trajectory method for AME. More details of this method can be found in [[2] Quantum trajectories for time-dependent adiabatic master equations](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022116). The basic workflow is to create an ODE [EnsembleProblem](https://docs.juliadiffeq.org/dev/features/ensemble/) via `build_ensembles` interface. Then, the resulting `EnsembleProblem` object can be solved by the native [Parallel Ensemble Simulations](https://docs.juliadiffeq.org/dev/features/ensemble/) interface of `DifferentialEquations.jl`. The following code block solves the same annealing dynamics described above ($t_f = 5000(ns)$) using multithreading. To keep the running time reasonably short, we simulate only 3000 trajectories in this example. The result may not converge to the true solution yet. The user is encouraged to try more trajectories and see how the result converges.
 
 The codes can also be deployed on high-performance clusters using Julia's native [distributed computing](https://docs.julialang.org/en/v1/manual/distributed-computing/) module.
 

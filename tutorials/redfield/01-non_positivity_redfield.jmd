@@ -18,13 +18,13 @@ fc= 10/(2π)
 bath = Ohmic(η, fc, T)
 ```
 
-The spectrum $\gamma$ is plotted below:
+The spectral density $\gamma$ is plotted below:
 
 ```julia
 plot(bath, :γ, range(0,10,length=100), linewidth=2, label="")
 ```
 
-and the properties of the bath are:
+The time scales (defined in [[1] Completely positive master equation for arbitrary driving and small level spacing](https://quantum-journal.org/papers/q-2020-02-06-227/)) of the bath are:
 
 ```julia
 τsb, err_τsb = τ_SB((x)->correlation(x, bath))
@@ -33,17 +33,16 @@ and the properties of the bath are:
 @printf("τ_b of the Ohmic bath is %.6f with error estimation %.2e \n", τb, err_τb)
 ```
 
-## Annealing
+## Evolution
 
-We define the annealing process as
-
+We construct the Hamiltonian by:
 ```julia
 Hp = 0.5*σz⊗σi - 0.7*σi⊗σz + 0.3*σz⊗σz
 Hd = standard_driver(2)
 H = DenseHamiltonian([(s)->1-s, (s)->s], [-Hd, Hp], unit=:ħ)
 ```
 
-The spectrum of the Hamiltonian during the evolution is
+The spectrum of the Hamiltonian during is
 ```julia
 plot(H, range(0,1,length=100), 4, linewidth=2)
 xlabel!("s")
@@ -61,7 +60,7 @@ annealing = Annealing(H, ρ0, bath=bath, coupling=coupling)
 close_sol = solve_von_neumann(annealing, tf, alg = Tsit5(), abstol=1e-6, reltol=1e-6);
 ```
 
-The population of instantaneous ground state is:
+The population of the instantaneous ground state is:
 
 ```julia
 plot(close_sol, H, 1, range(0,tf,length=100), linewidth=2)

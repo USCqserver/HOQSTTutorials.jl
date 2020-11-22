@@ -3,7 +3,7 @@ author: "Huo Chen"
 title: "3-qubit entanglement witness experiment"
 ---
 
-This tutorial illustrates how to simulate the 3-qubit entanglement experiment examined in [T. Albash, I. Hen, F. M. Spedalieri, and D. A. Lidar, Reexamination of the Evidence for Entanglement in a Quantum Annealer, Phys. Rev. A 92, 062328 (2015)](https://link.aps.org/doi/10.1103/PhysRevA.92.062328) and the HOQST paper. We assume that our readers already have some knowledge of this experiment and HOQST. If not, we strongly recommend readers to first go through the references and introductory tutorials.
+This tutorial illustrates how to simulate the 3-qubit entanglement experiment examined in [[1] Reexamination of the Evidence for Entanglement in a Quantum Annealer](https://link.aps.org/doi/10.1103/PhysRevA.92.062328) and the HOQST paper. We assume that our readers already have some knowledge of this experiment and HOQST. If not, we strongly recommend readers to first go through the references and introductory tutorials.
 
 To make this tutorial less bulky, we also move most of the source code into [modules/3\_qubit\_entanglement](https://github.com/USCqserver/HOQSTTutorials.jl/tree/master/modules/3_qubit_entanglement) folder. Interested readers can look into the source files for more details.
 
@@ -44,9 +44,9 @@ plot(
 
 
 ## Adiabatic frame
-To keep the running time reasonably short for this tutorial, we only solve the adiabatic master equation and the adiabatic PTRE in the adiabatic frame. For readers who are not familiar with the adiabatic frame, [H. Chen and D. A. Lidar, Why and When Pausing Is Beneficial in Quantum Annealing, Phys. Rev. Applied 14, 014100 (2020)](https://link.aps.org/doi/10.1103/PhysRevApplied.14.014100) contains a brief description of it. The readers are encouraged to try solving the dynamics in the original frame. It will take around 3 hours to complete the simulation of a single evolution.
+To keep the running time reasonably short for this tutorial, we only solve the adiabatic master equation and adiabatic PTRE in the adiabatic frame. For readers who are not familiar with the adiabatic frame, [[2] Why and When Pausing Is Beneficial in Quantum Annealing](https://link.aps.org/doi/10.1103/PhysRevApplied.14.014100) contains a brief description of it. The readers are encouraged to try solving the dynamics in the original frame. It will take around 3 hours to complete the simulation of a single evolution.
 
-For some choices of $h_p$ values, there are two level crossings during the entire evolution. We approximate those level crossings as instantaneous pulses in the adiabatic frame. Besides, we ignore all the geometric terms in the adiabatic frame because they scale inversely proportional to the total evolution time and are very small in our case. To illustrate this point, we first plot the Hamiltonian spectrum(the lowest 4 levels) during the first stage of the evolution:
+For some choices of $h_p$ values, there are two level crossings during the evolution. We approximate those level crossings as instantaneous pulses in the adiabatic frame. Besides, we ignore all the geometric terms in the adiabatic frame because they scale inversely proportional to the total evolution time and are very small in our case. To illustrate this point, we first plot the Hamiltonian spectrum(the lowest 4 levels) during the first stage of the evolution:
 ```julia
 # hp value for the instance
 hp = 1.2

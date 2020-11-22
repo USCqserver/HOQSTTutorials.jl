@@ -11,7 +11,7 @@ $$H(s) = - \sigma_z + \sigma_x \otimes B_1 + \sigma_z \otimes B_2 + H_\mathrm{B}
 
 where $B_1$​ and $B_2$​ are independent Ohmic bath with different cutoff frequencies.
 
-### Define annealing
+### Define the evolution
 
 First, we need to combine `AbstractCouplings` with `AbstractBath` into an `Interaction` object. Then we combine different interactions into an `InteractionSet`:
 
@@ -32,7 +32,7 @@ interaction_set = InteractionSet(interaction_1, interaction_2);
 
 
 
-Finally, we can create an`Annealing` object with `InteractionSet` instead of coupling and bath:
+Finally, we can create an `Annealing` object with `InteractionSet` instead of `coupling` and `bath`:
 ```julia
 H = DenseHamiltonian([(s) -> 1.0], -[σz], unit = :ħ)
 u0 = PauliVec[1][1]
@@ -51,7 +51,7 @@ u0 with size: (2,)
 
 
 
-### Solve Redfield equation
+### Solve the Redfield equation
 
 We solve the Redfield equation with $X$, $Z$, and $X$ plus $Z$ couplings:
 
@@ -96,7 +96,7 @@ ylabel!("<X>")
 
 ### Instantaneous pulses
 
-In the last section, we run the same simulation with a single $X$ pulse in the middle of the evolution (spin echo). The can be done by creating a Callback object and feed it to the solver. For ideal pulses, we can use the built-in function `InstPulseCallback`. This has similar effects as the dynamical decoupling (except the pulse does not commute with the system Hamiltonian).
+In the last section, we run the same simulation with a single $X$ pulse in the middle of the evolution (spin echo). The can be done by creating a Callback object and feed it to the solver. For ideal pulses, we can use the built-in function `InstPulseCallback`. This has similar effects as the dynamical decoupling (except that the pulse does not commute with the system Hamiltonian).
 
 ```julia
 # in this example, we apply an Z pulse in the middle of the annealing
@@ -143,4 +143,4 @@ ylabel!("<X>")
 
 
 
-We can see that the echo pulse slightly reduced the envelope's decay rate for the case where $Z$ coupling is present.
+We can see that the echo pulse slightly reduced the envelope's decay rates for the case where $Z$ coupling is present.
