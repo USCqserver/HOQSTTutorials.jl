@@ -30,7 +30,7 @@ T (mK): 1.9095587777458247
 
 
 
-The spectrum $\gamma$ is plotted below:
+The spectral density $\gamma$ is plotted below:
 
 ```julia
 plot(bath, :γ, range(0,10,length=100), linewidth=2, label="")
@@ -40,7 +40,7 @@ plot(bath, :γ, range(0,10,length=100), linewidth=2, label="")
 
 
 
-and the properties of the bath are:
+The time scales (defined in [[1] Completely positive master equation for arbitrary driving and small level spacing](https://quantum-journal.org/papers/q-2020-02-06-227/)) of the bath are:
 
 ```julia
 τsb, err_τsb = τ_SB((x)->correlation(x, bath))
@@ -58,10 +58,9 @@ and the properties of the bath are:
 
 
 
-## Annealing
+## Evolution
 
-We define the annealing process as
-
+We construct the Hamiltonian by:
 ```julia
 Hp = 0.5*σz⊗σi - 0.7*σi⊗σz + 0.3*σz⊗σz
 Hd = standard_driver(2)
@@ -77,7 +76,7 @@ with size: (4, 4)
 
 
 
-The spectrum of the Hamiltonian during the evolution is
+The spectrum of the Hamiltonian during is
 ```julia
 plot(H, range(0,1,length=100), 4, linewidth=2)
 xlabel!("s")
@@ -102,7 +101,7 @@ close_sol = solve_von_neumann(annealing, tf, alg = Tsit5(), abstol=1e-6, reltol=
 
 
 
-The population of instantaneous ground state is:
+The population of the instantaneous ground state is:
 
 ```julia
 plot(close_sol, H, 1, range(0,tf,length=100), linewidth=2)
