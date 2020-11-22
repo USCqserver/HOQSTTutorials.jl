@@ -1,7 +1,8 @@
 ---
-title: An Intro to HOQST - Lindblad equation
-author: Huo Chen
+author: "Huo Chen"
+title: "An Intro to HOQST - Lindblad equation"
 ---
+
 This tutorial demonstrates how to solve the time-independent Lindblad equation using HOQST.
 
 ## Model setup
@@ -27,14 +28,27 @@ lind = Lindblad(0.1, σz)
 annealing = Annealing(H, u0, interactions = InteractionSet(lind))
 ```
 
+```
+Annealing with hType QTBase.DenseHamiltonian{Complex{Float64}} and uType Ar
+ray{Complex{Float64},2}
+u0 with size: (2, 2)
+```
+
+
+
+
+
 ## Dynamics
 The solution of the Lindblad ME can be obtained by calling `solve_lindblad`:
-```julia; results = "hidden"
+```julia
 # define total annealing/evolution time
 tf = 10
 # solve the Lindblad equation
 sol = solve_lindblad(annealing, 10, alg=Tsit5());
 ```
+
+
+
 
 In the following code blocks, we show how to extract useful quantities like the Bloch vector or density matrix elements from the simulation results:
 ```julia
@@ -51,6 +65,9 @@ for t in t_axis
 end
 ```
 
+
+
+
 We first plot the Bloch vector representation of the qubit along the evolution:
 ```julia
 plot(t_axis, [c[1] for c in bloch_vector], label="X", linewidth=2)
@@ -60,6 +77,10 @@ xlabel!("t (ns)")
 ylabel!("Bloch Vector")
 ```
 
+![](figures/02-lindblad_equation_4_1.png)
+
+
+
 Then, we plot the absolute value of the off-diagonal element $|\rho_{01}|$ and compare it with the analytical solution:
 ```julia
 plot(t_axis, off_diag, linewidth=2, label="ME")
@@ -68,9 +89,13 @@ xlabel!("t (ns)")
 ylabel!("|ρ₀₁(t)|")
 ```
 
+![](figures/02-lindblad_equation_5_1.png)
+
+
+
 ## Quantum trajectories method
 In this section, we show how to perform the same simulation using the quantum trajectories method. This is done by:
-```julia; results = "hidden"
+```julia
 # For the quantum trajectories method, the u0 supplied to `Annealing` must be
 # a state vector.
 # We will show how to replace it with a pure state ensemble latter
@@ -84,6 +109,9 @@ prob = build_ensembles(annealing, tf, :lindblad)
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=1000, saveat=range(0,tf,length=100))
 ```
 
+
+
+
 We can pick one trajectory from the entire set of trajectories and observe how its norm shrinks during the evolution:
 ```julia
 vec_norm = []
@@ -94,6 +122,10 @@ for v in sol[idx].u
 end
 plot(sol[idx].t, vec_norm, linewidth=2, label="", xlabel="t (ns)", ylabel="‖ψ̃(t)‖")
 ```
+
+![](figures/02-lindblad_equation_7_1.png)
+
+
 
 We can also compare the results of the quantum trajectories method with the result of the direct solver:
 ```julia
@@ -141,12 +173,16 @@ end
 
 plot!(t_axis, x_mean, ribbon=2*x_sem, label="100 trajectories", markersize=6, ylabel="<X>", xlabel="t (ns)")
 ```
+
+![](figures/02-lindblad_equation_8_1.png)
+
+
 We observe better convergence with more trajectories.
 
 ## Pure state ensemble
 In the last section, we show how to perform the simulation when the initial state is a pure state ensemble. In this case, we need to use the [prob_func](https://diffeq.sciml.ai/stable/features/ensemble/) interface of [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/) to randomly draw an initial state from the pure state ensemble for each trajectory.
 
-```julia; results = "hidden"
+```julia
 # PuliVec[1][1] is the plus state and PauliVec[1][2] is the minus state
 # The first argument is a list of corresponding probabilities of the
 # pure states in the second argument. 
@@ -165,6 +201,9 @@ prob = build_ensembles(annealing, tf, :lindblad, prob_func=prob_func)
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=2000, saveat=range(0,tf,length=100))
 ```
 
+
+
+
 We can count the number of each pure state in the simulation results:
 ```julia
 initial_state_counter = zeros(2)
@@ -177,6 +216,10 @@ for so in sol
 end
 bar([0,1],initial_state_counter, label="", ylabel="Frequency", xticks=([0, 1], ["|+⟩","|-⟩"]))
 ```
+
+![](figures/02-lindblad_equation_10_1.png)
+
+
 
 Finally, we plot the result of the quantum trajectories method together with the result of the direct solver:
 ```julia
@@ -224,5 +267,9 @@ scatter(t_axis, x_mean, marker=:d, yerror=2*x_sem, label="2000 trajectories", ma
 
 plot!(t_axis, [c[1] for c in x_vector], linewidth=2, label="direct solver")
 ```
+
+![](figures/02-lindblad_equation_11_1.png)
+
+
 
 It is important to note that, to keep the running-time short, we include only 2000 trajectories. The result does not necessarily converge to the true solution.

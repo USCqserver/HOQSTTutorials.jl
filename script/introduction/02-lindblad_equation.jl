@@ -1,20 +1,4 @@
----
-title: An Intro to HOQST - Lindblad equation
-author: Huo Chen
----
-This tutorial demonstrates how to solve the time-independent Lindblad equation using HOQST.
 
-## Model setup
-We consider the Lindblad equation of the following form:
-
-$$\dot{\rho} = -i[H, \rho] + \sum_i\gamma_i \Big( L_i \rho L_i^\dagger - \frac{1}{2}\big\{L_i^\dagger L_i, \rho\big\}\Big) \ .$$
-In this example, we choose a constant Hamiltonian
-
-$$H(s) = \sigma_z \ ,$$
-
-a single Lindblad operator $L=\sigma_z$ and a single rate $\gamma$. The entire evolution can be defined by:
-
-```julia
 using OpenQuantumTools, OrdinaryDiffEq, Plots
 # define the Hamiltonian
 H = DenseHamiltonian([(s)->1.0], [σz], unit=:ħ)
@@ -25,19 +9,14 @@ u0 = PauliVec[1][1]*PauliVec[1][1]'
 lind = Lindblad(0.1, σz)
 # combine them into an Annealing object
 annealing = Annealing(H, u0, interactions = InteractionSet(lind))
-```
 
-## Dynamics
-The solution of the Lindblad ME can be obtained by calling `solve_lindblad`:
-```julia; results = "hidden"
+
 # define total annealing/evolution time
 tf = 10
 # solve the Lindblad equation
 sol = solve_lindblad(annealing, 10, alg=Tsit5());
-```
 
-In the following code blocks, we show how to extract useful quantities like the Bloch vector or density matrix elements from the simulation results:
-```julia
+
 t_axis = range(0, 10, length=100)
 bloch_vector = []
 for t in t_axis
@@ -49,28 +28,21 @@ off_diag = []
 for t in t_axis
     push!(off_diag, abs(sol(t)[1,2]))
 end
-```
 
-We first plot the Bloch vector representation of the qubit along the evolution:
-```julia
+
 plot(t_axis, [c[1] for c in bloch_vector], label="X", linewidth=2)
 plot!(t_axis, [c[2] for c in bloch_vector], label="Y", linewidth=2)
 plot!(t_axis, [c[3] for c in bloch_vector], label="Z", linewidth=2)
 xlabel!("t (ns)")
 ylabel!("Bloch Vector")
-```
 
-Then, we plot the absolute value of the off-diagonal element $|\rho_{01}|$ and compare it with the analytical solution:
-```julia
+
 plot(t_axis, off_diag, linewidth=2, label="ME")
 plot!(t_axis, 0.5*exp.(-0.2*t_axis), linestyle=:dash, linewidth=3, label="Analytical")
 xlabel!("t (ns)")
 ylabel!("|ρ₀₁(t)|")
-```
 
-## Quantum trajectories method
-In this section, we show how to perform the same simulation using the quantum trajectories method. This is done by:
-```julia; results = "hidden"
+
 # For the quantum trajectories method, the u0 supplied to `Annealing` must be
 # a state vector.
 # We will show how to replace it with a pure state ensemble latter
@@ -82,10 +54,8 @@ tf = 10
 prob = build_ensembles(annealing, tf, :lindblad)
 # We ran each trajectory in serial for the sake of simplicity. The user is encouraged to try parallel algorithms.
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=1000, saveat=range(0,tf,length=100))
-```
 
-We can pick one trajectory from the entire set of trajectories and observe how its norm shrinks during the evolution:
-```julia
+
 vec_norm = []
 # this is the index of the trajectory you want to look at
 idx = 2
@@ -93,10 +63,8 @@ for v in sol[idx].u
     push!(vec_norm, norm(v))
 end
 plot(sol[idx].t, vec_norm, linewidth=2, label="", xlabel="t (ns)", ylabel="‖ψ̃(t)‖")
-```
 
-We can also compare the results of the quantum trajectories method with the result of the direct solver:
-```julia
+
 t_axis = range(0,tf,length=100)
 dataset = []
 for t in t_axis
@@ -140,13 +108,8 @@ for data in dataset
 end
 
 plot!(t_axis, x_mean, ribbon=2*x_sem, label="100 trajectories", markersize=6, ylabel="<X>", xlabel="t (ns)")
-```
-We observe better convergence with more trajectories.
 
-## Pure state ensemble
-In the last section, we show how to perform the simulation when the initial state is a pure state ensemble. In this case, we need to use the [prob_func](https://diffeq.sciml.ai/stable/features/ensemble/) interface of [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/) to randomly draw an initial state from the pure state ensemble for each trajectory.
 
-```julia; results = "hidden"
 # PuliVec[1][1] is the plus state and PauliVec[1][2] is the minus state
 # The first argument is a list of corresponding probabilities of the
 # pure states in the second argument. 
@@ -163,10 +126,8 @@ annealing = Annealing(H, u0, interactions = InteractionSet(lind))
 tf = 10
 prob = build_ensembles(annealing, tf, :lindblad, prob_func=prob_func)
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=2000, saveat=range(0,tf,length=100))
-```
 
-We can count the number of each pure state in the simulation results:
-```julia
+
 initial_state_counter = zeros(2)
 for so in sol
     if so.prob.u0 == PauliVec[1][1]
@@ -176,10 +137,8 @@ for so in sol
     end
 end
 bar([0,1],initial_state_counter, label="", ylabel="Frequency", xticks=([0, 1], ["|+⟩","|-⟩"]))
-```
 
-Finally, we plot the result of the quantum trajectories method together with the result of the direct solver:
-```julia
+
 t_axis = range(0,tf,length=100)
 dataset = []
 for t in t_axis
@@ -223,6 +182,4 @@ end
 scatter(t_axis, x_mean, marker=:d, yerror=2*x_sem, label="2000 trajectories", markersize=6, ylabel="<X>", xlabel="t (ns)")
 
 plot!(t_axis, [c[1] for c in x_vector], linewidth=2, label="direct solver")
-```
 
-It is important to note that, to keep the running-time short, we include only 2000 trajectories. The result does not necessarily converge to the true solution.

@@ -4,7 +4,7 @@ author: Huo Chen
 ---
 
 ## Correlation function in polaron frame
-This is a tutorial for using the polaron transformed Redfield equation (PTRE) in HOQST. For more details on PTRE, [Xu and Cao](https://link.springer.com/article/10.1007%2Fs11467-016-0540-2) is a good reference.
+This is a tutorial for using the polaron transformed Redfield equation (PTRE) in HOQST. For more details on PTRE, [[1] Non-canonical distribution and non-equilibrium transport beyond weak system-bath coupling regime: A polaron transformation approach](https://link.springer.com/article/10.1007%2Fs11467-016-0540-2) is a good reference.
 
 In this example, we solve both the Redfield equation and PTRE for a single qubit model with system Hamiltonian
 
@@ -14,7 +14,7 @@ coupling to an Ohmic bath via $\sigma_z$ interaction
 
 $$H = H_\mathrm{S} + \sigma_z \otimes B + H_\mathrm{B}\ .$$
 
-Loosely speaking, the main difference between the Redfield equation and PTRE is that they have different bath correlation functions. For the Redfield equation, the bath correlation function is
+Loosely, the main difference between the Redfield equation and PTRE is that they have different bath correlation functions. For the Redfield equation, the bath correlation function is
 
 $$C(t_1, t_2) = \langle B(t_1)B(t_2) \rangle \ .$$
 
@@ -22,7 +22,7 @@ In the polaron frame, however, the bath correlation function becomes
 
 $$K(t_1, t_2) = \exp\Big\{ -4 \int_0^t \int_{-\infty}^{0}C(t_1, t_2) \mathrm{d}t_1 \mathrm{d}t_2 \Big\} \ .$$
 
-Again, interested readers can refer to [[Amin and Averin]](https://link.aps.org/doi/10.1103/PhysRevLett.100.197001) and [Leggett et al.](https://link.aps.org/doi/10.1103/RevModPhys.59.1) for more details.
+Interested readers can refer to [[Amin and Averin]](https://link.aps.org/doi/10.1103/PhysRevLett.100.197001) and [Leggett et al.](https://link.aps.org/doi/10.1103/RevModPhys.59.1) for more details.
 
 ### Error bound on the second-order master equation
 
