@@ -25,8 +25,8 @@ This package directly interacts with [Plots.jl](https://github.com/JuliaPlots/Pl
 plot(H, 0:0.01:1, 2, linewidth=2)
 ```
 
-### Unit ($h$ or $\hbar$)
-A keyword argument `unit` whose default value is `:h` can be provided to any Hamiltonian type's constructor. This argument specifies the unit of other input arguments. For example, setting `unit` to `:h` means the other input arguments have the unit of $\mathrm{GHz}$, while setting it to `:ħ` means the other input arguments have the unit of $2\pi\mathrm{GHz}$. To evaluate the Hamiltonian at a given time, the user should use the `evaluate` function instead of directly calling it. `evaluate` will always return the Hamiltonian value in the unit system of $h=1$. The following code block shows the effects of different choices of `unit`:
+### Units ($h$ or $\hbar$)
+A keyword argument `unit` whose default value is `:h` can be provided to any Hamiltonian type's constructor. This argument specifies the units of other input arguments. For example, setting `unit` to `:h` means the other input arguments have units of $\mathrm{GHz}$, while setting it to `:ħ` means the other input arguments have units of $2\pi\mathrm{GHz}$. To evaluate the Hamiltonian at a specified time, the user should use the `evaluate` function instead of directly calling it. `evaluate` will always return the Hamiltonian value in the unit system of $h=1$. The following code block shows the effects of different choices of `unit`:
 
 ```julia
 H_h = DenseHamiltonian([(s)->1-s, (s)->s], -[σx, σz]/2, unit=:h)
@@ -48,10 +48,10 @@ The total Hamiltonian presented in [[1]](https://arxiv.org/abs/1503.08767) is
 
 $$H(s) = H_{\mathrm{S}}(s) + gS \otimes B + H_{\mathrm{B}} \ .$$
 
-We denote $S$ the coupling and $\{gB, H_{\mathrm{B}}\}$ the bath.
+$S$ denotes the system coupling operator in the system-bath interaction and $\{gB, H_{\mathrm{B}}\}$ are the bath coupling operator and bath Hamiltonian, respectively.
 
 #### Coupling
-For constant coupling operators, we can use the constructor `ConstantCouplings`. Like Hamiltonian's case, there is a keyword argument `unit` to specify the input unit.
+For constant coupling operators, we can use the constructor `ConstantCouplings`. As in the Hamiltonian case, there is a keyword argument `unit` to specify the input unit.
 
 ```julia
 coupling = ConstantCouplings(["Z"])
@@ -63,7 +63,7 @@ A bath instance can be any object which implements the following three methods:
   2. Spectral density: `γ(ω, bath)`
   3. Lamb shift: `S(ω, bath)`
 
-Redfield/Adiabatic ME solvers require those three methods. Currently, we have built-in support for the Ohmic bath. An Ohmic bath object can be created by :
+The Redfield/Adiabatic ME solvers require these three methods. Currently, HOQST has built-in support for the Ohmic bath. An Ohmic bath object can be created by:
 
 ```julia
 η = 1e-4
@@ -72,13 +72,13 @@ T = 16
 bath = Ohmic(η, fc, T)
 ```
 
-`info_freq` is a convenient function to convert each quantity into the same unit.
+`info_freq` is a convenient function to convert each quantity into the same system of units.
 
 ```julia
 info_freq(bath)
 ```
 
-We can also directly plot the spectral density of Ohmic bath:
+We can also directly plot the spectral density of an Ohmic bath:
 
 ```julia
 p1 = plot(bath, :γ, range(0,20,length=200), label="", size=(800, 400), linewidth=2)
@@ -101,27 +101,27 @@ bath = Ohmic(1e-4, 4, 16)
 annealing = Annealing(H, u0; coupling=coupling, bath=bath)
 ```
 
-Because we want to compare our results to the [[1]](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320), we need to set the unit to $\hbar=1$.
+In order to compare our results to [[1]](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320) we need to set the units to $\hbar=1$.
 
 ### Closed system
-There are several interfaces in HOQST that might be handy. The first one is the Schrodinger equation solver:
+There are several interfaces in HOQST that can come in handy. The first one is the Schrodinger equation solver:
 
 ```julia
 tf = 10*sqrt(2)
 @time sol = solve_schrodinger(annealing, tf, alg=Tsit5(), retol=1e-4)
 # The following line of code is a convenient recipe to plot the instantaneous population during the evolution.
-# It currently only supports Hamiltonian with annealing parameter s = t/tf from 0 to 1.
+# It currently only supports Hamiltonians with an annealing parameter s = t/tf from 0 to 1.
 # The third argument can be either a list or a number. When it is a list, it specifies the energy levels to plot (starting from 0); when it is a number, it specifies the total number of levels to plot.
 plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$")
 ```
 
-The solution is an `ODESolution` object in `DifferentialEquations.jl` package. More details for the interface can be found [here](http://docs.juliadiffeq.org/latest/basics/solution.html). The state vector's value at a given time can be obtained by directly calling the `ODESolution` object.
+The solution is an `ODESolution` object in the `DifferentialEquations.jl` package. More details for the interface can be found [here](http://docs.juliadiffeq.org/latest/basics/solution.html). The state vector's value at a given time can be obtained by directly calling the `ODESolution` object.
 
 ```julia
 sol(0.5)
 ```
 
-Other interfaces include
+Other interfaces include:
 
 ```julia; results = "hidden"
 # You need to solve the unitary first before trying to solve Redfield equation
@@ -149,7 +149,7 @@ The adiabatic master equation solver needs
   1. Annealing object
   2. Total Annealing time
 
-Besides other keyword arguments supported in [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/basics/common_solver_opts/), it is highly recommended to add the `ω_hint` keyword argument. By doing this, the solver will pre-compute the quantity $S(\omega)$ in Lambshift within the range specified by `ω_hint` to speed up the computation.
+Besides other keyword arguments supported in [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/basics/common_solver_opts/), we recommend adding the `ω_hint` keyword argument. By doing this, the solver will pre-compute the quantity $S(\omega)$ in the Lamb shift within the range specified by `ω_hint`, which will significantly speed up the computation.
 
 ```julia
 tf = 10*sqrt(2)
@@ -165,10 +165,10 @@ tf = 5000
 plot(sol_ame, H, [0], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
-The above results agree with Fig 2 of reference [[1]](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320).
+The above results agree with Fig. 2 of [[1]](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.91.062320).
 
-#### Trajectory method for adiabatic master equation
-The package also supports the trajectory method for AME. More details of this method can be found in [[2] Quantum trajectories for time-dependent adiabatic master equations](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022116). The basic workflow is to create an ODE [EnsembleProblem](https://docs.juliadiffeq.org/dev/features/ensemble/) via `build_ensembles` interface. Then, the resulting `EnsembleProblem` object can be solved by the native [Parallel Ensemble Simulations](https://docs.juliadiffeq.org/dev/features/ensemble/) interface of `DifferentialEquations.jl`. The following code block solves the same annealing dynamics described above ($t_f = 5000(ns)$) using multithreading. To keep the running time reasonably short, we simulate only 3000 trajectories in this example. The result may not converge to the true solution yet. The user is encouraged to try more trajectories and see how the result converges.
+#### Quantum trajectories method for the adiabatic master equation
+The package also supports the quantum trajectories method for the AME. More details of this method can be found in [[2] Quantum trajectories for time-dependent adiabatic master equations](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022116). The basic workflow is to create an ODE [EnsembleProblem](https://docs.juliadiffeq.org/dev/features/ensemble/) via the `build_ensembles` interface. The resulting `EnsembleProblem` object can then be solved by the native [Parallel Ensemble Simulations](https://docs.juliadiffeq.org/dev/features/ensemble/) interface of `DifferentialEquations.jl`. The following code block solves the same annealing dynamics described above ($t_f = 5000(ns)$) using multi-threading. To keep the run-time reasonably short, we simulate only 3000 trajectories in this example. This may be too small for the result to converge to the true solution. The user is encouraged to try more trajectories and see how the result converges.
 
 The codes can also be deployed on high-performance clusters using Julia's native [distributed computing](https://docs.julialang.org/en/v1/manual/distributed-computing/) module.
 
@@ -179,7 +179,7 @@ num_trajectories = 3000
 # construct the `EnsembleProblem` 
 # `safetycopy` needs to be true because the current trajectories implementation is not thread-safe.
 prob = build_ensembles(annealing, tf, :ame, ω_hint=range(-6, 6, length=200), safetycopy=true)
-# to use multi-threads, you need to start Julia kernel with multiple threads
+# to use multi-threads, you need to start the Julia kernel with multiple threads
 # julia --threads 8
 sol = solve(prob, Tsit5(), EnsembleThreads(), trajectories=num_trajectories, reltol=1e-6, saveat=range(0,tf,length=100))
 
@@ -190,7 +190,7 @@ for t in t_axis
     push!(dataset, [abs2(normalize(so(t))' * v[:, 1]) for so in sol])
 end
 
-# the following codes calculate the instantaneous ground state population and its error bar by averaging over all the trajectories
+# the following codes calculate the instantaneous ground state population and the corresponding error bars by averaging over all the trajectories:
 
 pop_mean = []
 pop_sem = []
