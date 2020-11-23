@@ -18,10 +18,10 @@ a single Lindblad operator $L=\sigma_z$ and a single rate $\gamma$. The entire e
 using OpenQuantumTools, OrdinaryDiffEq, Plots
 # define the Hamiltonian
 H = DenseHamiltonian([(s)->1.0], [σz], unit=:ħ)
-# define initial state
+# define the initial state
 u0 = PauliVec[1][1]*PauliVec[1][1]'
-# define Lindblad operator
-# the rate and Lindblad operator can also be time dependent functions
+# define the Lindblad operator
+# the rate and Lindblad operator can also be time-dependent functions
 lind = Lindblad(0.1, σz)
 # combine them into an Annealing object
 annealing = Annealing(H, u0, interactions = InteractionSet(lind))
@@ -41,7 +41,7 @@ In the following code blocks, we show how to extract useful quantities like the 
 t_axis = range(0, 10, length=100)
 bloch_vector = []
 for t in t_axis
-    # matrix_decompose projects a matrix onto a list of basis
+    # matrix_decompose projects a matrix onto a list of basis elements
     push!(bloch_vector, 2*real.(matrix_decompose(sol(t), [σx, σy, σz])))
 end
 
@@ -73,14 +73,14 @@ In this section, we show how to perform the same simulation using the quantum tr
 ```julia; results = "hidden"
 # For the quantum trajectories method, the u0 supplied to `Annealing` must be
 # a state vector.
-# We will show how to replace it with a pure state ensemble latter
+# We will show how to replace it with a pure state ensemble later
 # in this example
 u0 = PauliVec[1][1]
 lind = Lindblad(0.1, σz)
 annealing = Annealing(H, u0, interactions = InteractionSet(lind))
 tf = 10
 prob = build_ensembles(annealing, tf, :lindblad)
-# We ran each trajectory in serial for the sake of simplicity. The user is encouraged to try parallel algorithms.
+# We ran each trajectory serially for the sake of simplicity. The user is encouraged to try parallel algorithms.
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=1000, saveat=range(0,tf,length=100))
 ```
 
@@ -144,7 +144,7 @@ plot!(t_axis, x_mean, ribbon=2*x_sem, label="100 trajectories", markersize=6, yl
 We observe better convergence with more trajectories.
 
 ## Pure state ensemble
-In the last section, we show how to perform the simulation when the initial state is a pure state ensemble. In this case, we need to use the [prob_func](https://diffeq.sciml.ai/stable/features/ensemble/) interface of [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/) to randomly draw an initial state from the pure state ensemble for each trajectory.
+In this last section, we show how to perform the simulation when the initial state is a pure state ensemble. In this case, we need to use the [prob_func](https://diffeq.sciml.ai/stable/features/ensemble/) interface of [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/) to randomly draw an initial state from the pure state ensemble for each trajectory.
 
 ```julia; results = "hidden"
 # PuliVec[1][1] is the plus state and PauliVec[1][2] is the minus state
@@ -165,7 +165,7 @@ prob = build_ensembles(annealing, tf, :lindblad, prob_func=prob_func)
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=2000, saveat=range(0,tf,length=100))
 ```
 
-We can count the number of each pure state in the simulation results:
+We can count the number of each of the pure states in the simulation results:
 ```julia
 initial_state_counter = zeros(2)
 for so in sol
@@ -225,4 +225,4 @@ scatter(t_axis, x_mean, marker=:d, yerror=2*x_sem, label="2000 trajectories", ma
 plot!(t_axis, [c[1] for c in x_vector], linewidth=2, label="direct solver")
 ```
 
-It is important to note that, to keep the running-time short, we include only 2000 trajectories. The result does not necessarily converge to the true solution.
+It is important to note that in order to keep the running-time short we included only 2000 trajectories. The result does not necessarily converge to the true solution.
