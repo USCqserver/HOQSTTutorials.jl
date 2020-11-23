@@ -4,7 +4,7 @@ author: Huo Chen
 ---
 
 
-## Initialize Hamiltonian with a custom eigendecomposition function
+## Initialize a Hamiltonian with a custom eigendecomposition function
 
 When defining a Hamiltonian object, a user-defined eigendecomposition routine can be supplied using a keyword argument `EIGS`. All the eigendecomposition calls inside the solver will call this function instead of the default one.
 
@@ -52,14 +52,14 @@ print(eigen_decomp(H, 0.0, lvl=2))
 
 Another application is to supply special eigendecomposition algorithms for sparse matrices to take advantage of the sparsity. 
 
-For example, the default eigendecomposition algorithm for sparse Hamiltonian is to convert it into dense matrices first and then perform the decomposition.
+For example, the default eigendecomposition algorithm for a sparse Hamiltonian is to convert it into dense matrices first and then perform the decomposition.
 
 ```julia
 Hd = standard_driver(4, sp=true);
 Hp = two_local_term(rand(3), [[1,2],[2,3],[3,4]], 4, sp=true)
 H = SparseHamiltonian([(s)->1-s, (s)->s], [Hd, Hp], unit=:ħ)
 
-# the default eigen_decomposition using dense matrices algorithm
+# the default eigen_decomposition using the dense matrices algorithm
 w, v = eigen_decomp(H, 0.1, lvl=4)
 ```
 If the Hamiltonian size becomes large, we can use sparse algorithms provided by [Arpack](https://github.com/JuliaLinearAlgebra/Arpack.jl) instead. Let's first load `Arpack.jl` by running:
@@ -67,7 +67,7 @@ If the Hamiltonian size becomes large, we can use sparse algorithms provided by 
 using Arpack
 ```
 
-Next, we can use `Arpack` function to replace the default eigendecomposition routine:
+Next, we can use an `Arpack` function to replace the default eigendecomposition routine:
 ```julia
 function build_user_eigen(u_cache)
     function (H, t, lvl)
