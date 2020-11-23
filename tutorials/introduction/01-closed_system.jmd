@@ -11,7 +11,7 @@ The first step is to define a Hamiltonian. In this tutorial, we focus on a 2-lev
 
 $$H(s) = - \sigma_z$$
 
-where $s= t/t_f$ is the dimensionless time and $t_f$ is the total evolution time. We use the constant Hamiltonian so that the simulation results can be trivially confirmed. The syntax is the same for time-dependent Hamiltonians. Let's first define the Hamiltonian by:
+where $s= t/t_f$ is the dimensionless time and $t_f$ is the total evolution time. We use a constant Hamiltonian so that the simulation results can be trivially confirmed. The syntax is the same for time-dependent Hamiltonians. Let's first define the Hamiltonian by:
 
 ```julia
 using OpenQuantumTools, OrdinaryDiffEq, Plots
@@ -19,7 +19,7 @@ using OpenQuantumTools, OrdinaryDiffEq, Plots
 H = DenseHamiltonian([(s)->1.0], [-σz], unit=:ħ)
 ```
 
-In this example, we use the `DenseHamiltonian` [type](https://docs.julialang.org/en/v1/manual/types/#man-types). It means the underlying data structure of this Hamiltonian type is [Julia array](https://docs.julialang.org/en/v1/manual/arrays/). There exists a different Hamiltonian type named `SparseHamiltonian` that relies on [sparse array](https://docs.julialang.org/en/v1/stdlib/SparseArrays/) as its internal data structure. Sparsity can only provide performance improvement when the system size is large. So, as a rule of thumb, users should only consider using `SparseHamiltonian` when the system size is larger than 10 qubits. 
+In this example, we use the `DenseHamiltonian` [type](https://docs.julialang.org/en/v1/manual/types/#man-types). It means that the underlying data structure of this Hamiltonian type is [Julia array](https://docs.julialang.org/en/v1/manual/arrays/). There exists a different Hamiltonian type named `SparseHamiltonian` that relies on [sparse array](https://docs.julialang.org/en/v1/stdlib/SparseArrays/) as its internal data structure. Sparsity can only provide performance improvement when the system size is large. So, as a rule of thumb, users should only consider using `SparseHamiltonian` when the system size is larger than 10 qubits. 
 
 The closed-system evolution is completely specified by the Hamiltonian and the initial state. We can combine them into a single `Annealing` object by:
 
@@ -53,7 +53,7 @@ To solve this differential equation, we need to choose a proper algorithm. HOQST
 
 2. A second-order A-B-L-S-stable one-step ESDIRK method(TRBDF2()).
 
-   This is the method widely used in large scale classical circuit simulations. Because this is a second-order method, it is recommended to use smaller error tolerance comparing with other higher-order methods.
+   This is the method widely used in large scale classical circuit simulations. Because this is a second-order method, we recommended using a smaller error tolerance than with other higher-order methods.
  
 3. A simple linear exponential method(LinearExponential()).
 
@@ -68,9 +68,9 @@ It is important to note that methods 3 and 4 are exponential methods that are su
 ```julia
 sol_tsit = solve_schrodinger(annealing, tf, alg=Tsit5(), abstol=1e-6, reltol=1e-6);
 sol_trbdf = solve_schrodinger(annealing, tf, alg=TRBDF2(), abstol=1e-6, reltol=1e-6);
-# LinearExponential is a fixed-stepsize method, the user needs to specify the time steps using keyword argument `tstops`.
+# LinearExponential is a fixed-stepsize method, the user needs to specify the time steps using the keyword argument `tstops`.
 sol_linexp = solve_schrodinger(annealing, tf, alg=LinearExponential(), abstol=1e-6, reltol=1e-6, tstops=range(0,tf,length=100));
-# Even though Exprb is an adaptive method, it tends to skip a lot of middle points. So if you want accurate solution in the middle,
+# Even though Exprb is an adaptive method, it tends to skip a lot of middle points. So if you want an accurate solution in the middle,
 # it is better to manually add more points.
 sol_exprb32 = solve_schrodinger(annealing, tf, alg=Exprb32(), tstops=range(0,tf,length=100));
 ```
@@ -123,7 +123,7 @@ sol_tsit(0.5)
 ```
 
 ##### Recommended algorithm
-Only explicit methods are supported for solving equations w.r.t. density matrices. [Vectorization] (https://en.wikipedia.org/wiki/Vectorization_(mathematics)) is needed for implicit methods. This can be done by setting `vectorize` keyword argument to be true. For example, in the following code block, we solve the Von Neumann equation with TRBDF2 method:
+Only explicit methods are supported for solving equations w.r.t. density matrices. [Vectorization] (https://en.wikipedia.org/wiki/Vectorization_(mathematics)) is needed for implicit methods. This can be done by setting the `vectorize` keyword argument to be true. For example, in the following code block, we solve the Von Neumann equation with the TRBDF2 method:
 
 ```julia
 sol_bdf = solve_von_neumann(annealing, tf, alg=TRBDF2(), reltol=1e-6, vectorize=true)
@@ -132,7 +132,7 @@ sol_bdf(0.5 * tf)
 
 As shown above, the solution given by the solver becomes a vectorized version of the density matrix.
 
-Side note: `TRBDF2` can actually work without vectorizing the Von Neumann equation. However, this is not generally true for other algorithms/solvers. For example, we will run into error for `LinearExponential` method if no vectorization is performed:
+Side note: `TRBDF2` can actually work without vectorizing the Von Neumann equation. However, this is not generally true for other algorithms/solvers. For example, we will run into errors for `LinearExponential` method if no vectorization is performed:
 
 ```julia
 sol_linexp = solve_von_neumann(annealing, tf, alg=LinearExponential(), tstops=range(0,tf,length=100));
@@ -178,7 +178,7 @@ using `solve_unitary`. The ODE form of the problem is
 
 $$\dot{U} = -i t_f H(s) U \ .$$
 
-Although this is in principle equivalent to Schrodinger/Von Neumann equation, the unitary becomes handy in certain cases, e.g., when solving the Redfield equation.
+Although this is in principle equivalent to the Schrodinger/Von Neumann equation, the unitary becomes handy in certain cases, e.g., when solving the Redfield equation.
 
 ```julia
 annealing = Annealing(H, u0)
@@ -186,14 +186,14 @@ sol_tsit = solve_unitary(annealing, tf, alg=Tsit5(),abstol=1e-6, reltol=1e-6)
 sol_tsit(0.5 * tf)
 ```
 
-Again we plot the $\langle X \rangle$ obtained by multiplying the unitary with the initial state.
+Again we plot the $\langle X \rangle$ obtained by multiplying the unitary by the initial state.
 
 ```julia
 sol_tsit = solve_unitary(annealing, tf, alg=Tsit5(), reltol=1e-6);
 sol_trbdf = solve_unitary(annealing, tf, alg=TRBDF2(), reltol=1e-6, vectorize=true);
-# LinearExponential is a fixed step size method, user need to specify the time steps using keyword argument `tstops`.
+# LinearExponential is a fixed step size method, users need to specify the time steps using the keyword argument `tstops`.
 sol_linexp = solve_unitary(annealing, tf, alg=LinearExponential(), tstops=range(0,tf,length=100), vectorize=true);
-# Even though Exprb method is an adaptive method, it tends to jump a lot of middle points. So if you want accurate evolution in the middle,
+# Even though Exprb method is an adaptive method, it tends to skip a lot of middle points. So if you want an accurate evolution in the middle,
 # it is better to manually add more points for the algorithm.
 sol_exprb32 = solve_unitary(annealing, tf, alg=Exprb32(), tstops=range(0,tf,length=100), vectorize=true);
 
