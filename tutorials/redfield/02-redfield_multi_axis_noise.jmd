@@ -8,7 +8,7 @@ In this example, we show how to solve the Redfield equation with the following H
 
 $$H(s) = - \sigma_z + \sigma_x \otimes B_1 + \sigma_z \otimes B_2 + H_\mathrm{B} \ ,$$
 
-where $B_1$​ and $B_2$​ are independent Ohmic bath with different cutoff frequencies.
+where $B_1$​ and $B_2$​ are independent Ohmic baths with different cutoff frequencies.
 
 ### Define the evolution
 
@@ -75,10 +75,10 @@ ylabel!("<X>")
 
 ### Instantaneous pulses
 
-In the last section, we run the same simulation with a single $X$ pulse in the middle of the evolution (spin echo). The can be done by creating a Callback object and feed it to the solver. For ideal pulses, we can use the built-in function `InstPulseCallback`. This has similar effects as the dynamical decoupling (except that the pulse does not commute with the system Hamiltonian).
+In this last section, we run the same simulation with a single $X$ pulse in the middle of the evolution (spin echo). This can be done by creating a Callback object and feeding it to the solver. For ideal pulses, we can use the built-in function `InstPulseCallback`. This has similar effects as dynamical decoupling (except that the pulse does not commute with the system Hamiltonian).
 
 ```julia; results = "hidden"
-# in this example, we apply an Z pulse in the middle of the annealing
+# in this example, we apply a Z pulse in the middle of the evolution
 # for the InstPulseCallback constructor
 # the first argument is a list of times where the pulses are applied
 # the second argument is a function to update the state update!(c, pulse_index
