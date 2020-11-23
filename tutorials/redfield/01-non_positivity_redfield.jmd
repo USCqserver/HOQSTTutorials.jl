@@ -42,7 +42,7 @@ Hd = standard_driver(2)
 H = DenseHamiltonian([(s)->1-s, (s)->s], [-Hd, Hp], unit=:ħ)
 ```
 
-The spectrum of the Hamiltonian during is
+The spectrum of the Hamiltonian during the evolution is
 ```julia
 plot(H, range(0,1,length=100), 4, linewidth=2)
 xlabel!("s")
@@ -89,7 +89,7 @@ U = solve_unitary(annealing, tf, alg = Tsit5(), abstol=1e-7, reltol=1e-7);
 redfield_sol = solve_redfield(annealing, tf, U, alg = Tsit5(), abstol=1e-7, reltol=1e-7);
 ```
 
-We plot the populations of the computational states:
+We plot the populations of the computational basis states:
 
 ```julia
 t_axis = range(0,tf,length=100)
