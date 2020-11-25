@@ -1,6 +1,6 @@
 ---
 author: "Huo Chen"
-title: "An Intro to the coarse-grained ME and universal Lindblad ME"
+title: "An Intro to the coarse-grained ME and the universal Lindblad ME"
 ---
 
 
@@ -10,11 +10,11 @@ In this tutorial, we consider a standard single qubit annealing Hamiltonian
 
 $$H(s) = -\frac{1}{2}(1-s)\sigma_x - \frac{1}{2}s\sigma_z$$
 
-coupled to an Ohmic bath via $\sigma_z$ operator. We solve the open system dynamics via three different MEs: the Redfield equation, the coarse-grained ME (CGME), and the universal Lindblad equation (ULE). Unlike the Redfield equation, the CGME and ULE generate CP maps.
+coupled to an Ohmic bath via $\sigma_z$. We solve the open system dynamics via three different MEs: the Redfield equation, the coarse-grained ME (CGME), and the universal Lindblad equation (ULE). Unlike the Redfield equation, the CGME and ULE generate CP maps.
 
 ## Coarse-grained ME
 
-The CGME is a completely positive ME obtained by applying an additional time coarse-graining approximate to the Redfield equation. More details of the CGME can be found in [[1] Completely positive master equation for arbitrary driving and small level spacing](https://quantum-journal.org/papers/q-2020-02-06-227/). We first solve the original Redfield equation and CGME and compare both cases' instantaneous ground state population.
+The CGME is a completely positive ME obtained by applying an additional time coarse-graining approximation to the Redfield equation. More details of the CGME can be found in [[1] Completely positive master equation for arbitrary driving and small level spacing](https://quantum-journal.org/papers/q-2020-02-06-227/). We first solve the original Redfield equation and CGME and compare both cases' instantaneous ground state populations.
 
 ```julia
 using OrdinaryDiffEq, Plots, LaTeXStrings
@@ -42,8 +42,8 @@ plot!(solc, H, [0], 0:0.01:tf, linewidth=2, label="CGME")
 ```
 
 ```
-0.325194 seconds (3.08 M allocations: 80.058 MiB, 2.94% gc time)
- 48.638713 seconds (489.73 M allocations: 19.392 GiB, 4.55% gc time)
+0.354245 seconds (3.08 M allocations: 80.058 MiB)
+ 54.372317 seconds (489.73 M allocations: 19.392 GiB, 4.60% gc time)
 ```
 
 
@@ -53,7 +53,7 @@ plot!(solc, H, [0], 0:0.01:tf, linewidth=2, label="CGME")
 
 ## Universal Lindblad equation
 
-The universal Lindblad equation(ULE) is a different CP ME proposed in [[2] Universal Lindblad equation for open quantum systems](https://arxiv.org/abs/2004.01469). Unlike the Redfield equation and CGME, it depends on the jump correlator, which is the inverse Fourier transform of the square root of the noise spectrum:
+The universal Lindblad equation (ULE) is a different CP ME proposed in [[2] Universal Lindblad equation for open quantum systems](https://arxiv.org/abs/2004.01469). Unlike the Redfield equation and the CGME, it depends on the jump correlator, which is the inverse Fourier transform of the square root of the noise spectrum:
 
 $$g(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty} \sqrt{\gamma(\omega)} e^{i\omega t} \mathrm{d}\omega \ .$$
 
@@ -111,7 +111,7 @@ plot!(solu, H, [0], 0:0.01:tf, linewidth=2, label="ULE")
 ```
 
 ```
-0.466425 seconds (5.09 M allocations: 133.383 MiB, 3.57% gc time)
+0.528406 seconds (5.09 M allocations: 133.383 MiB, 4.60% gc time)
 ```
 
 

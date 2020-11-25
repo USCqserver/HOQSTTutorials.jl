@@ -47,7 +47,7 @@ xlabel!("s")
 ylabel!("<X>")
 
 
-# in this example, we apply an Z pulse in the middle of the annealing
+# in this example, we apply a Z pulse in the middle of the evolution
 # for the InstPulseCallback constructor
 # the first argument is a list of times where the pulses are applied
 # the second argument is a function to update the state update!(c, pulse_index

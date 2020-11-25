@@ -92,7 +92,7 @@ sol3 = solve_ame(annealing, 2 * τ1, ω_hint=range(-15, 15, length=200), alg=Tsi
 
 # combine 3 stages of the evolution together for plotting
 t_axis = [sol1.t; 2 * τ1 .+ sol2.t[2:end]; 2 * τ1 .+ τ2 .+ sol3.t[2:end]]
-# in adiabatic frame, the diagonal elements of the density matrix are
+# in the adiabatic frame, the diagonal elements of the density matrix are
 # the instantaneous eigen-populations
 s1 = [real.(diag(u)) for u in sol1.u]
 s2 = [real.(diag(u)) for u in sol2.u[2:end]]
@@ -102,7 +102,7 @@ plot(t_axis/1e3, s_axis', xlabel=L"t\ (\mu s)", ylabel=L"P_i(t)", label=[L"E_0" 
 title!(latexstring(@sprintf "h_p = %.3f" hp))
 
 
-# pre-calculate the spectrum density of the 
+# pre-calculate the spectral density of the 
 # hybrid Ohmic bath to speed up the computation
 function hybrid_ohmic(ω, W, η, fc, T)
     ω = 2*π*ω
@@ -121,15 +121,15 @@ C1p = C1[1]
 C1s = C1[2]
 u1 = build_adiabatic_frame_u0(hp)
 # For the adiabatic PTRE, we only perform the polaron transformation
-# on the probe qubit. So there are two types of interactions.
+# on the probe qubit. So there are two types of interactions:
 interaction_1 = Interaction(C1p, bath_hybrid)
 interaction_2 = Interaction(C1s, bath_ohmic)
 interaction1 = InteractionSet(interaction_1, interaction_2)
 annealing = Annealing(H1, u1, interactions = interaction1)
-# we ignore the Lambshift for the simulation
-# if the user want to include Lambshift in the simulation
+# we ignore the Lamb shift for the simulation;
+# if the user would like to include the Lamb shift in the simulation
 # it is better to provide an interpolated version of the `S`
-# function via keyword argument `lambshift_S`
+# function via the keyword argument `lambshift_S`
 sol1 = solve_ame(annealing, 2 * τ1, lambshift = false, alg=Tsit5(), reltol=1e-6, callback=cb1, saveat=range(0,2*τ1,length=100))
 
 τ2 = 1e5
@@ -154,7 +154,7 @@ annealing = Annealing(H3, u3, interactions = interaction3)
 sol3 = solve_ame(annealing, 2 * τ1, lambshift=false, alg=Tsit5(), reltol=1e-6, callback=cb3, saveat=range(0,2*τ1,length=100))
 
 
-# combine 3 stages of the evolution together for plotting
+# combine 3 stages of the evolution for plotting
 t_axis = [sol1.t; 2 * τ1 .+ sol2.t[2:end]; 2 * τ1 .+ τ2 .+ sol3.t[2:end]]
 # in adiabatic frame, the diagonal elements of the density matrix are
 # the instantaneous eigen-populations

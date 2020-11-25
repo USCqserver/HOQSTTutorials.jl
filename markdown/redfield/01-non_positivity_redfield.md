@@ -76,7 +76,7 @@ with size: (4, 4)
 
 
 
-The spectrum of the Hamiltonian during is
+The spectrum of the Hamiltonian during the evolution is
 ```julia
 plot(H, range(0,1,length=100), 4, linewidth=2)
 xlabel!("s")
@@ -141,7 +141,7 @@ redfield_sol = solve_redfield(annealing, tf, U, alg = Tsit5(), abstol=1e-7, relt
 
 
 
-We plot the populations of the computational states:
+We plot the populations of the computational basis states:
 
 ```julia
 t_axis = range(0,tf,length=100)

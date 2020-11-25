@@ -39,7 +39,7 @@ ylabel!("error")
 
     # assume ϵ = 1
     const Δ = 0.1 
-    # define the Ohmic bath in polaron transformed frame
+    # define the Ohmic bath in the polaron transformed frame
     η = 0.5; bath = Ohmic(η, fc, T)
     K(t1, t2) = Δ^2 * polaron_correlation(t1-t2, bath)
     cfun = [nothing K; K nothing]

@@ -3,9 +3,9 @@ author: "Huo Chen"
 title: "3-qubit entanglement witness experiment"
 ---
 
-This tutorial illustrates how to simulate the 3-qubit entanglement experiment examined in [[1] Reexamination of the Evidence for Entanglement in a Quantum Annealer](https://link.aps.org/doi/10.1103/PhysRevA.92.062328) and the HOQST paper. We assume that our readers already have some knowledge of this experiment and HOQST. If not, we strongly recommend readers to first go through the references and introductory tutorials.
+This tutorial illustrates how to simulate the 3-qubit entanglement experiment examined in [[1] Reexamination of the Evidence for Entanglement in a Quantum Annealer](https://link.aps.org/doi/10.1103/PhysRevA.92.062328) and the HOQST paper. We assume that the reader already has some knowledge of this experiment and HOQST. If not, we strongly recommend to first go through the references and introductory tutorials.
 
-To make this tutorial less bulky, we also move most of the source code into [modules/3\_qubit\_entanglement](https://github.com/USCqserver/HOQSTTutorials.jl/tree/master/modules/3_qubit_entanglement) folder. Interested readers can look into the source files for more details.
+To make this tutorial less bulky, we also moved most of the source code into the [modules/3\_qubit\_entanglement](https://github.com/USCqserver/HOQSTTutorials.jl/tree/master/modules/3_qubit_entanglement) folder. Interested readers can look into the source files for more details.
 
 ## Annealing schedules
 First, we load all necessary files and packages:
@@ -44,9 +44,9 @@ plot(
 
 
 ## Adiabatic frame
-To keep the running time reasonably short for this tutorial, we only solve the adiabatic master equation and adiabatic PTRE in the adiabatic frame. For readers who are not familiar with the adiabatic frame, [[2] Why and When Pausing Is Beneficial in Quantum Annealing](https://link.aps.org/doi/10.1103/PhysRevApplied.14.014100) contains a brief description of it. The readers are encouraged to try solving the dynamics in the original frame. It will take around 3 hours to complete the simulation of a single evolution.
+To keep the run-time reasonably short for this tutorial, we only solve the adiabatic master equation and the adiabatic PTRE in the adiabatic frame. For readers who are not familiar with the adiabatic frame, [[2] Why and When Pausing Is Beneficial in Quantum Annealing](https://link.aps.org/doi/10.1103/PhysRevApplied.14.014100) contains a brief description of it. The reader is encouraged to try solving the dynamics in the original frame. It will take around 3 hours to complete the simulation of a single evolution.
 
-For some choices of $h_p$ values, there are two level crossings during the evolution. We approximate those level crossings as instantaneous pulses in the adiabatic frame. Besides, we ignore all the geometric terms in the adiabatic frame because they scale inversely proportional to the total evolution time and are very small in our case. To illustrate this point, we first plot the Hamiltonian spectrum(the lowest 4 levels) during the first stage of the evolution:
+For some choices of $h_p$ values, there are two level crossings during the evolution. We approximate those level crossings as instantaneous pulses in the adiabatic frame. In addition we ignore all the geometric terms in the adiabatic frame because they scale inversely proportional to the total evolution time and are very small in our case. To illustrate this point, we first plot the Hamiltonian spectrum (the lowest 4 levels) during the first stage of the evolution:
 ```julia
 # hp value for the instance
 hp = 1.2
@@ -75,7 +75,7 @@ plot!(p1, [0.05, 0.0], [ev[1][ilvl], ev[1][ilvl]], arrow=0.4, color=:red, label=
 
 
 
-Second, we plot the amplitude of the geometric terms in the adiabatic frame. There will be a bunch of warnings when the following code block is executed. This is because some energy levels become so close to each other during the evolution (either because $a(t)$ becomes very small or there is actually a level crossing) that the current algorithm may not be accurate in those regions. It is fine to ignore those warnings in this particular example. The level crossings (delta functions in adiabatic frame) are not captured by the algorithm but will be manually added when we perform the simulations.
+Second, we plot the amplitude of the geometric terms in the adiabatic frame. There will be a bunch of warnings when the following code block is executed. This is because some energy levels come so close to each other during the evolution (either because $a(t)$ becomes very small or there is an actual level crossing) that the current algorithm may not be accurate in those regions. It is fine to ignore those warnings in this particular example. The level crossings (delta functions in the adiabatic frame) are not captured by the algorithm but will be manually added when we perform the simulations.
 ```julia
 dH = build_dH(hp, 1)
 coupling = ConstantCouplings(["ZII", "IZI", "IIZ"], unit=:ħ)
@@ -95,7 +95,7 @@ title!(p1, latexstring(@sprintf "h_p = %.3f" hp))
 ![](figures/02-3_qubit_entanglement_witness_4_1.png)
 
 
-When divided by the total evolution time of the first stage $\tau_1$, these geometric terms are small compared with the energy gaps. The same argument applies to stage 3 of the evolution because these two stages are symmetrical to each other. Additionally, since stage 2 has a constant Hamiltonian, the geometric terms are 0. In conclusion, it is safe to ignore all the geometric terms during the entire evolution.
+When divided by the total evolution time of the first stage $\tau_1$, these geometric terms are small compared with the energy gaps. The same argument applies to stage 3 of the evolution because these two stages are mirror images. Additionally, since stage 2 has a constant Hamiltonian, the geometric terms are 0. In conclusion, it is safe to ignore all the geometric terms during the entire evolution.
 
 ## Dynamics
 Finally, we solve the open system dynamics using two different types of master equations. More details about the master equations and corresponding model parameters can be found in the HOQST paper.
@@ -132,11 +132,11 @@ sol3 = solve_ame(annealing, 2 * τ1, ω_hint=range(-15, 15, length=200), alg=Tsi
 
 
 
-We plot the population of the instantaneous eigenstates during the evolution:
+We plot the populations of the instantaneous eigenstates during the evolution:
 ```julia
 # combine 3 stages of the evolution together for plotting
 t_axis = [sol1.t; 2 * τ1 .+ sol2.t[2:end]; 2 * τ1 .+ τ2 .+ sol3.t[2:end]]
-# in adiabatic frame, the diagonal elements of the density matrix are
+# in the adiabatic frame, the diagonal elements of the density matrix are
 # the instantaneous eigen-populations
 s1 = [real.(diag(u)) for u in sol1.u]
 s2 = [real.(diag(u)) for u in sol2.u[2:end]]
@@ -153,7 +153,7 @@ title!(latexstring(@sprintf "h_p = %.3f" hp))
 ### Adiabatic PTRE
 
 ```julia
-# pre-calculate the spectrum density of the 
+# pre-calculate the spectral density of the 
 # hybrid Ohmic bath to speed up the computation
 function hybrid_ohmic(ω, W, η, fc, T)
     ω = 2*π*ω
@@ -172,15 +172,15 @@ C1p = C1[1]
 C1s = C1[2]
 u1 = build_adiabatic_frame_u0(hp)
 # For the adiabatic PTRE, we only perform the polaron transformation
-# on the probe qubit. So there are two types of interactions.
+# on the probe qubit. So there are two types of interactions:
 interaction_1 = Interaction(C1p, bath_hybrid)
 interaction_2 = Interaction(C1s, bath_ohmic)
 interaction1 = InteractionSet(interaction_1, interaction_2)
 annealing = Annealing(H1, u1, interactions = interaction1)
-# we ignore the Lambshift for the simulation
-# if the user want to include Lambshift in the simulation
+# we ignore the Lamb shift for the simulation;
+# if the user would like to include the Lamb shift in the simulation
 # it is better to provide an interpolated version of the `S`
-# function via keyword argument `lambshift_S`
+# function via the keyword argument `lambshift_S`
 sol1 = solve_ame(annealing, 2 * τ1, lambshift = false, alg=Tsit5(), reltol=1e-6, callback=cb1, saveat=range(0,2*τ1,length=100))
 
 τ2 = 1e5
@@ -210,7 +210,7 @@ sol3 = solve_ame(annealing, 2 * τ1, lambshift=false, alg=Tsit5(), reltol=1e-6, 
 
 We plot the population of the instantaneous eigenstates:
 ```julia
-# combine 3 stages of the evolution together for plotting
+# combine 3 stages of the evolution for plotting
 t_axis = [sol1.t; 2 * τ1 .+ sol2.t[2:end]; 2 * τ1 .+ τ2 .+ sol3.t[2:end]]
 # in adiabatic frame, the diagonal elements of the density matrix are
 # the instantaneous eigen-populations

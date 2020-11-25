@@ -2,10 +2,10 @@
 using OpenQuantumTools, OrdinaryDiffEq, Plots
 # define the Hamiltonian
 H = DenseHamiltonian([(s)->1.0], [σz], unit=:ħ)
-# define initial state
+# define the initial state
 u0 = PauliVec[1][1]*PauliVec[1][1]'
-# define Lindblad operator
-# the rate and Lindblad operator can also be time dependent functions
+# define the Lindblad operator
+# the rate and Lindblad operator can also be time-dependent functions
 lind = Lindblad(0.1, σz)
 # combine them into an Annealing object
 annealing = Annealing(H, u0, interactions = InteractionSet(lind))
@@ -20,7 +20,7 @@ sol = solve_lindblad(annealing, 10, alg=Tsit5());
 t_axis = range(0, 10, length=100)
 bloch_vector = []
 for t in t_axis
-    # matrix_decompose projects a matrix onto a list of basis
+    # matrix_decompose projects a matrix onto a list of basis elements
     push!(bloch_vector, 2*real.(matrix_decompose(sol(t), [σx, σy, σz])))
 end
 
@@ -45,14 +45,14 @@ ylabel!("|ρ₀₁(t)|")
 
 # For the quantum trajectories method, the u0 supplied to `Annealing` must be
 # a state vector.
-# We will show how to replace it with a pure state ensemble latter
+# We will show how to replace it with a pure state ensemble later
 # in this example
 u0 = PauliVec[1][1]
 lind = Lindblad(0.1, σz)
 annealing = Annealing(H, u0, interactions = InteractionSet(lind))
 tf = 10
 prob = build_ensembles(annealing, tf, :lindblad)
-# We ran each trajectory in serial for the sake of simplicity. The user is encouraged to try parallel algorithms.
+# We ran each trajectory serially for the sake of simplicity. The user is encouraged to try parallel algorithms.
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=1000, saveat=range(0,tf,length=100))
 
 

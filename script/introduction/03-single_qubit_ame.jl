@@ -50,7 +50,7 @@ annealing = Annealing(H, u0; coupling=coupling, bath=bath)
 tf = 10*sqrt(2)
 @time sol = solve_schrodinger(annealing, tf, alg=Tsit5(), retol=1e-4)
 # The following line of code is a convenient recipe to plot the instantaneous population during the evolution.
-# It currently only supports Hamiltonian with annealing parameter s = t/tf from 0 to 1.
+# It currently only supports Hamiltonians with an annealing parameter s = t/tf from 0 to 1.
 # The third argument can be either a list or a number. When it is a list, it specifies the energy levels to plot (starting from 0); when it is a number, it specifies the total number of levels to plot.
 plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$")
 
@@ -85,7 +85,7 @@ num_trajectories = 3000
 # construct the `EnsembleProblem` 
 # `safetycopy` needs to be true because the current trajectories implementation is not thread-safe.
 prob = build_ensembles(annealing, tf, :ame, ω_hint=range(-6, 6, length=200), safetycopy=true)
-# to use multi-threads, you need to start Julia kernel with multiple threads
+# to use multi-threads, you need to start the Julia kernel with multiple threads
 # julia --threads 8
 sol = solve(prob, Tsit5(), EnsembleThreads(), trajectories=num_trajectories, reltol=1e-6, saveat=range(0,tf,length=100))
 
@@ -96,7 +96,7 @@ for t in t_axis
     push!(dataset, [abs2(normalize(so(t))' * v[:, 1]) for so in sol])
 end
 
-# the following codes calculate the instantaneous ground state population and its error bar by averaging over all the trajectories
+# the following codes calculate the instantaneous ground state population and the corresponding error bars by averaging over all the trajectories:
 
 pop_mean = []
 pop_sem = []

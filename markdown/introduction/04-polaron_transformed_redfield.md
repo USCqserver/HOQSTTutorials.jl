@@ -5,9 +5,9 @@ title: "A tutorial on the polaron transformed Redfield equation"
 
 
 ## Correlation function in the polaron frame
-This tutorial demonstrates how to use the polaron transformed Redfield equation (PTRE) in HOQST. For more details on the PTRE, [[1] Non-canonical distribution and non-equilibrium transport beyond weak system-bath coupling regime: A polaron transformation approach](https://link.springer.com/article/10.1007%2Fs11467-016-0540-2) is a useful reference.
+This tutorial demonstrates how to use the polaron transformed Redfield equation (PTRE) in HOQST. For more details on the PTRE, see [[1] Non-canonical distribution and non-equilibrium transport beyond weak system-bath coupling regime: A polaron transformation approach](https://link.springer.com/article/10.1007%2Fs11467-016-0540-2).
 
-We solve both the Redfield equation and PTRE for a single qubit Hamiltonian
+We solve both the Redfield equation and the PTRE for a single qubit Hamiltonian
 
 $$H_\mathrm{S}=\epsilon \sigma_z + \Delta \sigma_x$$
 
@@ -31,7 +31,7 @@ The most straightforward analysis is to compare the error bounds given in [[4] C
 
 $$error = \frac{\tau_\mathrm{B}}{\tau_\mathrm{SB}} \ .$$
 
-Then we plot the error ratio between the Redfield equation and PTRE
+Then we plot the error ratio between the Redfield equation and the PTRE
 
 $$R = \frac{error_{\mathrm{Redfield}}}{error_{\mathrm{PTRE}}} \ ,$$
 
@@ -72,7 +72,7 @@ ylabel!("R")
 ![](figures/04-polaron_transformed_redfield_1_1.png)
 
 
-From the above figure we observe that when the system-bath coupling strength is larger than $10^{-1}$, the PTRE should have better error scaling than the standard form of Redfield equation. We also plot the corresponding error values for both the Redfield equation and PTRE:
+From the above figure we observe that when the system-bath coupling strength is larger than $10^{-1}$, the PTRE should have better error scaling than the standard form of the Redfield equation. We also plot the corresponding error values for both the Redfield equation and the PTRE:
 
 ```julia
 plot(ηlist, err_clist, xscale=:log10, yscale=:log10, label="Redfield", linewidth=2)
@@ -89,7 +89,7 @@ The above figure confirms that the Redfield equation applies to the weak-couplin
 
 ### Solving PTRE
 
-Since the Redfield equation and PTRE have identical forms, `solve_redfield` can also be used for the PTRE. To see this, let's first write down the PTRE for our example.
+Since the Redfield equation and the PTRE have identical forms, `solve_redfield` can also be used for the PTRE. To see this, let's first write down the PTRE for our example.
 
 $$\dot{\rho}_\mathrm{S} = \epsilon σ_z + [ \sigma_i, \Lambda_i(t) \rho_\mathrm{S}(t) ] + h.c.$$
 
@@ -100,14 +100,14 @@ $$\Lambda_i(t)=\Delta^2 \int_0^{t} K(t-\tau)U(t,\tau) \sigma_j U^\dagger(t,\tau)
 From the above equations, it is clear that the following steps are needed to define an evolution in the polaron frame:
 1. define a new Hamiltonian $H = \epsilon σ_z$;
 2. define new coupling operators $\sigma_-$ and $\sigma_+$;
-3. define new correlated bath with two-point correlation $K_{i,j}(t_1, t_2)$;
+3. define a new correlated bath with two-point correlation $K_{i,j}(t_1, t_2)$;
 
-The following code block illustrates how these can be done in HOQST:
+The following code block illustrates how this can be done in HOQST:
 
 ```julia
     # assume ϵ = 1
     const Δ = 0.1 
-    # define the Ohmic bath in polaron transformed frame
+    # define the Ohmic bath in the polaron transformed frame
     η = 0.5; bath = Ohmic(η, fc, T)
     K(t1, t2) = Δ^2 * polaron_correlation(t1-t2, bath)
     cfun = [nothing K; K nothing]
@@ -130,11 +130,11 @@ The following code block illustrates how these can be done in HOQST:
 
 
 
-For historical reasons, this is known as an example of the "incoherent tunneling". The off-diagonal elements of the density matrix in computational bases(Z-bases) during the entire evolution are 0 (shown in the next section).
+For historical reasons, this is known as an example of "incoherent tunneling". The off-diagonal elements of the density matrix in the computational basis (the Z-basis) vanish during the entire evolution (shown in the next section).
 
 ### Redfield equation
 
-What would happen to the Redfield equation in this regime? We can also try:
+What happens to the Redfield equation in this regime? We can also try:
 
 ```julia
 H = DenseHamiltonian([(s)->1.0], [σz+0.1*σx])
@@ -151,7 +151,7 @@ plot!(sol_redfield.t, pop_e_redfield, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t
 
 
 
-The PTRE gives a much stronger decay than Redfield equation for the parameters chosen in this example. One can also verify the amplitude of the off-diagonal elements during the evolution. Unlike the PTRE, the solution of the Redfield equation has non-vanishing off-diagonal elements of the density matrix.
+The PTRE gives a much stronger decay than the Redfield equation for the parameters chosen in this example. One can also verify the amplitude of the off-diagonal elements during the evolution. Unlike the PTRE, the solution of the Redfield equation has non-vanishing off-diagonal elements of the density matrix.
 
 ```julia
 t_axis = range(0, 5, length=100)

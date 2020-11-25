@@ -16,9 +16,9 @@ annealing = Annealing(H, u0)
 
 sol_tsit = solve_schrodinger(annealing, tf, alg=Tsit5(), abstol=1e-6, reltol=1e-6);
 sol_trbdf = solve_schrodinger(annealing, tf, alg=TRBDF2(), abstol=1e-6, reltol=1e-6);
-# LinearExponential is a fixed-stepsize method, the user needs to specify the time steps using keyword argument `tstops`.
+# LinearExponential is a fixed-stepsize method, the user needs to specify the time steps using the keyword argument `tstops`.
 sol_linexp = solve_schrodinger(annealing, tf, alg=LinearExponential(), abstol=1e-6, reltol=1e-6, tstops=range(0,tf,length=100));
-# Even though Exprb is an adaptive method, it tends to skip a lot of middle points. So if you want accurate solution in the middle,
+# Even though Exprb is an adaptive method, it tends to skip a lot of middle points. So if you want an accurate solution in the middle,
 # it is better to manually add more points.
 sol_exprb32 = solve_schrodinger(annealing, tf, alg=Exprb32(), tstops=range(0,tf,length=100));
 
@@ -95,9 +95,9 @@ sol_tsit(0.5 * tf)
 
 sol_tsit = solve_unitary(annealing, tf, alg=Tsit5(), reltol=1e-6);
 sol_trbdf = solve_unitary(annealing, tf, alg=TRBDF2(), reltol=1e-6, vectorize=true);
-# LinearExponential is a fixed step size method, user need to specify the time steps using keyword argument `tstops`.
+# LinearExponential is a fixed step size method, users need to specify the time steps using the keyword argument `tstops`.
 sol_linexp = solve_unitary(annealing, tf, alg=LinearExponential(), tstops=range(0,tf,length=100), vectorize=true);
-# Even though Exprb method is an adaptive method, it tends to jump a lot of middle points. So if you want accurate evolution in the middle,
+# Even though Exprb method is an adaptive method, it tends to skip a lot of middle points. So if you want an accurate evolution in the middle,
 # it is better to manually add more points for the algorithm.
 sol_exprb32 = solve_unitary(annealing, tf, alg=Exprb32(), tstops=range(0,tf,length=100), vectorize=true);
 

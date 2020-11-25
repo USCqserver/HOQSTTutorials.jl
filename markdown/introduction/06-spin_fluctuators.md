@@ -11,7 +11,7 @@ $$H(s) = -Z+ \frac{1}{2}\sum_i n_i(s) Z \ ,$$
 
 where $n_i(s)$ is the telegraph process that switches randomly between $\pm b_i$ with a rate $\gamma_i$. The summation $\sum_i n_i(s)$ generates the "1/f" noise approximately.
 
-We choose the initial state to be
+We choose the initial state to be:
 
 $$\lvert \phi(0) \rangle = \lvert + \rangle \ .$$
 
@@ -24,13 +24,13 @@ We first construct the fluctuator bath object using `EnsembleFluctuator` and plo
 using OpenQuantumTools, LaTeXStrings
 using OrdinaryDiffEq, Plots, StatsBase
 
-# calculate the mean and standard deviation of mean estimator from a sample
+# calculate the mean and standard deviation of the mean estimator from a sample
 function mean_std(sample)
     m, v = mean_and_std(sample, corrected=true)
     m, v/sqrt(length(sample))
 end
 
-# All the value created in the following codes is in angular frquencies unit
+# All values calculated below are in angular frequency units
 num = 10
 bvec = 0.2 * ones(num)
 γvec = log_uniform(0.01, 1, num)
@@ -57,7 +57,7 @@ annealing = Annealing(H, u0, coupling = coupling, bath=fluctuator_ensemble)
 tf = 10
 # create object for parallel simulation
 prob = build_ensembles(annealing, tf, :stochastic)
-# we run each trajectories in serial for this example
+# we run each trajectory serially for this example
 sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=1000, reltol=1e-6, saveat=range(0,tf,length=100))
 ```
 
@@ -97,7 +97,7 @@ sol = solve(prob, Tsit5(), EnsembleSerial(), trajectories=1000, reltol=1e-6, sav
 
 
 
-Again, we plot the $\langle + \rangle$ w.r.t the evolution time:
+We again plot $\langle + \rangle$ w.r.t the evolution time:
 
 ```julia
 s_axis = range(0,1,length=100)

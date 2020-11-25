@@ -8,7 +8,7 @@ u0 = PauliVec[1][1]
 coupling = ConstantCouplings(["Z"], unit=:ħ)
 # number of fluctuators
 num = 10
-# The values of b created here are in angular frequencies unit
+# The values of b created here are in angular frequency units:
 bvec = 0.01 * ones(num)
 # γᵢ
 γvec = log_uniform(0.01, 1, num)
@@ -18,7 +18,7 @@ interaction_fluctuator = Interaction(coupling, fluctuator_ensemble)
 # create the Ohmic coupling interaction
 ohmic_bath = Ohmic(1e-4, 4, 16)
 interaction_ohmic = Interaction(coupling, ohmic_bath)
-# merge those two bath object into `InteractionSet`
+# merge these two bath objects into `InteractionSet`
 interactions = InteractionSet(interaction_fluctuator, interaction_ohmic)
 annealing = Annealing(H, u0, interactions=interactions)
 

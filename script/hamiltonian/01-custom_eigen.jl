@@ -36,12 +36,10 @@ Hd = standard_driver(4, sp=true);
 Hp = two_local_term(rand(3), [[1,2],[2,3],[3,4]], 4, sp=true)
 H = SparseHamiltonian([(s)->1-s, (s)->s], [Hd, Hp], unit=:ħ)
 
-# the default eigen_decomposition using dense matrices algorithm
+# the default eigen_decomposition using the dense matrices algorithm
 w, v = eigen_decomp(H, 0.1, lvl=4)
 
 
-using Pkg
-Pkg.add("Arpack")
 using Arpack
 
 
