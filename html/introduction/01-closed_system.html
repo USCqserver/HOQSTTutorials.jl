@@ -669,7 +669,7 @@ div.title {text-align: center;}
 <p class="math">\[
 H(s) = - \sigma_z
 \]</p>
-<p>where <span class="math">$s= t/t_f$</span> is the dimensionless time and <span class="math">$t_f$</span> is the total evolution time. We use the constant Hamiltonian so that the simulation results can be trivially confirmed. The syntax is the same for time-dependent Hamiltonians. Let&#39;s first define the Hamiltonian by:</p>
+<p>where <span class="math">$s= t/t_f$</span> is the dimensionless time and <span class="math">$t_f$</span> is the total evolution time. We use a constant Hamiltonian so that the simulation results can be trivially confirmed. The syntax is the same for time-dependent Hamiltonians. Let&#39;s first define the Hamiltonian by:</p>
 
 
 <pre class='hljl'>
@@ -685,7 +685,7 @@ with size: &#40;2, 2&#41;
 </pre>
 
 
-<p>In this example, we use the <code>DenseHamiltonian</code> <a href="https://docs.julialang.org/en/v1/manual/types/#man-types">type</a>. It means the underlying data structure of this Hamiltonian type is <a href="https://docs.julialang.org/en/v1/manual/arrays/">Julia array</a>. There exists a different Hamiltonian type named <code>SparseHamiltonian</code> that relies on <a href="https://docs.julialang.org/en/v1/stdlib/SparseArrays/">sparse array</a> as its internal data structure. Sparsity can only provide performance improvement when the system size is large. So, as a rule of thumb, users should only consider using <code>SparseHamiltonian</code> when the system size is larger than 10 qubits. </p>
+<p>In this example, we use the <code>DenseHamiltonian</code> <a href="https://docs.julialang.org/en/v1/manual/types/#man-types">type</a>. It means that the underlying data structure of this Hamiltonian type is <a href="https://docs.julialang.org/en/v1/manual/arrays/">Julia array</a>. There exists a different Hamiltonian type named <code>SparseHamiltonian</code> that relies on <a href="https://docs.julialang.org/en/v1/stdlib/SparseArrays/">sparse array</a> as its internal data structure. Sparsity can only provide performance improvement when the system size is large. So, as a rule of thumb, users should only consider using <code>SparseHamiltonian</code> when the system size is larger than 10 qubits. </p>
 <p>The closed-system evolution is completely specified by the Hamiltonian and the initial state. We can combine them into a single <code>Annealing</code> object by:</p>
 
 
@@ -718,7 +718,7 @@ u0 with size: &#40;2,&#41;
 <p>This is the default method in <code>OrdinaryDiffEq</code> and works well in most cases.</p>
 </li>
 <li><p>A second-order A-B-L-S-stable one-step ESDIRK method&#40;TRBDF2&#40;&#41;&#41;.</p>
-<p>This is the method widely used in large scale classical circuit simulations. Because this is a second-order method, it is recommended to use smaller error tolerance comparing with other higher-order methods.</p>
+<p>This is the method widely used in large scale classical circuit simulations. Because this is a second-order method, we recommended using a smaller error tolerance than with other higher-order methods.</p>
 </li>
 </ol>
 <ol start="3">
@@ -737,9 +737,9 @@ u0 with size: &#40;2,&#41;
 <pre class='hljl'>
 <span class='hljl-n'>sol_tsit</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>solve_schrodinger</span><span class='hljl-p'>(</span><span class='hljl-n'>annealing</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>alg</span><span class='hljl-oB'>=</span><span class='hljl-nf'>Tsit5</span><span class='hljl-p'>(),</span><span class='hljl-t'> </span><span class='hljl-n'>abstol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-6</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>reltol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-6</span><span class='hljl-p'>);</span><span class='hljl-t'>
 </span><span class='hljl-n'>sol_trbdf</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>solve_schrodinger</span><span class='hljl-p'>(</span><span class='hljl-n'>annealing</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>alg</span><span class='hljl-oB'>=</span><span class='hljl-nf'>TRBDF2</span><span class='hljl-p'>(),</span><span class='hljl-t'> </span><span class='hljl-n'>abstol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-6</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>reltol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-6</span><span class='hljl-p'>);</span><span class='hljl-t'>
-</span><span class='hljl-cs'># LinearExponential is a fixed-stepsize method, the user needs to specify the time steps using keyword argument `tstops`.</span><span class='hljl-t'>
+</span><span class='hljl-cs'># LinearExponential is a fixed-stepsize method, the user needs to specify the time steps using the keyword argument `tstops`.</span><span class='hljl-t'>
 </span><span class='hljl-n'>sol_linexp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>solve_schrodinger</span><span class='hljl-p'>(</span><span class='hljl-n'>annealing</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>alg</span><span class='hljl-oB'>=</span><span class='hljl-nf'>LinearExponential</span><span class='hljl-p'>(),</span><span class='hljl-t'> </span><span class='hljl-n'>abstol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-6</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>reltol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-6</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tstops</span><span class='hljl-oB'>=</span><span class='hljl-nf'>range</span><span class='hljl-p'>(</span><span class='hljl-ni'>0</span><span class='hljl-p'>,</span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-n'>length</span><span class='hljl-oB'>=</span><span class='hljl-ni'>100</span><span class='hljl-p'>));</span><span class='hljl-t'>
-</span><span class='hljl-cs'># Even though Exprb is an adaptive method, it tends to skip a lot of middle points. So if you want accurate solution in the middle,</span><span class='hljl-t'>
+</span><span class='hljl-cs'># Even though Exprb is an adaptive method, it tends to skip a lot of middle points. So if you want an accurate solution in the middle,</span><span class='hljl-t'>
 </span><span class='hljl-cs'># it is better to manually add more points.</span><span class='hljl-t'>
 </span><span class='hljl-n'>sol_exprb32</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>solve_schrodinger</span><span class='hljl-p'>(</span><span class='hljl-n'>annealing</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>alg</span><span class='hljl-oB'>=</span><span class='hljl-nf'>Exprb32</span><span class='hljl-p'>(),</span><span class='hljl-t'> </span><span class='hljl-n'>tstops</span><span class='hljl-oB'>=</span><span class='hljl-nf'>range</span><span class='hljl-p'>(</span><span class='hljl-ni'>0</span><span class='hljl-p'>,</span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-n'>length</span><span class='hljl-oB'>=</span><span class='hljl-ni'>100</span><span class='hljl-p'>));</span>
 </pre>
@@ -876,7 +876,7 @@ u: 78-element Array&#123;Array&#123;Complex&#123;Float64&#125;,2&#125;,1&#125;:
 
 
 <h5>Recommended algorithm</h5>
-<p>Only explicit methods are supported for solving equations w.r.t. density matrices. <a href="https://en.wikipedia.org/wiki/Vectorization_&#40;mathematics&#41;">Vectorization</a> is needed for implicit methods. This can be done by setting <code>vectorize</code> keyword argument to be true. For example, in the following code block, we solve the Von Neumann equation with TRBDF2 method:</p>
+<p>Only explicit methods are supported for solving equations w.r.t. density matrices. <a href="https://en.wikipedia.org/wiki/Vectorization_&#40;mathematics&#41;">Vectorization</a> is needed for implicit methods. This can be done by setting the <code>vectorize</code> keyword argument to be true. For example, in the following code block, we solve the Von Neumann equation with the TRBDF2 method:</p>
 
 
 <pre class='hljl'>
@@ -895,7 +895,7 @@ u: 78-element Array&#123;Array&#123;Complex&#123;Float64&#125;,2&#125;,1&#125;:
 
 
 <p>As shown above, the solution given by the solver becomes a vectorized version of the density matrix.</p>
-<p>Side note: <code>TRBDF2</code> can actually work without vectorizing the Von Neumann equation. However, this is not generally true for other algorithms/solvers. For example, we will run into error for <code>LinearExponential</code> method if no vectorization is performed:</p>
+<p>Side note: <code>TRBDF2</code> can actually work without vectorizing the Von Neumann equation. However, this is not generally true for other algorithms/solvers. For example, we will run into errors for <code>LinearExponential</code> method if no vectorization is performed:</p>
 
 
 <pre class='hljl'>
@@ -957,7 +957,7 @@ U(s) = T_+ \exp\bigg\{ -i t_f \int_0^s H(s') \mathrm{d}s' \bigg\}
 <p class="math">\[
 \dot{U} = -i t_f H(s) U \ .
 \]</p>
-<p>Although this is in principle equivalent to Schrodinger/Von Neumann equation, the unitary becomes handy in certain cases, e.g., when solving the Redfield equation.</p>
+<p>Although this is in principle equivalent to the Schrodinger/Von Neumann equation, the unitary becomes handy in certain cases, e.g., when solving the Redfield equation.</p>
 
 
 <pre class='hljl'>
@@ -974,15 +974,15 @@ U(s) = T_+ \exp\bigg\{ -i t_f \int_0^s H(s') \mathrm{d}s' \bigg\}
 </pre>
 
 
-<p>Again we plot the <span class="math">$\langle X \rangle$</span> obtained by multiplying the unitary with the initial state.</p>
+<p>Again we plot the <span class="math">$\langle X \rangle$</span> obtained by multiplying the unitary by the initial state.</p>
 
 
 <pre class='hljl'>
 <span class='hljl-n'>sol_tsit</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>solve_unitary</span><span class='hljl-p'>(</span><span class='hljl-n'>annealing</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>alg</span><span class='hljl-oB'>=</span><span class='hljl-nf'>Tsit5</span><span class='hljl-p'>(),</span><span class='hljl-t'> </span><span class='hljl-n'>reltol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-6</span><span class='hljl-p'>);</span><span class='hljl-t'>
 </span><span class='hljl-n'>sol_trbdf</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>solve_unitary</span><span class='hljl-p'>(</span><span class='hljl-n'>annealing</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>alg</span><span class='hljl-oB'>=</span><span class='hljl-nf'>TRBDF2</span><span class='hljl-p'>(),</span><span class='hljl-t'> </span><span class='hljl-n'>reltol</span><span class='hljl-oB'>=</span><span class='hljl-nfB'>1e-6</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>vectorize</span><span class='hljl-oB'>=</span><span class='hljl-kc'>true</span><span class='hljl-p'>);</span><span class='hljl-t'>
-</span><span class='hljl-cs'># LinearExponential is a fixed step size method, user need to specify the time steps using keyword argument `tstops`.</span><span class='hljl-t'>
+</span><span class='hljl-cs'># LinearExponential is a fixed step size method, users need to specify the time steps using the keyword argument `tstops`.</span><span class='hljl-t'>
 </span><span class='hljl-n'>sol_linexp</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>solve_unitary</span><span class='hljl-p'>(</span><span class='hljl-n'>annealing</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>alg</span><span class='hljl-oB'>=</span><span class='hljl-nf'>LinearExponential</span><span class='hljl-p'>(),</span><span class='hljl-t'> </span><span class='hljl-n'>tstops</span><span class='hljl-oB'>=</span><span class='hljl-nf'>range</span><span class='hljl-p'>(</span><span class='hljl-ni'>0</span><span class='hljl-p'>,</span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-n'>length</span><span class='hljl-oB'>=</span><span class='hljl-ni'>100</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>vectorize</span><span class='hljl-oB'>=</span><span class='hljl-kc'>true</span><span class='hljl-p'>);</span><span class='hljl-t'>
-</span><span class='hljl-cs'># Even though Exprb method is an adaptive method, it tends to jump a lot of middle points. So if you want accurate evolution in the middle,</span><span class='hljl-t'>
+</span><span class='hljl-cs'># Even though Exprb method is an adaptive method, it tends to skip a lot of middle points. So if you want an accurate evolution in the middle,</span><span class='hljl-t'>
 </span><span class='hljl-cs'># it is better to manually add more points for the algorithm.</span><span class='hljl-t'>
 </span><span class='hljl-n'>sol_exprb32</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>solve_unitary</span><span class='hljl-p'>(</span><span class='hljl-n'>annealing</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>alg</span><span class='hljl-oB'>=</span><span class='hljl-nf'>Exprb32</span><span class='hljl-p'>(),</span><span class='hljl-t'> </span><span class='hljl-n'>tstops</span><span class='hljl-oB'>=</span><span class='hljl-nf'>range</span><span class='hljl-p'>(</span><span class='hljl-ni'>0</span><span class='hljl-p'>,</span><span class='hljl-n'>tf</span><span class='hljl-p'>,</span><span class='hljl-n'>length</span><span class='hljl-oB'>=</span><span class='hljl-ni'>100</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>vectorize</span><span class='hljl-oB'>=</span><span class='hljl-kc'>true</span><span class='hljl-p'>);</span><span class='hljl-t'>
 
@@ -1018,7 +1018,7 @@ U(s) = T_+ \exp\bigg\{ -i t_f \int_0^s H(s') \mathrm{d}s' \bigg\}
         <div class="footer">
           <p>
             Published from <a href="01-closed_system.jmd">01-closed_system.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.6 on 2020-11-20.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.6 on 2020-11-25.
           </p>
         </div>
       </div>
