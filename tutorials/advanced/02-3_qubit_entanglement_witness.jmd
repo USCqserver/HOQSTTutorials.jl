@@ -38,7 +38,7 @@ plot(
 ## Adiabatic frame
 To keep the run-time reasonably short for this tutorial, we only solve the adiabatic master equation and the adiabatic PTRE in the adiabatic frame. For readers who are not familiar with the adiabatic frame, [[2] Why and When Pausing Is Beneficial in Quantum Annealing](https://link.aps.org/doi/10.1103/PhysRevApplied.14.014100) contains a brief description of it. The reader is encouraged to try solving the dynamics in the original frame. It will take around 3 hours to complete the simulation of a single evolution.
 
-For some choices of $h_p$ values, there are two level crossings during the evolution. We approximate those level crossings as instantaneous pulses in the adiabatic frame. In additiona we ignore all the geometric terms in the adiabatic frame because they scale inversely proportional to the total evolution time and are very small in our case. To illustrate this point, we first plot the Hamiltonian spectrum (the lowest 4 levels) during the first stage of the evolution:
+For some choices of $h_p$ values, there are two level crossings during the evolution. We approximate those level crossings as instantaneous pulses in the adiabatic frame. In addition we ignore all the geometric terms in the adiabatic frame because they scale inversely proportional to the total evolution time and are very small in our case. To illustrate this point, we first plot the Hamiltonian spectrum (the lowest 4 levels) during the first stage of the evolution:
 ```julia
 # hp value for the instance
 hp = 1.2
