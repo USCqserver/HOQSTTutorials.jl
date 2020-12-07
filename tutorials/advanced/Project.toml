@@ -1,4 +1,5 @@
 [deps]
+OpenQuantumTools = "e429f160-8886-11e9-20cb-0dbe84e78965"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
