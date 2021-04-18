@@ -96,25 +96,25 @@ From the above equations, it is clear that the following steps are needed to def
 The following code block illustrates how this can be done in HOQST:
 
 ```julia
-    # assume ϵ = 1
-    const Δ = 0.1 
-    # define the Ohmic bath in the polaron transformed frame
-    η = 0.5; bath = Ohmic(η, fc, T)
-    K(t1, t2) = Δ^2 * polaron_correlation(t1-t2, bath)
-    cfun = [nothing K; K nothing]
-    pbath = CorrelatedBath(((1,2),(2,1)), correlation=cfun)
-    # define coupling as σ+ and σ- operators
-    σp = [0 1;0 0.0im]; σm = [0 0;1 0.0im]
-    coupling = ConstantCouplings([σp, σm])
-    # manually define the unitary operator
-    U(t) = exp(-2.0im * π * σz * t)
-    H = DenseHamiltonian([(s)->1.0], [σz])
-    u0 = PauliVec[3][1]
-    annealing = Annealing(H, u0, coupling = coupling, bath = pbath)
-    tf = 100
-    sol_ptre = solve_redfield(annealing, tf, U, alg=Tsit5(), Ta=2, reltol=1e-5)
-    pop_e = [real(s[1,1]) for s in sol_ptre.u]
-    plot(sol_ptre.t, pop_e, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t)", label="", linewidth = 2)
+# assume ϵ = 1
+const Δ = 0.1 
+# define the Ohmic bath in the polaron transformed frame
+η = 0.5; bath = Ohmic(η, fc, T)
+K(t1, t2) = Δ^2 * polaron_correlation(t1-t2, bath)
+cfun = [nothing K; K nothing]
+pbath = CorrelatedBath(((1,2),(2,1)), correlation=cfun)
+# define coupling as σ+ and σ- operators
+σp = [0 1;0 0.0im]; σm = [0 0;1 0.0im]
+coupling = ConstantCouplings([σp, σm])
+# manually define the unitary operator
+U(t) = exp(-2.0im * π * σz * t)
+H = DenseHamiltonian([(s)->1.0], [σz])
+u0 = PauliVec[3][1]
+annealing = Annealing(H, u0, coupling = coupling, bath = pbath)
+tf = 100
+sol_ptre = solve_redfield(annealing, tf, U, alg=Tsit5(), Ta=2, reltol=1e-5)
+pop_e = [real(s[1,1]) for s in sol_ptre.u]
+plot(sol_ptre.t, pop_e, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t)", label="", linewidth = 2)
 ```
 
 For historical reasons, this is known as an example of "incoherent tunneling". The off-diagonal elements of the density matrix in the computational basis (the Z-basis) vanish during the entire evolution (shown in the next section).
@@ -128,6 +128,8 @@ H = DenseHamiltonian([(s)->1.0], [σz+0.1*σx])
 coupling = ConstantCouplings(["Z"])
 annealing = Annealing(H, u0, coupling = coupling, bath = bath)
 tf = 100
+# manually define the unitary operator
+U(t) = exp(-2.0im * π * (σz+0.1*σx) * t)
 sol_redfield = solve_redfield(annealing, tf, U, alg=Tsit5(), Ta=40, reltol=1e-5, callback=PositivityCheckCallback())
 pop_e_redfield = [real(s[1,1]) for s in sol_redfield.u]
 plot(sol_ptre.t, pop_e, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t)", label="PTRE", linewidth = 2, legend = :right)
