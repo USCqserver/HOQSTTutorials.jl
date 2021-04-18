@@ -220,3 +220,8 @@ xlabel!("t (ns)")
 ylabel!("<X>")
 title!("Free Evolution")
 ```
+
+```{julia; echo=false; skip="notebook"}
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
+```
