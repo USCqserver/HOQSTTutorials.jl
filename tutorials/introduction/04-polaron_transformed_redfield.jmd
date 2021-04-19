@@ -131,17 +131,30 @@ tf = 100
 # manually define the unitary operator
 U(t) = exp(-2.0im * π * (σz+0.1*σx) * t)
 sol_redfield = solve_redfield(annealing, tf, U, alg=Tsit5(), Ta=40, reltol=1e-5, callback=PositivityCheckCallback())
-pop_e_redfield = [real(s[1,1]) for s in sol_redfield.u]
-plot(sol_ptre.t, pop_e, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t)", label="PTRE", linewidth = 2, legend = :right)
-plot!(sol_redfield.t, pop_e_redfield, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t)", label="Redfield", linewidth = 2)
 ```
-
-The PTRE gives a much stronger decay than the Redfield equation for the parameters chosen in this example. One can also verify the amplitude of the off-diagonal elements during the evolution. Unlike the PTRE, the solution of the Redfield equation has non-vanishing off-diagonal elements of the density matrix.
+The Redfield equation becomes non-positive in a very short evolution time. To fix this issue, we use the [coarse-grained master equation (CGME)](https://uscqserver.github.io/HOQSTTutorials.jl/html/introduction/05-CGME_ULE.html) instead.
 
 ```julia
-t_axis = range(0, 5, length=100)
+tf = 50
+solc = solve_cgme(annealing, tf, U, alg=Tsit5(), reltol=1e-3, int_atol=1e-3, int_rtol=1e-3)
+t_axis = range(0,50,length=200)
+pop_e = [real(sol_ptre(t)[1,1]) for t in t_axis]
+pop_e_cg = [real(solc(t)[1,1]) for t in t_axis]
+plot(t_axis, pop_e, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t)", label="PTRE", linewidth = 2)
+plot!(t_axis, pop_e_cg, xlabel=L"t\ (\mathrm{ns})", ylabel=L"P_0(t)", label="CGME", linewidth = 2)
+```
+
+The PTRE gives a much stronger decay than the Redfield equation for the parameters chosen in this example. One can also verify the amplitude of the off-diagonal elements during the evolution. Unlike the PTRE, the solution of the CGME has non-vanishing off-diagonal elements of the density matrix.
+
+```julia
+t_axis = range(0, 0.2, length=100)
 off_diag_ptre = [abs(sol_ptre(t)[1,2]) for t in t_axis]
-off_diag_redfield = [abs(sol_redfield(t)[1,2]) for t in t_axis]
+off_diag_cg = [abs(solc(t)[1,2]) for t in t_axis]
 plot(t_axis, off_diag_ptre, xlabel=L"t\ (\mathrm{ns})", ylabel=L"\lvert \rho_{12} \rvert|(t)", label="PTRE", linewidth = 2, legend=:right)
-plot!(t_axis, off_diag_redfield, xlabel=L"t\ (\mathrm{ns})", ylabel=L"|\rho_{12}(t)|", label="Redfield", linewidth = 2)
+plot!(t_axis, off_diag_cg, xlabel=L"t\ (\mathrm{ns})", ylabel=L"|\rho_{12}(t)|", label="CGME", linewidth = 2)
+```
+
+```{julia; echo=false; skip="notebook"}
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
 ```
