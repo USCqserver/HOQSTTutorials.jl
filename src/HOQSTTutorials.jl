@@ -1,73 +1,73 @@
-__precompile__(false)
+# __precompile__(false)
 module HOQSTTutorials
 
 using Weave, Pkg, InteractiveUtils, IJulia
 
-repo_directory = joinpath(@__DIR__,"..")
+repo_directory = joinpath(@__DIR__, "..")
 cssfile = joinpath(@__DIR__, "..", "templates", "skeleton_css.css")
 latexfile = joinpath(@__DIR__, "..", "templates", "julia_tex.tpl")
 
-function weave_file(folder,file,build_list=(:script,:html,:pdf,:github,:notebook); kwargs...)
-  tmp = joinpath(repo_directory,"tutorials",folder,file)
-  Pkg.activate(dirname(tmp))
-  Pkg.instantiate()
-  args = Dict{Symbol,String}(:folder=>folder,:file=>file)
-  if :script ∈ build_list
-    println("Building Script")
-    dir = joinpath(repo_directory,"script",folder)
-    isdir(dir) || mkdir(dir)
-    args[:doctype] = "script"
-    tangle(tmp;out_path=dir)
-  end
-  if :html ∈ build_list
-    println("Building HTML")
-    dir = joinpath(repo_directory,"html",folder)
-    isdir(dir) || mkdir(dir)
-    args[:doctype] = "html"
-    weave(tmp,doctype = "md2html",out_path=dir,args=args; fig_ext=".svg", css=cssfile, kwargs...)
-  end
-  if :pdf ∈ build_list
-    println("Building PDF")
-    dir = joinpath(repo_directory,"pdf",folder)
-    isdir(dir) || mkdir(dir)
-    args[:doctype] = "pdf"
-    try
-      weave(tmp,doctype="md2pdf",out_path=dir,args=args; template=latexfile, kwargs...)
-    catch ex
-      @warn "PDF generation failed" exception=(ex, catch_backtrace())
+function weave_file(folder, file, build_list=(:script, :html, :pdf, :github, :notebook); kwargs...)
+    tmp = joinpath(repo_directory, "tutorials", folder, file)
+    Pkg.activate(dirname(tmp))
+    Pkg.instantiate()
+    args = Dict{Symbol,String}(:folder => folder, :file => file)
+    if :script ∈ build_list
+        println("Building Script")
+        dir = joinpath(repo_directory, "script", folder)
+        isdir(dir) || mkdir(dir)
+        args[:doctype] = "script"
+        tangle(tmp;out_path=dir)
     end
-  end
-  if :github ∈ build_list
-    println("Building Github Markdown")
-    dir = joinpath(repo_directory,"markdown",folder)
-    isdir(dir) || mkdir(dir)
-    args[:doctype] = "github"
-    weave(tmp,doctype = "github",out_path=dir,args=args; kwargs...)
-  end
-  if :notebook ∈ build_list
-    println("Building Notebook")
-    dir = joinpath(repo_directory,"notebook",folder)
-    isdir(dir) || mkdir(dir)
-    args[:doctype] = "notebook"
-    Weave.convert_doc(tmp,joinpath(dir,file[1:end-4]*".ipynb"))
-  end
+    if :html ∈ build_list
+        println("Building HTML")
+        dir = joinpath(repo_directory, "html", folder)
+        isdir(dir) || mkdir(dir)
+        args[:doctype] = "html"
+        weave(tmp, doctype="md2html", out_path=dir, args=args; fig_ext=".svg", css=cssfile, kwargs...)
+    end
+    if :pdf ∈ build_list
+        println("Building PDF")
+        dir = joinpath(repo_directory, "pdf", folder)
+        isdir(dir) || mkdir(dir)
+        args[:doctype] = "pdf"
+        try
+            weave(tmp, doctype="md2pdf", out_path=dir, args=args; template=latexfile, kwargs...)
+        catch ex
+            @warn "PDF generation failed" exception = (ex, catch_backtrace())
+        end
+    end
+    if :github ∈ build_list
+        println("Building Github Markdown")
+        dir = joinpath(repo_directory, "markdown", folder)
+        isdir(dir) || mkdir(dir)
+        args[:doctype] = "github"
+        weave(tmp, doctype="github", out_path=dir, args=args; kwargs...)
+    end
+    if :notebook ∈ build_list
+        println("Building Notebook")
+        dir = joinpath(repo_directory, "notebook", folder)
+        isdir(dir) || mkdir(dir)
+        args[:doctype] = "notebook"
+        Weave.convert_doc(tmp, joinpath(dir, file[1:end - 4] * ".ipynb"))
+    end
 end
 
 function weave_all()
-  for folder in readdir(joinpath(repo_directory,"tutorials"))
-    folder == "test.jmd" && continue
-    weave_folder(folder)
-  end
+    for folder in readdir(joinpath(repo_directory, "tutorials"))
+        folder == "test.jmd" && continue
+        weave_folder(folder)
+    end
 end
 
 function weave_folder(folder)
-  for file in readdir(joinpath(repo_directory,"tutorials",folder))
-    println("Building $(joinpath(folder,file)))")
-    try
-      weave_file(folder,file)
-    catch
+    for file in readdir(joinpath(repo_directory, "tutorials", folder))
+        println("Building $(joinpath(folder, file)))")
+        try
+            weave_file(folder, file)
+        catch
+        end
     end
-  end
 end
 
 function tutorial_footer(folder=nothing, file=nothing; remove_homedir=true)
@@ -91,11 +91,10 @@ function tutorial_footer(folder=nothing, file=nothing; remove_homedir=true)
     $(vinfo)
     ```
     """)
-
     ctx = Pkg.API.Context()
-    pkgs = Pkg.Display.status(Pkg.API.Context(), use_as_api=true);
+    pkgs = Pkg.dependencies();
     projfile = ctx.env.project_file
-    remove_homedir && (projfile = replace(projfile, homedir() => "~"))
+    remove_homedir && (projfile = projfile[findlast("tutorials", projfile)[1]:end])
 
     display("text/markdown","""
     Package Information:
@@ -104,11 +103,9 @@ function tutorial_footer(folder=nothing, file=nothing; remove_homedir=true)
     md = ""
     md *= "```\nStatus `$(projfile)`\n"
 
-    for pkg in pkgs
-        if !isnothing(pkg.old) && pkg.old.ver !== nothing
-          md *= "[$(string(pkg.uuid))] $(string(pkg.name)) $(string(pkg.old.ver))\n"
-        else
-          md *= "[$(string(pkg.uuid))] $(string(pkg.name))\n"
+    for (uuid, pkg) in pkgs
+        if pkg.is_direct_dep == true
+            md *= "[$(string(uuid))] $(string(pkg.name)) $(string(pkg.version))\n"
         end
     end
     md *= "```"
@@ -116,9 +113,9 @@ function tutorial_footer(folder=nothing, file=nothing; remove_homedir=true)
 end
 
 function open_notebooks()
-  Base.eval(Main, Meta.parse("import IJulia"))
-  path = joinpath(repo_directory,"notebook")
-  IJulia.notebook(;dir=path)
+    Base.eval(Main, Meta.parse("import IJulia"))
+    path = joinpath(repo_directory, "notebook")
+    IJulia.notebook(;dir=path)
 end
 
 end

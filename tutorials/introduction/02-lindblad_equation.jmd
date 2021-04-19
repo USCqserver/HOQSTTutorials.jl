@@ -226,3 +226,8 @@ plot!(t_axis, [c[1] for c in x_vector], linewidth=2, label="direct solver")
 ```
 
 It is important to note that in order to keep the running-time short we included only 2000 trajectories. The result does not necessarily converge to the true solution.
+
+```{julia; echo=false; skip="notebook"}
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
+```
