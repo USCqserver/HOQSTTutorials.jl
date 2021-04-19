@@ -29,9 +29,9 @@ annealing = Annealing(H, u0, interactions = InteractionSet(lind))
 ```
 
 ```
-Annealing with hType QTBase.DenseHamiltonian{Complex{Float64}} and uType Ar
-ray{Complex{Float64},2}
-u0 with size: (2, 2)
+Annealing with OpenQuantumBase.DenseHamiltonian{ComplexF64} and u0 Matrix{C
+omplexF64}
+u0 size: (2, 2)
 ```
 
 
@@ -273,3 +273,38 @@ plot!(t_axis, [c[1] for c in x_vector], linewidth=2, label="direct solver")
 
 
 It is important to note that in order to keep the running-time short we included only 2000 trajectories. The result does not necessarily converge to the true solution.
+
+
+## Appendix
+ This tutorial is part of the HOQSTTutorials.jl repository, found at: <https://github.com/USCqserver/HOQSTTutorials.jl>.
+
+To locally run this tutorial, do the following commands:
+```
+using HOQSTTutorials
+HOQSTTutorials.weave_file("introduction","02-lindblad_equation.jmd")
+```
+
+Computer Information:
+```
+Julia Version 1.6.0
+Commit f9720dc2eb (2021-03-24 12:55 UTC)
+Platform Info:
+  OS: Windows (x86_64-w64-mingw32)
+  CPU: Intel(R) Core(TM) i7-6700K CPU @ 4.00GHz
+  WORD_SIZE: 64
+  LIBM: libopenlibm
+  LLVM: libLLVM-11.0.1 (ORCJIT, skylake)
+
+```
+
+Package Information:
+
+```
+Status `tutorials\introduction\Project.toml`
+[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.4
+[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 5.52.2
+[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.2
+[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.11.2
+[b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.2.1
+[1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.1
+```

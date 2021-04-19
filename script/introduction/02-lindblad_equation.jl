@@ -183,3 +183,7 @@ scatter(t_axis, x_mean, marker=:d, yerror=2*x_sem, label="2000 trajectories", ma
 
 plot!(t_axis, [c[1] for c in x_vector], linewidth=2, label="direct solver")
 
+
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
+
