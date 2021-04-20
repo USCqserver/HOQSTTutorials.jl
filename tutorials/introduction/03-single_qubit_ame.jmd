@@ -46,9 +46,9 @@ H_h(0.5)
 ### Annealing
 The total Hamiltonian presented in [[1]](https://arxiv.org/abs/1503.08767) is
 
-$$H(s) = H_{\mathrm{S}}(s) + gS \otimes B + H_{\mathrm{B}} \ .$$
+$$H(s) = H_{\mathrm{S}}(s) + gS \otimes B + H_{\mathrm{B}} \ ,$$
 
-$S$ denotes the system coupling operator in the system-bath interaction and $\{gB, H_{\mathrm{B}}\}$ are the bath coupling operator and bath Hamiltonian, respectively.
+where $S$ denotes the system coupling operator in the system-bath interaction and $\{gB, H_{\mathrm{B}}\}$ are the bath coupling operator and bath Hamiltonian, respectively.
 
 #### Coupling
 For constant coupling operators, we can use the constructor `ConstantCouplings`. As in the Hamiltonian case, there is a keyword argument `unit` to specify the input unit.
@@ -205,4 +205,9 @@ scatter(t_axis, pop_mean, marker=:d, yerror=2*pop_sem, label="Trajectory", marke
 plot!(sol_ame, H, [0], t_axis, linewidth=2, label="Non-trajectory")
 xlabel!("t (ns)")
 ylabel!("\$P_G(s)\$")
+```
+
+```{julia; echo=false; skip="notebook"}
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
 ```

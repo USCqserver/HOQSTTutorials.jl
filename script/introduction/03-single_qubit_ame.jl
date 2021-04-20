@@ -112,3 +112,7 @@ plot!(sol_ame, H, [0], t_axis, linewidth=2, label="Non-trajectory")
 xlabel!("t (ns)")
 ylabel!("\$P_G(s)\$")
 
+
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
+
