@@ -19,7 +19,7 @@ H = DenseHamiltonian([(s)->1-s, (s)->s], -[σx, σz]/2)
 ```
 
 ```
-DenseHamiltonian with Complex{Float64}
+DenseHamiltonian with ComplexF64
 with size: (2, 2)
 ```
 
@@ -53,12 +53,12 @@ println("Setting unit to :ħ")
 
 ```
 Setting unit to :h
-evaluate(H_h, 0.5) = Complex{Float64}[-0.25 + 0.0im -0.25 + 0.0im; -0.25 + 
-0.0im 0.25 + 0.0im]
+evaluate(H_h, 0.5) = ComplexF64[-0.25 + 0.0im -0.25 + 0.0im; -0.25 + 0.0im 
+0.25 + 0.0im]
 Setting unit to :ħ
-evaluate(H_ħ, 0.5) = Complex{Float64}[-0.039788735772973836 + 0.0im -0.0397
-88735772973836 + 0.0im; -0.039788735772973836 + 0.0im 0.039788735772973836 
-+ 0.0im]
+evaluate(H_ħ, 0.5) = ComplexF64[-0.039788735772973836 + 0.0im -0.0397887357
+72973836 + 0.0im; -0.039788735772973836 + 0.0im 0.039788735772973836 + 0.0i
+m]
 ```
 
 
@@ -72,8 +72,8 @@ H_h(0.5)
 ```
 
 ```
-2×2 StaticArrays.MArray{Tuple{2,2},Complex{Float64},2,4} with indices SOneT
-o(2)×SOneTo(2):
+2×2 StaticArrays.MMatrix{2, 2, ComplexF64, 4} with indices SOneTo(2)×SOneTo
+(2):
  -1.5708+0.0im  -1.5708+0.0im
  -1.5708+0.0im   1.5708+0.0im
 ```
@@ -85,9 +85,9 @@ o(2)×SOneTo(2):
 ### Annealing
 The total Hamiltonian presented in [[1]](https://arxiv.org/abs/1503.08767) is
 
-$$H(s) = H_{\mathrm{S}}(s) + gS \otimes B + H_{\mathrm{B}} \ .$$
+$$H(s) = H_{\mathrm{S}}(s) + gS \otimes B + H_{\mathrm{B}} \ ,$$
 
-$S$ denotes the system coupling operator in the system-bath interaction and $\{gB, H_{\mathrm{B}}\}$ are the bath coupling operator and bath Hamiltonian, respectively.
+where $S$ denotes the system coupling operator in the system-bath interaction and $\{gB, H_{\mathrm{B}}\}$ are the bath coupling operator and bath Hamiltonian, respectively.
 
 #### Coupling
 For constant coupling operators, we can use the constructor `ConstantCouplings`. As in the Hamiltonian case, there is a keyword argument `unit` to specify the input unit.
@@ -97,7 +97,7 @@ coupling = ConstantCouplings(["Z"])
 ```
 
 ```
-ConstantCouplings with AbstractArray{T,2} where T
+ConstantCouplings with ComplexF64
 and string representation: ["Z"]
 ```
 
@@ -174,9 +174,9 @@ annealing = Annealing(H, u0; coupling=coupling, bath=bath)
 ```
 
 ```
-Annealing with hType QTBase.DenseHamiltonian{Complex{Float64}} and uType Ar
-ray{Complex{Float64},1}
-u0 with size: (2,)
+Annealing with OpenQuantumBase.DenseHamiltonian{ComplexF64} and u0 Vector{C
+omplexF64}
+u0 size: (2,)
 ```
 
 
@@ -198,7 +198,8 @@ plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$"
 ```
 
 ```
-0.006840 seconds (2.42 k allocations: 146.910 KiB)
+0.005308 seconds (2.63 k allocations: 174.095 KiB, 95.05% compilation tim
+e)
 ```
 
 
@@ -213,9 +214,9 @@ sol(0.5)
 ```
 
 ```
-2-element Array{Complex{Float64},1}:
- 0.6856253144209079 + 0.1750041214939618im
- 0.6861430138705714 + 0.1688172359560306im
+2-element Vector{ComplexF64}:
+  0.685625314420908 + 0.17500412149396175im
+ 0.6861430138705717 + 0.16881723595603054im
 ```
 
 
@@ -266,7 +267,7 @@ plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.014877 seconds (193.16 k allocations: 4.270 MiB)
+0.007874 seconds (56.35 k allocations: 1.650 MiB)
 ```
 
 
@@ -283,7 +284,7 @@ plot(sol_ame, H, [0], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.139022 seconds (1.37 M allocations: 70.515 MiB, 12.32% gc time)
+0.133935 seconds (1.24 M allocations: 67.898 MiB, 20.39% gc time)
 ```
 
 
@@ -334,3 +335,38 @@ ylabel!("\$P_G(s)\$")
 ```
 
 ![](figures/03-single_qubit_ame_16_1.png)
+
+
+## Appendix
+ This tutorial is part of the HOQSTTutorials.jl repository, found at: <https://github.com/USCqserver/HOQSTTutorials.jl>.
+
+To locally run this tutorial, do the following commands:
+```
+using HOQSTTutorials
+HOQSTTutorials.weave_file("introduction","03-single_qubit_ame.jmd")
+```
+
+Computer Information:
+```
+Julia Version 1.6.0
+Commit f9720dc2eb (2021-03-24 12:55 UTC)
+Platform Info:
+  OS: Windows (x86_64-w64-mingw32)
+  CPU: Intel(R) Core(TM) i7-6700K CPU @ 4.00GHz
+  WORD_SIZE: 64
+  LIBM: libopenlibm
+  LLVM: libLLVM-11.0.1 (ORCJIT, skylake)
+
+```
+
+Package Information:
+
+```
+Status `tutorials\introduction\Project.toml`
+[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.4
+[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 5.52.2
+[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.2
+[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.11.2
+[b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.2.1
+[1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.1
+```
