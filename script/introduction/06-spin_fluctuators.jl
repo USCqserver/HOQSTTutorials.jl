@@ -63,3 +63,7 @@ plot(tf*s_axis, es, ribbon=err, linewidth=2, label="")
 xlabel!("ns")
 ylabel!("<+>")
 
+
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
+
