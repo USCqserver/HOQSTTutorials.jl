@@ -56,3 +56,7 @@ plot!(t_list, pop_mean, ribbon=pop_rmse, label="Hyrbrid", linewidth=2)
 xlabel!("s (ns)")
 ylabel!("<X>")
 
+
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
+

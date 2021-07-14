@@ -4,6 +4,8 @@ author: Huo Chen
 ---
 
 ## Model setup
+The spin-fluctuator model is a way to model 1/f noise in solid-state systems and is discussed in more detail in Dr. Yip's [thesis](https://github.com/USCqserver/1fnoise/blob/master/Kawa_Yip_thesis.pdf). You can also find Dr. Yip's MATLAB implementation in this [1fnoise](https://github.com/USCqserver/1fnoise) repo.
+
 In this example notebook, we solve a master equation of the form
 
 $$\dot{\rho} = - i [-Z + \delta(s)Z, \rho] + \mathcal{L}(\rho)$$
@@ -81,4 +83,9 @@ plot(a_list, ame_x, label="Ohmic", linewidth=2)
 plot!(t_list, pop_mean, ribbon=pop_rmse, label="Hyrbrid", linewidth=2)
 xlabel!("s (ns)")
 ylabel!("<X>")
+```
+
+```{julia; echo=false; skip="notebook"}
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
 ```

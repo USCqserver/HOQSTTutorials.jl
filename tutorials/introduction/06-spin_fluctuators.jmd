@@ -4,7 +4,9 @@ author: Huo Chen
 ---
 
 ## Spin-fluctuator model (Classical 1/f noise)
-The total Hamiltonian in this example is
+The spin-fluctuator model is a way to model 1/f noise in solid-state systems and is discussed in more detail in Dr. Yip's [thesis](https://github.com/USCqserver/1fnoise/blob/master/Kawa_Yip_thesis.pdf). You can also find Dr. Yip's MATLAB implementation in this [1fnoise](https://github.com/USCqserver/1fnoise) repo.
+
+The total Hamiltonian in this tutorial is
 
 $$H(s) = -Z+ \frac{1}{2}\sum_i n_i(s) Z \ ,$$
 
@@ -98,4 +100,9 @@ end
 plot(tf*s_axis, es, ribbon=err, linewidth=2, label="")
 xlabel!("ns")
 ylabel!("<+>")
+```
+
+```{julia; echo=false; skip="notebook"}
+using HOQSTTutorials
+HOQSTTutorials.tutorial_footer(WEAVE_ARGS[:folder],WEAVE_ARGS[:file])
 ```
