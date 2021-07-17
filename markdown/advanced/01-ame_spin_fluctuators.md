@@ -5,9 +5,9 @@ title: "Adiabatic master equation with spin-fluctuators"
 
 
 ## Model setup
-The spin-fluctuator model is a way to model 1/f noise in solid-state systems and is discussed in more detail in Dr. Yip's [thesis](https://github.com/USCqserver/1fnoise/blob/master/Kawa_Yip_thesis.pdf). You can also find Dr. Yip's MATLAB implementation in this [1fnoise](https://github.com/USCqserver/1fnoise) repo.
+The spin-fluctuator model is a way to model 1/f noise in solid-state systems. Interested readers can find more information in this [review paper](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.86.361) as well as in Ka-Wa Yip's [thesis](https://github.com/USCqserver/1fnoise/blob/master/Kawa_Yip_thesis.pdf). Ka-Wa's MATLAB program is also available in this [1fnoise](https://github.com/USCqserver/1fnoise) repo.
 
-In this example notebook, we solve a master equation of the form
+In this tutorial, we solve a master equation of the form
 
 $$\dot{\rho} = - i [-Z + \delta(s)Z, \rho] + \mathcal{L}(\rho)$$
 
@@ -131,10 +131,10 @@ Package Information:
 
 ```
 Status `tutorials\advanced\Project.toml`
-[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.0
-[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.2
+[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.3
+[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.8
 [de0858da-6303-5e67-8744-51eddeeeb8d7] Printf nothing
-[429524aa-4258-5aef-a3af-852621145aeb] Optim 1.2.0
-[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 5.45.1
-[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.9.1
+[429524aa-4258-5aef-a3af-852621145aeb] Optim 1.3.0
+[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 5.60.0
+[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.19.2
 ```

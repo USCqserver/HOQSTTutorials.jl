@@ -23,3 +23,7 @@ docs/site/
 # environment.
 Manifest.toml
 .vscode
+*.aux
+*.out
+*.log
+*.tex

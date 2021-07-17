@@ -4,9 +4,9 @@ author: Huo Chen
 ---
 
 ## Model setup
-The spin-fluctuator model is a way to model 1/f noise in solid-state systems and is discussed in more detail in Dr. Yip's [thesis](https://github.com/USCqserver/1fnoise/blob/master/Kawa_Yip_thesis.pdf). You can also find Dr. Yip's MATLAB implementation in this [1fnoise](https://github.com/USCqserver/1fnoise) repo.
+The spin-fluctuator model is a way to model 1/f noise in solid-state systems. Interested readers can find more information in this [review paper](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.86.361) as well as in Ka-Wa Yip's [thesis](https://github.com/USCqserver/1fnoise/blob/master/Kawa_Yip_thesis.pdf). Ka-Wa's MATLAB program is also available in this [1fnoise](https://github.com/USCqserver/1fnoise) repo.
 
-In this example notebook, we solve a master equation of the form
+In this tutorial, we solve a master equation of the form
 
 $$\dot{\rho} = - i [-Z + \delta(s)Z, \rho] + \mathcal{L}(\rho)$$
 

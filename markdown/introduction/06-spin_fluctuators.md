@@ -5,15 +5,15 @@ title: "Classical stochastic noise -- the spin-fluctuator model"
 
 
 ## Spin-fluctuator model (Classical 1/f noise)
-The spin-fluctuator model is a way to model 1/f noise in solid-state systems and is discussed in more detail in Dr. Yip's [thesis](https://github.com/USCqserver/1fnoise/blob/master/Kawa_Yip_thesis.pdf). You can also find Dr. Yip's MATLAB implementation in this [1fnoise](https://github.com/USCqserver/1fnoise) repo.
+The spin-fluctuator model is a way to model 1/f noise in solid-state systems. Interested readers can find more information in this [review paper](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.86.361) as well as in Ka-Wa Yip's [thesis](https://github.com/USCqserver/1fnoise/blob/master/Kawa_Yip_thesis.pdf). Ka-Wa's MATLAB program is also available in this [1fnoise](https://github.com/USCqserver/1fnoise) repo.
 
-The total Hamiltonian in this tutorial is
+The Hamiltonian of the spin-fluctuator model is
 
 $$H(s) = -Z+ \frac{1}{2}\sum_i n_i(s) Z \ ,$$
 
 where $n_i(s)$ is the telegraph process that switches randomly between $\pm b_i$ with a rate $\gamma_i$. The summation $\sum_i n_i(s)$ generates the "1/f" noise approximately.
 
-We choose the initial state to be:
+In this tutorial, we choose the initial state to be:
 
 $$\lvert \phi(0) \rangle = \lvert + \rangle \ .$$
 
@@ -146,10 +146,10 @@ Package Information:
 
 ```
 Status `tutorials\introduction\Project.toml`
-[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.2
-[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.4
+[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.3
+[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.8
 [1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.1
 [b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.2.1
-[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 5.52.2
-[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.11.2
+[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 5.60.0
+[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.19.2
 ```
