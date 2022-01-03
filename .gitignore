@@ -27,3 +27,6 @@ Manifest.toml
 *.out
 *.log
 *.tex
+
+build_tutorial.jl
+update_dependence.jl
