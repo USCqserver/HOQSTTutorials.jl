@@ -30,3 +30,4 @@ Manifest.toml
 
 build_tutorial.jl
 update_dependence.jl
+update_GH_page.jl

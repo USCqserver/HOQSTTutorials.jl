@@ -85,8 +85,8 @@ Then, we plot the absolute value of the off-diagonal element $|\rho_{01}|$ and c
 ```julia
 plot(t_axis, off_diag, linewidth=2, label="ME")
 plot!(t_axis, 0.5*exp.(-0.2*t_axis), linestyle=:dash, linewidth=3, label="Analytical")
-xlabel!("t (ns)")
-ylabel!("|ρ₀₁(t)|")
+xlabel!("\$t\\ (\\mathrm{ns})\$")
+ylabel!("\$|\\rho_{01}(t)|\$")
 ```
 
 ![](figures/02-lindblad_equation_5_1.png)
@@ -120,7 +120,7 @@ idx = 2
 for v in sol[idx].u
     push!(vec_norm, norm(v))
 end
-plot(sol[idx].t, vec_norm, linewidth=2, label="", xlabel="t (ns)", ylabel="‖ψ̃(t)‖")
+plot(sol[idx].t, vec_norm, linewidth=2, label="", xlabel="\$t\\ (\\mathrm{ns})\$", ylabel="\$\\|\\|\\tilde{\\Psi}(t)\\|\\|\$")
 ```
 
 ![](figures/02-lindblad_equation_7_1.png)
@@ -286,14 +286,14 @@ HOQSTTutorials.weave_file("introduction","02-lindblad_equation.jmd")
 
 Computer Information:
 ```
-Julia Version 1.6.0
-Commit f9720dc2eb (2021-03-24 12:55 UTC)
+Julia Version 1.7.3
+Commit 742b9abb4d (2022-05-06 12:58 UTC)
 Platform Info:
   OS: Windows (x86_64-w64-mingw32)
   CPU: Intel(R) Core(TM) i7-6700K CPU @ 4.00GHz
   WORD_SIZE: 64
   LIBM: libopenlibm
-  LLVM: libLLVM-11.0.1 (ORCJIT, skylake)
+  LLVM: libLLVM-12.0.1 (ORCJIT, skylake)
 
 ```
 
@@ -301,10 +301,10 @@ Package Information:
 
 ```
 Status `tutorials\introduction\Project.toml`
-[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.4
-[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 5.52.2
-[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.2
-[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.11.2
-[b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.2.1
-[1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.1
+[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.29.1
+[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 6.15.0
+[b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.3.0
+[1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.2
+[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.16
+[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.7.0
 ```

@@ -64,8 +64,8 @@ Then, we plot the absolute value of the off-diagonal element $|\rho_{01}|$ and c
 ```julia
 plot(t_axis, off_diag, linewidth=2, label="ME")
 plot!(t_axis, 0.5*exp.(-0.2*t_axis), linestyle=:dash, linewidth=3, label="Analytical")
-xlabel!("t (ns)")
-ylabel!("|ρ₀₁(t)|")
+xlabel!("\$t\\ (\\mathrm{ns})\$")
+ylabel!("\$|\\rho_{01}(t)|\$")
 ```
 
 ## Quantum trajectories method
@@ -92,7 +92,7 @@ idx = 2
 for v in sol[idx].u
     push!(vec_norm, norm(v))
 end
-plot(sol[idx].t, vec_norm, linewidth=2, label="", xlabel="t (ns)", ylabel="‖ψ̃(t)‖")
+plot(sol[idx].t, vec_norm, linewidth=2, label="", xlabel="\$t\\ (\\mathrm{ns})\$", ylabel="\$\\|\\|\\tilde{\\Psi}(t)\\|\\|\$")
 ```
 
 We can also compare the results of the quantum trajectories method with the result of the direct solver:
