@@ -40,7 +40,7 @@ ylabel!("Bloch Vector")
 plot(t_axis, off_diag, linewidth=2, label="ME")
 plot!(t_axis, 0.5*exp.(-0.2*t_axis), linestyle=:dash, linewidth=3, label="Analytical")
 xlabel!("t (ns)")
-ylabel!("|ρ₀₁(t)|")
+ylabel!("\$|\rhoρ_{01}(t)|\$")
 
 
 # For the quantum trajectories method, the u0 supplied to `Annealing` must be
