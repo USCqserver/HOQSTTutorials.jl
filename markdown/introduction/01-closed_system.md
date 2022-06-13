@@ -240,8 +240,8 @@ sol_bdf(0.5 * tf)
 ```
 4-element Vector{ComplexF64}:
    0.4999999999999999 + 0.0im
- -0.42145581736316284 + 0.2689406069997066im
- -0.42145581736316284 - 0.2689406069997066im
+ -0.42145581736316345 + 0.2689406069997065im
+ -0.42145581736316345 - 0.2689406069997065im
    0.4999999999999999 + 0.0im
 ```
 
@@ -259,15 +259,16 @@ sol_linexp = solve_von_neumann(annealing, tf, alg=LinearExponential(), tstops=ra
 ```
 
 ```
-Error: MethodError: no method matching (Matrix)(::OpenQuantumTools.var"#34#
-38")
+Error: MethodError: no method matching (Matrix)(::OpenQuantumTools.var"#35#
+39")
 Closest candidates are:
   (Matrix)(!Matched::Union{LinearAlgebra.QR, LinearAlgebra.QRCompactWY}) at
- ~/julia-1.7.1/share/julia/stdlib/v1.7/LinearAlgebra/src/qr.jl:441
-  (Matrix)(!Matched::LinearAlgebra.Diagonal) at ~/julia-1.7.1/share/julia/s
-tdlib/v1.7/LinearAlgebra/src/diagonal.jl:72
-  (Matrix)(!Matched::LinearAlgebra.CholeskyPivoted) at ~/julia-1.7.1/share/
-julia/stdlib/v1.7/LinearAlgebra/src/cholesky.jl:488
+ d:\Julia-1.7.3\share\julia\stdlib\v1.7\LinearAlgebra\src\qr.jl:441
+  (Matrix)(!Matched::IterativeSolvers.BrokenArrowBidiagonal{T}) where T at 
+C:\Users\chenh\.julia\packages\IterativeSolvers\rhYBz\src\svdl.jl:53
+  (Matrix)(!Matched::ArnoldiMethod.Rotation3{Tc, Ts}, !Matched::Int64) wher
+e {Tc, Ts} at C:\Users\chenh\.julia\packages\ArnoldiMethod\JdEiw\src\schurf
+act.jl:45
   ...
 ```
 
@@ -385,11 +386,11 @@ HOQSTTutorials.weave_file("introduction","01-closed_system.jmd")
 
 Computer Information:
 ```
-Julia Version 1.7.1
-Commit ac5cc99908 (2021-12-22 19:35 UTC)
+Julia Version 1.7.3
+Commit 742b9abb4d (2022-05-06 12:58 UTC)
 Platform Info:
-  OS: Linux (x86_64-pc-linux-gnu)
-  CPU: Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
+  OS: Windows (x86_64-w64-mingw32)
+  CPU: Intel(R) Core(TM) i7-6700K CPU @ 4.00GHz
   WORD_SIZE: 64
   LIBM: libopenlibm
   LLVM: libLLVM-12.0.1 (ORCJIT, skylake)
@@ -399,11 +400,11 @@ Platform Info:
 Package Information:
 
 ```
-Status `tutorials/introduction/Project.toml`
-[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.25.4
-[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 6.0.3
+Status `tutorials\introduction\Project.toml`
+[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.29.1
+[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 6.15.0
 [b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.3.0
 [1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.2
-[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.14
-[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.3
+[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.16
+[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.7.0
 ```
