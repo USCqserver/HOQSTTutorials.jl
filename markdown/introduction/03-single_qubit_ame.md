@@ -39,6 +39,8 @@ plot(H, 0:0.01:1, 2, linewidth=2)
 
 
 
+More information about the Hamiltonian types can be found in the [documentation page](https://uscqserver.github.io/OpenQuantumTools.jl/stable/basics/hamiltonians.html).
+
 ### Units ($h$ or $\hbar$)
 A keyword argument `unit` whose default value is `:h` can be provided to any Hamiltonian type's constructor. This argument specifies the units of other input arguments. For example, setting `unit` to `:h` means the other input arguments have units of $\mathrm{GHz}$, while setting it to `:ħ` means the other input arguments have units of $2\pi\mathrm{GHz}$. To evaluate the Hamiltonian at a specified time, the user should use the `evaluate` function instead of directly calling it. `evaluate` will always return the Hamiltonian value in the unit system of $h=1$. The following code block shows the effects of different choices of `unit`:
 
@@ -190,7 +192,7 @@ There are several interfaces in HOQST that can come in handy. The first one is t
 
 ```julia
 tf = 10*sqrt(2)
-@time sol = solve_schrodinger(annealing, tf, alg=Tsit5(), retol=1e-4)
+@time sol = solve_schrodinger(annealing, tf, alg=Tsit5(), reltol=1e-4)
 # The following line of code is a convenient recipe to plot the instantaneous population during the evolution.
 # It currently only supports Hamiltonians with an annealing parameter s = t/tf from 0 to 1.
 # The third argument can be either a list or a number. When it is a list, it specifies the energy levels to plot (starting from 0); when it is a number, it specifies the total number of levels to plot.
@@ -198,8 +200,8 @@ plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$"
 ```
 
 ```
-0.005308 seconds (2.63 k allocations: 174.095 KiB, 95.05% compilation tim
-e)
+0.005835 seconds (10.12 k allocations: 594.101 KiB, 96.63% compilation ti
+me)
 ```
 
 
@@ -215,8 +217,8 @@ sol(0.5)
 
 ```
 2-element Vector{ComplexF64}:
-  0.685625314420908 + 0.17500412149396175im
- 0.6861430138705717 + 0.16881723595603054im
+ 0.6856253186493614 + 0.175004131212539im
+ 0.6861430115062637 + 0.16881724372067486im
 ```
 
 
@@ -227,8 +229,8 @@ Other interfaces include:
 
 ```julia
 # You need to solve the unitary first before trying to solve Redfield equation
-@time U = solve_unitary(annealing, tf, alg=Tsit5(), abstol=1e-8, retol=1e-8);
-@time solve_von_neumann(annealing, tf, alg=Tsit5(), abstol=1e-8, retol=1e-8);
+@time U = solve_unitary(annealing, tf, alg=Tsit5(), abstol=1e-8, reltol=1e-8);
+@time solve_von_neumann(annealing, tf, alg=Tsit5(), abstol=1e-8, reltol=1e-8);
 ```
 
 
@@ -244,8 +246,8 @@ to work. The following code block illustrates how to supply the above three obje
 
 ```julia
 tf = 10*sqrt(2)
-U = solve_unitary(annealing, tf, alg=Tsit5(), abstol=1e-8, retol=1e-8);
-sol = solve_redfield(annealing, tf, U; alg=Tsit5(), abstol=1e-8, retol=1e-8)
+U = solve_unitary(annealing, tf, alg=Tsit5(), abstol=1e-8, reltol=1e-8);
+sol = solve_redfield(annealing, tf, U; alg=Tsit5(), abstol=1e-8, reltol=1e-8)
 plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
@@ -267,7 +269,7 @@ plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.007874 seconds (56.35 k allocations: 1.650 MiB)
+0.003624 seconds (37.25 k allocations: 1.152 MiB)
 ```
 
 
@@ -284,7 +286,7 @@ plot(sol_ame, H, [0], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.133935 seconds (1.24 M allocations: 67.898 MiB, 20.39% gc time)
+0.105419 seconds (1.20 M allocations: 63.078 MiB, 21.34% gc time)
 ```
 
 
@@ -306,6 +308,7 @@ num_trajectories = 3000
 # construct the `EnsembleProblem` 
 # `safetycopy` needs to be true because the current trajectories implementation is not thread-safe.
 prob = build_ensembles(annealing, tf, :ame, ω_hint=range(-6, 6, length=200), safetycopy=true)
+# the following code block is slow if running with a single thread
 # to use multi-threads, you need to start the Julia kernel with multiple threads
 # julia --threads 8
 sol = solve(prob, Tsit5(), EnsembleThreads(), trajectories=num_trajectories, reltol=1e-6, saveat=range(0,tf,length=100))
@@ -348,25 +351,25 @@ HOQSTTutorials.weave_file("introduction","03-single_qubit_ame.jmd")
 
 Computer Information:
 ```
-Julia Version 1.6.0
-Commit f9720dc2eb (2021-03-24 12:55 UTC)
+Julia Version 1.7.3
+Commit 742b9abb4d (2022-05-06 12:58 UTC)
 Platform Info:
-  OS: Windows (x86_64-w64-mingw32)
-  CPU: Intel(R) Core(TM) i7-6700K CPU @ 4.00GHz
+  OS: Linux (x86_64-pc-linux-gnu)
+  CPU: Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
   WORD_SIZE: 64
   LIBM: libopenlibm
-  LLVM: libLLVM-11.0.1 (ORCJIT, skylake)
+  LLVM: libLLVM-12.0.1 (ORCJIT, skylake)
 
 ```
 
 Package Information:
 
 ```
-Status `tutorials\introduction\Project.toml`
-[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.4
-[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 5.52.2
-[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.2
-[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.11.2
-[b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.2.1
-[1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.1
+Status `tutorials/introduction/Project.toml`
+[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.29.0
+[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 6.10.0
+[b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.3.0
+[1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.2
+[2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.16
+[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.4
 ```
