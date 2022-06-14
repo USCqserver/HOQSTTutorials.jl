@@ -200,7 +200,7 @@ plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel = "t (ns)", ylabel="\$P_G(t)\$"
 ```
 
 ```
-0.005835 seconds (10.12 k allocations: 594.101 KiB, 96.63% compilation ti
+0.005889 seconds (10.13 k allocations: 594.272 KiB, 96.09% compilation ti
 me)
 ```
 
@@ -269,7 +269,7 @@ plot(sol, H, [0], 0:0.01:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.003624 seconds (37.25 k allocations: 1.152 MiB)
+0.007991 seconds (57.67 k allocations: 2.643 MiB)
 ```
 
 
@@ -286,7 +286,7 @@ plot(sol_ame, H, [0], 0:1:tf, linewidth=2, xlabel="t (ns)", ylabel="\$P_G(t)\$")
 ```
 
 ```
-0.105419 seconds (1.20 M allocations: 63.078 MiB, 21.34% gc time)
+0.407993 seconds (4.18 M allocations: 280.653 MiB, 11.52% gc time)
 ```
 
 
@@ -366,10 +366,10 @@ Package Information:
 
 ```
 Status `tutorials/introduction/Project.toml`
-[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.29.0
-[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 6.10.0
+[91a5bcdd-55d7-5caf-9e0b-520d859cae80] Plots 1.29.1
+[1dea7af3-3e70-54e6-95c3-0bf5283fa5ed] OrdinaryDiffEq 6.15.0
 [b964fa9f-0449-5b57-a5c2-d3ea65f4040f] LaTeXStrings 1.3.0
 [1fd47b50-473d-5c70-9696-f719f8f3bcdc] QuadGK 2.4.2
 [2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91] StatsBase 0.33.16
-[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.6.4
+[e429f160-8886-11e9-20cb-0dbe84e78965] OpenQuantumTools 0.7.0
 ```
